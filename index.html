@@ -10,7 +10,7 @@
 <meta name="robots" content="noindex,nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Unbounded:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Unbounded:wght@300;500;700;800&display=swap">
 <style>
 /* Afterglow: near-black plum ground, pink light, the logo's own gradient.
    Single committed dark world, so no light-theme branch. */
@@ -150,10 +150,17 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
 .flip[aria-pressed="true"] .hint::after{animation:none;opacity:0}
 .card .h3{font-size:1.75cqw}
 .music{display:flex;flex-wrap:wrap;align-items:baseline;gap:.6cqw 1.6cqw;border-top:1px solid var(--line);padding-top:1.2cqw}
-.music b{font:700 1.3cqw/1.2 var(--body)}
+.music b,.music a{font:700 1.3cqw/1.2 var(--body)}
+.music a{text-decoration:none;border-bottom:.12cqw solid rgba(255,134,196,.6)}
+.music a::after{content:" ↗";color:var(--pink-2)}
+.music a:hover{color:var(--pink-2)}
+.card .watch{align-self:flex-start}
+.watch.off{opacity:.45;cursor:default}
 
 /* 7 dance films: playlist, stage left, scrolling thumbnails right */
-.films .pad{flex-direction:row;align-items:center;gap:2.6cqw}
+.films .pad{gap:1.8cqw}
+.films .h2{font-size:4cqw}
+.films .frow{flex:1;min-height:0;display:flex;align-items:center;gap:2.6cqw}
 .films .stagewrap{width:55cqw;flex:none;display:flex;flex-direction:column;gap:1.3cqw}
 .stage{position:relative;aspect-ratio:16/9;border-radius:.8cqw;overflow:hidden;background:#000;border:1px solid var(--line)}
 .stage video{width:100%;height:100%;object-fit:contain;display:block}
@@ -227,6 +234,36 @@ a.brand:hover{transform:translateY(-.2cqw)}
 .lines div{display:flex;flex-direction:column;gap:.4cqw;border-top:1px solid rgba(255,255,255,.2);padding-top:.9cqw}
 .lines div:nth-child(2){grid-column:1/3;grid-row:2}
 .lines b{font:700 1.8cqw/1.15 var(--body);user-select:all}
+.lines b.wa{user-select:auto}
+.wa{display:flex;align-items:center;gap:1cqw}
+.wa a{display:inline-flex;align-items:center;gap:.6cqw;text-decoration:none}
+.wa a:hover{color:var(--pink-2)}
+.wai{width:1.15em;height:1.15em;flex:none;color:#25d366}
+.wa .sep{font-weight:400;color:rgba(255,255,255,.35)}
+
+/* placeholder sections (corporate events, sangeet): three "coming soon" tiles until media arrives */
+.ph-slide .pad{gap:2.4cqw}
+.ph-slide .head{display:flex;justify-content:space-between;align-items:flex-end;gap:3cqw}
+.ph-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr;gap:1.3cqw}
+.ph-grid .cap{align-items:flex-start}
+.ph-grid .cap .row{align-self:stretch}
+.ph-grid.two{grid-template-columns:repeat(2,1fr)}
+
+/* prompt targets stop clear of the fixed top bar */
+#brand-films,#dance-music-videos,#corporate-events,#sangeet-choreographies{scroll-margin-top:56px}
+
+/* first-scroll prompt on the cover: sits just above the scroll cue */
+.ask{left:50%;bottom:calc(26px + 48px + 14px + env(safe-area-inset-bottom,0px));z-index:3;width:max-content;max-width:calc(100% - 32px);
+  display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;text-shadow:0 1px 14px rgba(8,3,13,.7);
+  opacity:0;visibility:hidden;transform:translate(-50%,10px);transition:opacity 1.1s ease,transform 1.1s cubic-bezier(.2,.7,.2,1),visibility 0s 1.1s}
+.ask.on{opacity:1;visibility:visible;transform:translate(-50%,0);transition:opacity 1.1s ease,transform 1.1s cubic-bezier(.2,.7,.2,1)}
+.ask-q{margin:0;font:300 clamp(13px,1.15vw,17px)/1.3 var(--display);text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.88)}
+.ask-opts{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;list-style:none;margin:0;padding:0}
+.ask-opts li+li::before{content:"";display:inline-block;width:1px;height:12px;background:rgba(255,255,255,.3);vertical-align:middle}
+.ask-opts li{display:flex;align-items:center}
+.ask-opts a{display:block;font:400 clamp(13px,1vw,15px)/1 var(--body);letter-spacing:.02em;text-decoration:none;padding:8px 14px;
+  color:rgba(255,255,255,.7);white-space:nowrap;transition:color .3s}
+.ask-opts a:hover,.ask-opts a:focus-visible{color:var(--pink)}
 
 /* ---------- phone: reflow each slide to natural height ---------- */
 @media (max-width:760px){
@@ -244,7 +281,16 @@ a.brand:hover{transform:translateY(-.2cqw)}
 
   /* cover: still exactly one screen, film cropped to fill; logo and line sized to read */
   .cover{display:flex}
-  .cover > .bg,.cover > .cue{position:absolute}
+  .cover > .bg,.cover > .cue,.cover > .ask{position:absolute}
+  .ask{width:calc(100% - 32px)}
+  .ask-opts{display:grid;grid-template-columns:1fr 1fr;width:100%}
+  .ask-opts li{justify-content:center}
+  .ask-opts li+li::before{display:none}
+  .ask-opts a{padding:10px 6px;white-space:normal;line-height:1.2}
+  .ph-slide .head{flex-direction:column;align-items:flex-start;gap:10px}
+  .ph-grid,.ph-grid.two{grid-template-columns:1fr;grid-template-rows:none;gap:14px}
+  .ph-grid .case{aspect-ratio:16/9;flex:none}
+  .wa{gap:12px}.wa a{gap:7px}
   .cover .pad{flex:1;padding:24px;gap:22px;justify-content:center}
   .cover .mark{width:74vw;height:31.9vw}
   .cover .lede{width:80vw!important;font-size:17px!important;line-height:1.45}
@@ -296,10 +342,12 @@ a.brand:hover{transform:translateY(-.2cqw)}
   .hint{width:9px;height:9px;right:10px;bottom:10px}
   .face,.flip{border-radius:10px}
   .card{gap:8px}.card .h3{font-size:17px}
-  .music{gap:8px 16px;padding-top:16px}.music b{font-size:15px}
+  .music{gap:8px 16px;padding-top:16px}.music b,.music a{font-size:15px}.music a{border-bottom-width:1.5px}
 
   /* dance films playlist */
   .films .pad{flex-direction:column;align-items:stretch;gap:18px}
+  .films .h2{font-size:clamp(30px,9vw,44px)}
+  .films .frow{flex-direction:column;align-items:stretch;gap:18px}
   .films .stagewrap{width:100%;gap:12px}
   .films .playlist{display:none}
   .films .nowbar{display:grid;grid-template-columns:46px 1fr 46px;align-items:center;gap:6px 12px;padding:14px 0 4px;touch-action:pan-y;user-select:none}
@@ -328,7 +376,7 @@ a.brand:hover{transform:translateY(-.2cqw)}
   .lines{grid-template-columns:1fr;gap:14px}.lines div:nth-child(2){grid-column:auto;grid-row:auto}
   .lines b{font-size:18px}
 }
-@media (prefers-reduced-motion:reduce){.hint::after{animation:none}.flip-in{transition:transform .01s}.creators .flip .flip-in{animation:none!important}.track{animation:none;flex-wrap:wrap;justify-content:center;width:auto;row-gap:4cqw}.track [aria-hidden="true"]{display:none}.cue::before{animation:none}.orb{animation:none}.mono{transition:none}}
+@media (prefers-reduced-motion:reduce){.hint::after{animation:none}.flip-in{transition:transform .01s}.creators .flip .flip-in{animation:none!important}.track{animation:none;flex-wrap:wrap;justify-content:center;width:auto;row-gap:4cqw}.track [aria-hidden="true"]{display:none}.cue::before{animation:none}.ask,.ask.on{transition:none}.orb{animation:none}.mono{transition:none}}
 </style>
 </head>
 <body>
@@ -346,6 +394,15 @@ a.brand:hover{transform:translateY(-.2cqw)}
     <div class="pad">
       <span class="mark" role="img" aria-label="Fraction"></span>
     </div>
+    <nav class="ask" id="ask" aria-label="What are you looking for?">
+      <p class="ask-q">What are you looking for?</p>
+      <ul class="ask-opts">
+        <li><a href="#dance-music-videos">Dance Music Videos</a></li>
+        <li><a href="#brand-films">Brand Films</a></li>
+        <li><a href="#corporate-events">Corporate Events</a></li>
+        <li><a href="#sangeet-choreographies">Sangeet Choreographies</a></li>
+      </ul>
+    </nav>
     <a class="cue" href="#collective" aria-label="Scroll down"></a>
   </section>
 
@@ -384,7 +441,7 @@ a.brand:hover{transform:translateY(-.2cqw)}
   </section>
 
   <!-- 5 BRANDS -->
-  <section class="slide brands" aria-label="Brand films">
+  <section class="slide brands" id="brand-films" aria-label="Brand films">
     <div class="pad">
       <div class="head">
         <h2 class="h2">Brand films</h2>
@@ -428,19 +485,20 @@ a.brand:hover{transform:translateY(-.2cqw)}
         <p class="eyebrow">Creator collaborations</p>
       </div>
       <div class="cards" id="creatorCards"></div>
-      <div class="music">
+      <div class="music" id="musicList">
         <span class="eyebrow">Music videos &amp; promotions</span>
-        <b>Nikhil &amp; Rishabh</b><b>Jaadu</b><b>Anant Khamkar</b><b>Riya Duggal</b><b>RuhFikra</b>
       </div>
     </div>
   </section>
 
-  <!-- 7 DANCE FILMS: playlist (entries in FILMS below) -->
-  <section class="slide films" aria-label="Dance films">
+  <!-- 7 DANCE MUSIC VIDEOS: playlist (entries in FILMS below) -->
+  <section class="slide films" id="dance-music-videos" aria-label="Dance music videos">
     <div class="pad">
+      <h2 class="h2">Dance <span class="pink">music videos</span></h2>
+      <div class="frow">
       <div class="stagewrap">
         <div class="stage" id="stage">
-          <video id="fv" class="mono" src="media/bm-loop.mp4" poster="media/bm-thumb.webp" muted loop playsinline preload="metadata"></video>
+          <video id="fv" class="mono" src="media/dh-preview.mp4" poster="media/dh-thumb.webp" muted loop playsinline preload="metadata"></video>
           <button class="big" type="button" id="fplay" aria-label="Play preview"></button>
           <div class="msg"><p class="eyebrow">Preview coming</p><h3 class="h3" id="fmsg"></h3><a class="watch" id="fmsglink" href="#" target="_blank" rel="noopener">Watch on Drive</a></div>
         </div>
@@ -452,6 +510,57 @@ a.brand:hover{transform:translateY(-.2cqw)}
         </div>
       </div>
       <ol class="playlist" id="playlist" aria-label="Films"></ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- CORPORATE EVENTS: placeholder; swap each .case.soon for a real tile when media arrives -->
+  <section class="slide ph-slide" id="corporate-events" aria-label="Corporate events">
+    <div class="pad">
+      <div class="head">
+        <h2 class="h2">Corporate<br><span class="pink">events</span></h2>
+        <p class="small">Films and details coming soon.</p>
+      </div>
+      <div class="ph-grid">
+        <article class="case soon"><div class="media"></div><div class="cap"><span class="tag">Media coming soon</span></div></article>
+        <article class="case soon"><div class="media"></div><div class="cap"><span class="tag">Media coming soon</span></div></article>
+        <article class="case soon"><div class="media"></div><div class="cap"><span class="tag">Media coming soon</span></div></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- SANGEET CHOREOGRAPHIES: placeholder; swap each .case.soon for a real tile when media arrives -->
+  <section class="slide ph-slide" id="sangeet-choreographies" aria-label="Sangeet choreographies">
+    <div class="pad">
+      <div class="head">
+        <h2 class="h2">Sangeet<br><span class="pink">choreographies</span></h2>
+        <p class="small">Films and details coming soon.</p>
+      </div>
+      <div class="ph-grid">
+        <article class="case soon"><div class="media"></div><div class="cap"><span class="tag">Media coming soon</span></div></article>
+        <article class="case soon"><div class="media"></div><div class="cap"><span class="tag">Media coming soon</span></div></article>
+        <article class="case soon"><div class="media"></div><div class="cap"><span class="tag">Media coming soon</span></div></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE PERFORMANCES: stage sets; swap the .case.soon tile for a real one when the IMAP video arrives -->
+  <section class="slide ph-slide" id="live-performances" aria-label="Live performances">
+    <div class="pad">
+      <div class="head">
+        <h2 class="h2">Live<br><span class="pink">performances</span></h2>
+        <p class="small">On stage with Fraction.</p>
+      </div>
+      <div class="ph-grid two">
+        <article class="case">
+          <div class="media"><video class="mono" src="media/sp-preview.mp4" poster="media/sp-thumb.webp" muted loop playsinline preload="metadata" aria-label="Silent Poison, live at Evolution 2"></video></div>
+          <div class="cap"><p class="eyebrow">Stage · Evolution 2</p><div class="row"><h3 class="h3">Silent Poison</h3><button class="watch pv" type="button" data-src="media/sp-preview.mp4" data-title="Silent Poison · Evolution 2" data-link="https://drive.google.com/file/d/12hDgQVGBTYqI-YriWgWZVPXxnJ4vewnO/view">Watch</button></div></div>
+        </article>
+        <article class="case soon">
+          <div class="media"></div>
+          <div class="cap"><p class="eyebrow">Live performance</p><h3 class="h3">IMAP Annual Jam</h3><span class="tag">Video coming soon</span></div>
+        </article>
+      </div>
     </div>
   </section>
 
@@ -476,13 +585,15 @@ a.brand:hover{transform:translateY(-.2cqw)}
         <h2 class="h2">Let’s make<br>the <span class="pink">next one.</span></h2>
         <div class="lines">
           <div><span class="eyebrow">Email</span><b>fractioncrew@gmail.com</b></div>
-          <div><span class="eyebrow">Phone</span><b>+91 96642 76169 · +91 79779 67076</b></div>
+          <div><span class="eyebrow">Phone · WhatsApp</span><b class="wa"><a href="https://wa.me/919664276169?text=Hi%20Pratik%2C%20I%20wanted%20to%20know%20more%20about%20Team%20Fraction" target="_blank" rel="noopener" title="+91 9664276169" aria-label="WhatsApp Pratik, +91 9664276169"><svg class="wai" aria-hidden="true"><use href="#wa-icon"/></svg>Pratik</a><span class="sep" aria-hidden="true">|</span><a href="https://wa.me/917977275660?text=Hi%20Mitesh%2C%20I%20wanted%20to%20know%20more%20about%20Team%20Fraction" target="_blank" rel="noopener" title="+91 7977275660" aria-label="WhatsApp Mitesh, +91 7977275660"><svg class="wai" aria-hidden="true"><use href="#wa-icon"/></svg>Mitesh</a></b></div>
           <div><span class="eyebrow">Instagram</span><b><a href="https://instagram.com/team.fraction" target="_blank" rel="noopener" style="text-decoration:none">@team.fraction</a></b></div>
         </div>
       </div>
     </div>
   </section>
 </main>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="wa-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></symbol></svg>
 
 <dialog class="player" id="player" aria-label="Film preview">
   <div class="wrap">
@@ -507,12 +618,20 @@ function applySources(){
 applySources();phone.addEventListener('change',applySources);
 
 /* ---- slots: add a file with the slug as its name and it replaces the placeholder ---- */
-// [name, front photo, back photo (Fraction with the creator); a card without a group photo repeats its front]
+// [name, front photo, back photo (Fraction with the creator), "Watch here" link; a card without a group photo repeats its front]
 const CREATORS=[
-  ["Yashraj Mukhate","media/creators/yashraj-mukhate.webp","media/creators/yashraj-mukhate-group.webp"],
-  ["Just Neel Things","media/creators/just-neel-things.webp","media/creators/just-neel-things-group.webp"],
-  ["Prosenjit Kundu","media/creators/prosenjit-kundu.webp","media/creators/prosenjit-kundu-group.webp"],
-  ["Ruhee Dosani","media/creators/ruhee-dosani.webp","media/creators/ruhee-dosani-group.webp"]
+  ["Yashraj Mukhate","media/creators/yashraj-mukhate.webp","media/creators/yashraj-mukhate-group.webp",""],
+  ["Just Neel Things","media/creators/just-neel-things.webp","media/creators/just-neel-things-group.webp",""],
+  ["Prosenjit Kundu","media/creators/prosenjit-kundu.webp","media/creators/prosenjit-kundu-group.webp",""],
+  ["Ruhee Dosani","media/creators/ruhee-dosani.webp","media/creators/ruhee-dosani-group.webp",""]
+];
+// Music videos & promotions: [name, video link]; a name without a link shows as plain text
+const MUSIC=[
+  ["Nikhil & Rishabh",""],
+  ["Jaadu",""],
+  ["Anant Khamkar",""],
+  ["Riya Duggal",""],
+  ["RuhFikra",""]
 ];
 // Worked with: [name, logo file, full video link or "", logo height in cqw (evens out wide vs tall marks)]
 const LOGOS=[
@@ -521,15 +640,18 @@ const LOGOS=[
   ["The Souled Store","media/logos/the-souled-store.png","",9.4],
   ["Sharjah Warriors","media/logos/sharjah-warriors.png","",12.0],
   ["Airtel","media/logos/airtel.png","",6.2],
-  ["iMAP","media/logos/imap.png","https://drive.google.com/file/d/1b_HZUwgLZbLA9Z2V4EBTm1M1h_bYPL37/view",6.8]
+  ["iMAP","media/logos/imap.png","https://drive.google.com/file/d/1b_HZUwgLZbLA9Z2V4EBTm1M1h_bYPL37/view",6.8],
+  ["Pidilite","media/logos/pidilite.png","",7.6]
 ];
 /* creator cards flip in 3D to show Fraction with that creator */
 const cardsEl=document.getElementById('creatorCards'),crSec=cardsEl.closest('.slide');
-CREATORS.forEach(([name,front,back],i)=>{
+CREATORS.forEach(([name,front,back,link],i)=>{
   const c=document.createElement('div');c.className='card';
   c.innerHTML='<button class="flip" type="button" aria-pressed="false" style="--d:'+(i*1.1)+'s">'
     +'<span class="flip-in"><span class="face front"><img class="mono" alt=""></span><span class="face back"><img alt=""></span></span>'
-    +'<span class="hint" aria-hidden="true"></span></button><h3 class="h3"></h3><p class="eyebrow">Creator</p>';
+    +'<span class="hint" aria-hidden="true"></span></button><h3 class="h3"></h3><p class="eyebrow">Creator</p>'
+    +(link?'<a class="watch" target="_blank" rel="noopener">Watch here</a>':'<span class="watch off" aria-disabled="true" title="Link coming soon">Watch here</span>');
+  if(link){const a=c.querySelector('a.watch');a.href=link;a.setAttribute('aria-label','Watch '+name+' with Fraction')}
   const [fi,bi]=c.querySelectorAll('img');fi.src=front;fi.alt=name;bi.src=back;bi.alt='Fraction with '+name;fi.loading=bi.loading='lazy';
   c.querySelector('h3').textContent=name;
   const btn=c.querySelector('.flip'),tag=c.querySelector('.eyebrow');
@@ -537,6 +659,12 @@ CREATORS.forEach(([name,front,back],i)=>{
   btn.onclick=()=>{const on=btn.getAttribute('aria-pressed')!=='true';btn.setAttribute('aria-pressed',String(on));
     tag.textContent=on?'With Fraction':'Creator';crSec.classList.add('learned')};
   cardsEl.appendChild(c);
+});
+const musicEl=document.getElementById('musicList');
+MUSIC.forEach(([name,link])=>{
+  const el=document.createElement(link?'a':'b');el.textContent=name;
+  if(link){el.href=link;el.target='_blank';el.rel='noopener'}
+  musicEl.appendChild(el);
 });
 /* the row is drawn twice so the -50% loop is seamless; the copy is hidden from screen readers */
 const track=document.getElementById('logoTrack');
@@ -584,10 +712,10 @@ function kick(){if(kickQueued)return;kickQueued=true;requestAnimationFrame(()=>{
 
 /* ---- dance films playlist: add a preview + thumb and the row becomes playable ---- */
 const FILMS=[
-  {t:"Big Magic",k:"Dance film · 90 sec cut",th:"media/bm-thumb.webp",src:"media/bm-preview.mp4",loop:"media/bm-loop.mp4",link:"https://drive.google.com/file/d/1acDWaoTfTBzJMs7BYr0LBbE1sm6u75bL/view"},
-  {t:"Manjha",k:"Dance film · 90 sec cut",th:"media/mj-thumb.webp",src:"media/mj-preview.mp4",link:"https://drive.google.com/file/d/1VEAoo6yDGeYRq0FK_6Z9c8SPoD3JiH-r/view"},
-  {t:"Sajna Ve · Bombay Rockers",k:"Music visual · 46 sec",th:"media/sv-dance.webp",src:"media/sv-preview.mp4",link:"https://drive.google.com/file/d/1oS6UdZAxPV_oqi-AIYq5fFeA-v0YbCqW/view"},
   {t:"Dhurandhar · Jogi",k:"Music video · 45 sec",th:"media/dh-thumb.webp",src:"media/dh-preview.mp4",link:"https://drive.google.com/file/d/1xeY0_sowezvnXTvUyiyA6G2RKYYiDi0w/view"},
+  {t:"Manjha",k:"Dance film · 90 sec cut",th:"media/mj-thumb.webp",src:"media/mj-preview.mp4",link:"https://drive.google.com/file/d/1VEAoo6yDGeYRq0FK_6Z9c8SPoD3JiH-r/view"},
+  {t:"Big Magic",k:"Dance film · 90 sec cut",th:"media/bm-thumb.webp",src:"media/bm-preview.mp4",loop:"media/bm-loop.mp4",link:"https://drive.google.com/file/d/1acDWaoTfTBzJMs7BYr0LBbE1sm6u75bL/view"},
+  {t:"Sajna Ve · Bombay Rockers",k:"Music visual · 46 sec",th:"media/sv-dance.webp",src:"media/sv-preview.mp4",link:"https://drive.google.com/file/d/1oS6UdZAxPV_oqi-AIYq5fFeA-v0YbCqW/view"},
   {t:"Pasoori",k:"Choreography · 45 sec",th:"media/ps-thumb.webp",src:"media/ps-preview.mp4",link:"https://drive.google.com/file/d/1xU51OneaEo5a5v9_Hjl6MYmPZeMni7MM/view"},
   {t:"Chal Bombay",k:"Choreography · 45 sec",th:"media/cb-thumb.webp",src:"media/cb-preview.mp4",link:"https://drive.google.com/file/d/1267g0MK7yVTAQbhlAUDuAh0nFX3PLJBM/view"},
   {t:"Behka Main Behka",k:"Dance visual · 45 sec",th:"media/bk-thumb.webp",src:"media/bk-preview.mp4",link:"https://drive.google.com/file/d/1HYT4orkt3Mjn0f8PEkPs1hWnzEG6IujC/view"},
@@ -596,8 +724,7 @@ const FILMS=[
   {t:"Project Throne",k:"Choreography · 45 sec",th:"media/pt-thumb.webp",src:"media/pt-preview.mp4",link:"https://drive.google.com/file/d/1XWgKTSum6rp7Jcppx12CBe3NU65wYTxV/view"},
   {t:"Cham Cham",k:"Music video · 45 sec",th:"media/cc-thumb.webp",src:"media/cc-preview.mp4",link:"https://drive.google.com/file/d/1U06lXbnP7Kv0ULUJvGqiiAxYrSrXYpki/view"},
   {t:"Mere Dil Vich Hai Hum Tum",k:"Choreography · 40 sec",th:"media/md-thumb.webp",src:"media/md-preview.mp4",link:"https://drive.google.com/file/d/1o-VeGjbz8em_tU8E5rtCoNxydW-w3MGG/view"},
-  {t:"Dynamite · BTS",k:"Choreography · 40 sec",th:"media/dy-thumb.webp",src:"media/dy-preview.mp4",link:"https://drive.google.com/file/d/1WFlgkPJaAUDUAaDkF2UmopiHKIYF17HI/view"},
-  {t:"Silent Poison",k:"Stage · Evolution 2 · 45 sec",th:"media/sp-thumb.webp",src:"media/sp-preview.mp4",link:"https://drive.google.com/file/d/12hDgQVGBTYqI-YriWgWZVPXxnJ4vewnO/view"}
+  {t:"Dynamite · BTS",k:"Choreography · 40 sec",th:"media/dy-thumb.webp",src:"media/dy-preview.mp4",link:"https://drive.google.com/file/d/1WFlgkPJaAUDUAaDkF2UmopiHKIYF17HI/view"}
 ];
 const stage=document.getElementById('stage'),fv=document.getElementById('fv'),plist=document.getElementById('playlist');
 function selectFilm(i,play){
@@ -662,11 +789,26 @@ const bar=document.querySelector('.bar'),cover=document.querySelector('.cover');
 function barFade(){const h=cover.offsetHeight,t=(scrollY-h*.55)/(h*.35);bar.style.setProperty('--bar',Math.max(0,Math.min(1,t)).toFixed(3))}
 addEventListener('scroll',barFade,{passive:true});addEventListener('resize',barFade);barFade();
 
-/* ---- scroll cue ---- */
-document.querySelector('.cue').addEventListener('click',e=>{e.preventDefault();
-  const t=document.getElementById('collective'),y=scrollY;
+/* ---- scroll cue and prompt options ---- */
+function goTo(t){const y=scrollY;
   t.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
-  setTimeout(()=>{if(scrollY===y)t.scrollIntoView()},600)});  // fallback where smooth scrolling is paused
+  setTimeout(()=>{if(scrollY===y)t.scrollIntoView()},600)}  // fallback where smooth scrolling is paused
+document.querySelectorAll('.cue,.ask a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();goTo(document.querySelector(a.getAttribute('href')))}));
+
+/* ---- first scroll on the cover: hold the page and ask what they came for; the next scroll moves on ---- */
+const ask=document.getElementById('ask');let asked=false,askAt=0;
+ask.inert=true;
+function holdFirst(e){
+  if(asked){if(Date.now()-askAt<700&&e.cancelable)e.preventDefault();return}  // swallow trackpad momentum from the same gesture
+  if(scrollY>5)return;
+  if(e.cancelable)e.preventDefault();
+  asked=true;askAt=Date.now();ask.classList.add('on');ask.inert=false;
+}
+let ty=0;
+addEventListener('wheel',e=>{if(e.deltaY>0)holdFirst(e)},{passive:false});
+addEventListener('touchstart',e=>{ty=e.touches[0].clientY},{passive:true});
+addEventListener('touchmove',e=>{if(ty-e.touches[0].clientY>8)holdFirst(e)},{passive:false});
+addEventListener('keydown',e=>{if(['ArrowDown','PageDown',' ','End'].includes(e.key)&&!e.target.closest('a,button,input,textarea'))holdFirst(e)});
 
 /* ---- cover line: exactly the logo's width, largest size that stays on two lines ---- */
 function fitLede(){
