@@ -129,7 +129,7 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
 /* 6 creators: cutout cards, photos slot in by filename */
 .creators .pad{gap:2cqw}
 .creators .head{display:flex;justify-content:space-between;align-items:flex-end;gap:3cqw}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:1.6cqw}
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:1.4cqw}
 .card{display:flex;flex-direction:column;gap:.9cqw}
 .flip{position:relative;display:block;width:100%;aspect-ratio:1/1;padding:0;border:0;background:none;cursor:pointer;perspective:1400px;border-radius:.8cqw;color:inherit}
 .flip-in{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.2,.75,.2,1)}
@@ -148,7 +148,7 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
 .hint::after{content:"";position:absolute;inset:0;border-radius:50%;border:1.5px solid var(--pink);animation:ping 1.8s cubic-bezier(.2,.6,.3,1) infinite}
 @keyframes ping{0%{transform:scale(1);opacity:.9}100%{transform:scale(3.2);opacity:0}}
 .flip[aria-pressed="true"] .hint::after{animation:none;opacity:0}
-.card .h3{font-size:1.75cqw}
+.card .h3{font-size:1.6cqw;min-height:2.1em}
 .music{display:flex;flex-wrap:wrap;align-items:baseline;gap:.6cqw 1.6cqw;border-top:1px solid var(--line);padding-top:1.2cqw}
 .music b,.music a{font:700 1.3cqw/1.2 var(--body)}
 .music a{text-decoration:none;border-bottom:.12cqw solid rgba(255,134,196,.6)}
@@ -209,6 +209,8 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
 .player .ctl b{font:800 16px/1 var(--display);text-transform:uppercase;letter-spacing:-.01em}
 .player .ctl a{color:var(--pink-2)}
 .player .x{font:500 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink);background:none;border:1px solid var(--line);border-radius:999px;padding:10px 14px;cursor:pointer}
+.player iframe{border:0;border-radius:10px;background:#000;box-shadow:0 0 80px rgba(255,79,166,.25);width:min(100%,1280px);aspect-ratio:16/9;max-height:calc(100% - 90px)}
+.player iframe.tall{width:min(100%,400px);aspect-ratio:auto;height:min(calc(100% - 70px),740px);max-height:none;background:#fff}
 .player .note{font:500 11px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 
 /* worked with: a slim logo strip under the brand films, grey at rest, colour on hover */
@@ -241,16 +243,17 @@ a.brand:hover{transform:translateY(-.2cqw)}
 .wai{width:1.15em;height:1.15em;flex:none;color:#25d366}
 .wa .sep{font-weight:400;color:rgba(255,255,255,.35)}
 
-/* placeholder sections (corporate events, sangeet): three "coming soon" tiles until media arrives */
+/* placeholder sections (corporate work, sangeet): three "coming soon" tiles until media arrives */
 .ph-slide .pad{gap:2.4cqw}
 .ph-slide .head{display:flex;justify-content:space-between;align-items:flex-end;gap:3cqw}
 .ph-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr;gap:1.3cqw}
 .ph-grid .cap{align-items:flex-start}
 .ph-grid .cap .row{align-self:stretch}
 .ph-grid.two{grid-template-columns:repeat(2,1fr)}
+.ph-grid.four{grid-template-columns:repeat(2,1fr);grid-template-rows:1fr 1fr}
 
 /* prompt targets stop clear of the fixed top bar */
-#brand-films,#dance-music-videos,#corporate-events,#sangeet-choreographies{scroll-margin-top:56px}
+#brand-films,#dance-music-videos,#corporate-work,#sangeet-choreographies{scroll-margin-top:56px}
 
 /* first-scroll prompt on the cover: sits just above the scroll cue */
 .ask{left:50%;bottom:calc(26px + 48px + 14px + env(safe-area-inset-bottom,0px));z-index:3;width:max-content;max-width:calc(100% - 32px);
@@ -288,7 +291,7 @@ a.brand:hover{transform:translateY(-.2cqw)}
   .ask-opts li+li::before{display:none}
   .ask-opts a{padding:10px 6px;white-space:normal;line-height:1.2}
   .ph-slide .head{flex-direction:column;align-items:flex-start;gap:10px}
-  .ph-grid,.ph-grid.two{grid-template-columns:1fr;grid-template-rows:none;gap:14px}
+  .ph-grid,.ph-grid.two,.ph-grid.four{grid-template-columns:1fr;grid-template-rows:none;gap:14px}
   .ph-grid .case{aspect-ratio:16/9;flex:none}
   .wa{gap:12px}.wa a{gap:7px}
   .cover .pad{flex:1;padding:24px;gap:22px;justify-content:center}
@@ -341,7 +344,7 @@ a.brand:hover{transform:translateY(-.2cqw)}
   .cards{grid-template-columns:1fr 1fr;gap:14px}
   .hint{width:9px;height:9px;right:10px;bottom:10px}
   .face,.flip{border-radius:10px}
-  .card{gap:8px}.card .h3{font-size:17px}
+  .card{gap:8px}.card .h3{font-size:17px;min-height:0}
   .music{gap:8px 16px;padding-top:16px}.music b,.music a{font-size:15px}.music a{border-bottom-width:1.5px}
 
   /* dance films playlist */
@@ -399,7 +402,7 @@ a.brand:hover{transform:translateY(-.2cqw)}
       <ul class="ask-opts">
         <li><a href="#dance-music-videos">Dance Music Videos</a></li>
         <li><a href="#brand-films">Brand Films</a></li>
-        <li><a href="#corporate-events">Corporate Events</a></li>
+        <li><a href="#corporate-work">Corporate Work</a></li>
         <li><a href="#sangeet-choreographies">Sangeet Choreographies</a></li>
       </ul>
     </nav>
@@ -514,11 +517,11 @@ a.brand:hover{transform:translateY(-.2cqw)}
     </div>
   </section>
 
-  <!-- CORPORATE EVENTS: placeholder; swap each .case.soon for a real tile when media arrives -->
-  <section class="slide ph-slide" id="corporate-events" aria-label="Corporate events">
+  <!-- CORPORATE WORK: placeholder; swap each .case.soon for a real tile when media arrives -->
+  <section class="slide ph-slide" id="corporate-work" aria-label="Corporate work">
     <div class="pad">
       <div class="head">
-        <h2 class="h2">Corporate<br><span class="pink">events</span></h2>
+        <h2 class="h2">Corporate<br><span class="pink">work</span></h2>
         <p class="small">Films and details coming soon.</p>
       </div>
       <div class="ph-grid">
@@ -551,14 +554,22 @@ a.brand:hover{transform:translateY(-.2cqw)}
         <h2 class="h2">Live<br><span class="pink">performances</span></h2>
         <p class="small">On stage with Fraction.</p>
       </div>
-      <div class="ph-grid two">
+      <div class="ph-grid four">
+        <article class="case">
+          <div class="media"><video class="mono" src="media/imap-preview.mp4" poster="media/imap-thumb.jpg" muted loop playsinline preload="metadata" aria-label="Bombay Rockers, live at the IMAP Annual Jam"></video></div>
+          <div class="cap"><p class="eyebrow">Stage · IMAP Annual Jam</p><div class="row"><h3 class="h3">Bombay Rockers</h3><button class="watch pv" type="button" data-src="media/imap-preview.mp4" data-title="Bombay Rockers · IMAP Annual Jam" data-link="https://drive.google.com/file/d/1SitAvQ8rYsJT6x098egbPqTXoB3qGq5E/view?usp=drive_link">Watch</button></div></div>
+        </article>
+        <article class="case">
+          <div class="media"><video class="mono" src="media/replay-preview.mp4" poster="media/replay-thumb.jpg" muted loop playsinline preload="metadata" aria-label="Fraction Replay, live at The Movement Hub"></video></div>
+          <div class="cap"><p class="eyebrow">Stage · The Movement Hub</p><div class="row"><h3 class="h3">Fraction Replay</h3><button class="watch pv" type="button" data-src="media/replay-preview.mp4" data-title="Fraction Replay · The Movement Hub" data-link="https://drive.google.com/file/d/1HTOi825k9OS_z0D_dTLAv4vnqz85N0Rz/view">Watch</button></div></div>
+        </article>
         <article class="case">
           <div class="media"><video class="mono" src="media/sp-preview.mp4" poster="media/sp-thumb.webp" muted loop playsinline preload="metadata" aria-label="Silent Poison, live at Evolution 2"></video></div>
           <div class="cap"><p class="eyebrow">Stage · Evolution 2</p><div class="row"><h3 class="h3">Silent Poison</h3><button class="watch pv" type="button" data-src="media/sp-preview.mp4" data-title="Silent Poison · Evolution 2" data-link="https://drive.google.com/file/d/12hDgQVGBTYqI-YriWgWZVPXxnJ4vewnO/view">Watch</button></div></div>
         </article>
         <article class="case">
-          <div class="media"><video class="mono" src="media/imap-preview.mp4" poster="media/imap-thumb.jpg" muted loop playsinline preload="metadata" aria-label="Fraction on stage at the IMAP Annual Jam"></video></div>
-          <div class="cap"><p class="eyebrow">Live performance</p><div class="row"><h3 class="h3">IMAP Annual Jam</h3><button class="watch pv" type="button" data-src="media/imap-preview.mp4" data-title="IMAP Annual Jam · Fraction showcase" data-link="https://drive.google.com/file/d/1SitAvQ8rYsJT6x098egbPqTXoB3qGq5E/view?usp=drive_link">Watch</button></div></div>
+          <div class="media"><video class="mono" src="media/evo-preview.mp4" poster="media/evo-thumb.jpg" muted loop playsinline preload="metadata" aria-label="Game of Thrones, live at Evolution 1"></video></div>
+          <div class="cap"><p class="eyebrow">Stage · Evolution 1</p><div class="row"><h3 class="h3">Game of Thrones</h3><button class="watch pv" type="button" data-src="media/evo-preview.mp4" data-title="Game of Thrones · Evolution 1" data-link="https://drive.google.com/file/d/1di30OpGhONzVNMaSg93pyN_quUMaJFnm/view">Watch</button></div></div>
         </article>
       </div>
     </div>
@@ -598,8 +609,9 @@ a.brand:hover{transform:translateY(-.2cqw)}
 <dialog class="player" id="player" aria-label="Film preview">
   <div class="wrap">
     <video id="pv" controls playsinline preload="none"></video>
+    <iframe id="pf" title="Video" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen hidden></iframe>
     <div class="ctl"><b id="pt"></b><a id="pl" href="#" target="_blank" rel="noopener">Full film on Drive ↗</a><button class="x" type="button" id="px">Close</button></div>
-    <p class="note">Preview encode · full quality on Drive</p>
+    <p class="note" id="pn">Preview encode · full quality on Drive</p>
   </div>
 </dialog>
 
@@ -620,10 +632,11 @@ applySources();phone.addEventListener('change',applySources);
 /* ---- slots: add a file with the slug as its name and it replaces the placeholder ---- */
 // [name, front photo, back photo (Fraction with the creator), "Watch here" link; a card without a group photo repeats its front]
 const CREATORS=[
-  ["Yashraj Mukhate","media/creators/yashraj-mukhate.webp","media/creators/yashraj-mukhate-group.webp",""],
-  ["Just Neel Things","media/creators/just-neel-things.webp","media/creators/just-neel-things-group.webp",""],
-  ["Prosenjit Kundu","media/creators/prosenjit-kundu.webp","media/creators/prosenjit-kundu-group.webp",""],
-  ["Ruhee Dosani","media/creators/ruhee-dosani.webp","media/creators/ruhee-dosani-group.webp",""]
+  ["Yashraj Mukhate","media/creators/yashraj-mukhate.webp","media/creators/yashraj-mukhate-group.webp","https://www.instagram.com/reel/CqQbEldDhk6/"],
+  ["Just Neel Things","media/creators/just-neel-things.webp","media/creators/just-neel-things-group.webp","https://www.instagram.com/reel/CfLVSBrDrl1/"],
+  ["Prosenjit Kundu","media/creators/prosenjit-kundu.webp","media/creators/prosenjit-kundu-group.webp","https://www.instagram.com/reel/CbxWSnKvh32/"],
+  ["Ruhee Dosani","media/creators/ruhee-dosani.webp","media/creators/ruhee-dosani-group.webp","https://www.instagram.com/reel/CrkXioyNFtJ/"],
+  ["Noel Alexander","media/creators/noel-alexander.jpg","media/creators/noel-alexander.jpg","https://www.instagram.com/reel/Cpm845-DHFQ/"]
 ];
 // Music videos & promotions: [name, video link]; a name without a link shows as plain text
 const MUSIC=[
@@ -651,8 +664,9 @@ CREATORS.forEach(([name,front,back,link],i)=>{
   c.innerHTML='<button class="flip" type="button" aria-pressed="false" style="--d:'+(i*1.1)+'s">'
     +'<span class="flip-in"><span class="face front"><img class="mono" alt=""></span><span class="face back"><img alt=""></span></span>'
     +'<span class="hint" aria-hidden="true"></span></button><h3 class="h3"></h3><p class="eyebrow">Creator</p>'
-    +(link?'<a class="watch" target="_blank" rel="noopener">Watch here</a>':'<span class="watch off" aria-disabled="true" title="Link coming soon">Watch here</span>');
-  if(link){const a=c.querySelector('a.watch');a.href=link;a.setAttribute('aria-label','Watch '+name+' with Fraction')}
+    +(link?'<button class="watch pv" type="button">Watch here</button>':'<span class="watch off" aria-disabled="true" title="Link coming soon">Watch here</span>');
+  if(link){const w=c.querySelector('.pv');w.dataset.embed=link.replace(/\/?$/,'/embed/');w.dataset.link=link;w.dataset.title=name+' × Fraction';
+    w.setAttribute('aria-label','Watch '+name+' with Fraction')}
   const [fi,bi]=c.querySelectorAll('img');fi.src=front;fi.alt=name;bi.src=back;bi.alt='Fraction with '+name;fi.loading=bi.loading='lazy';
   c.querySelector('h3').textContent=name;
   const btn=c.querySelector('.flip'),tag=c.querySelector('.eyebrow');
@@ -776,13 +790,18 @@ selectFilm(0,false);
 
 /* ---- in-deck player ---- */
 const dlg=document.getElementById('player'),pv=document.getElementById('pv');
+const pf=document.getElementById('pf');
 document.querySelectorAll('.play,.pv').forEach(b=>b.addEventListener('click',()=>{
-  pv.src=b.dataset.src;document.getElementById('pt').textContent=b.dataset.title;const pl=document.getElementById('pl');pl.hidden=!b.dataset.link;if(b.dataset.link)pl.href=b.dataset.link;
-  dlg.showModal();pv.play().catch(()=>{});
+  const em=b.dataset.embed,ig=/instagram\.com/.test(b.dataset.link||'');
+  document.getElementById('pt').textContent=b.dataset.title;const pl=document.getElementById('pl');pl.hidden=!b.dataset.link;if(b.dataset.link)pl.href=b.dataset.link;
+  pl.textContent=ig?'Open on Instagram ↗':'Full film on Drive ↗';document.getElementById('pn').hidden=!!em;
+  pv.hidden=!!em;pf.hidden=!em;pf.classList.toggle('tall',ig);
+  if(em)pf.src=em;else{pv.src=b.dataset.src;dlg.showModal();pv.play().catch(()=>{});return}
+  dlg.showModal();
 }));
-function closePlayer(){pv.pause();pv.removeAttribute('src');pv.load();if(dlg.open)dlg.close()}
+function closePlayer(){pv.pause();pv.removeAttribute('src');pv.load();pf.removeAttribute('src');if(dlg.open)dlg.close()}
 document.getElementById('px').onclick=closePlayer;
-dlg.addEventListener('close',()=>{pv.pause()});
+dlg.addEventListener('close',()=>{pv.pause();pf.removeAttribute('src')});
 dlg.addEventListener('click',e=>{if(e.target===dlg||e.target.classList.contains('wrap'))closePlayer()});
 
 /* ---- top bar: absent on the cover, fades in as the cover scrolls away ---- */
