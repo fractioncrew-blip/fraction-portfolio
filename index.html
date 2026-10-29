@@ -209,8 +209,13 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
 .player .ctl b{font:800 16px/1 var(--display);text-transform:uppercase;letter-spacing:-.01em}
 .player .ctl a{color:var(--pink-2)}
 .player .x{font:500 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink);background:none;border:1px solid var(--line);border-radius:999px;padding:10px 14px;cursor:pointer}
-.player iframe{border:0;border-radius:10px;background:#000;box-shadow:0 0 80px rgba(255,79,166,.25);width:min(100%,1280px);aspect-ratio:16/9;max-height:calc(100% - 90px)}
-.player iframe.tall{width:min(100%,400px);aspect-ratio:auto;height:min(calc(100% - 70px),740px);max-height:none;background:#fff}
+.player .frame{position:relative;overflow:hidden;border-radius:10px;background:#000;box-shadow:0 0 80px rgba(255,79,166,.25);width:min(100%,1280px);aspect-ratio:16/9;max-height:calc(100% - 90px)}
+.player .frame iframe{display:block;border:0;width:100%;height:100%;opacity:0;transition:opacity .4s}
+.player .frame iframe.ready{opacity:1}  /* embeds paint white while loading */
+/* Instagram reels: the embed draws its video in a 4:5 box under a 54px white header, with white captions below;
+   crop to that box so only the video shows */
+.player .frame.ig{width:min(100%,600px,calc((100dvh - 150px) * .8));aspect-ratio:4/5;max-height:none}
+.player .frame.ig iframe{height:calc(100% + 54px + 260px);margin-top:-54px}
 .player .note{font:500 11px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 
 /* worked with: a slim logo strip under the brand films, grey at rest, colour on hover */
@@ -609,7 +614,7 @@ a.brand:hover{transform:translateY(-.2cqw)}
 <dialog class="player" id="player" aria-label="Film preview">
   <div class="wrap">
     <video id="pv" controls playsinline preload="none"></video>
-    <iframe id="pf" title="Video" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen hidden></iframe>
+    <div class="frame" id="pfw" hidden></div>
     <div class="ctl"><b id="pt"></b><a id="pl" href="#" target="_blank" rel="noopener">Full film on Drive ↗</a><button class="x" type="button" id="px">Close</button></div>
     <p class="note" id="pn">Preview encode · full quality on Drive</p>
   </div>
@@ -792,18 +797,21 @@ selectFilm(0,false);
 
 /* ---- in-deck player ---- */
 const dlg=document.getElementById('player'),pv=document.getElementById('pv');
-const pf=document.getElementById('pf');
+const pfw=document.getElementById('pfw');
+/* a fresh frame per open: a reused one does not reliably reload; it stays hidden until the embed has painted */
+function embed(src){const f=document.createElement('iframe');f.title='Video';f.allow='autoplay; encrypted-media; fullscreen; picture-in-picture';
+  f.allowFullscreen=true;f.scrolling='no';f.onload=()=>setTimeout(()=>f.classList.add('ready'),600);f.src=src;pfw.replaceChildren(f)}
 document.querySelectorAll('.play,.pv').forEach(b=>b.addEventListener('click',()=>{
   const em=b.dataset.embed,ig=/instagram\.com/.test(b.dataset.link||'');
   document.getElementById('pt').textContent=b.dataset.title;const pl=document.getElementById('pl');pl.hidden=!b.dataset.link;if(b.dataset.link)pl.href=b.dataset.link;
   pl.textContent=ig?'Open on Instagram ↗':'Full film on Drive ↗';document.getElementById('pn').hidden=!!em;
-  pv.hidden=!!em;pf.hidden=!em;pf.classList.toggle('tall',ig);
-  if(em)pf.src=em;else{pv.src=b.dataset.src;dlg.showModal();pv.play().catch(()=>{});return}
+  pv.hidden=!!em;pfw.hidden=!em;pfw.classList.toggle('ig',ig);
+  if(em)embed(em);else{pv.src=b.dataset.src;dlg.showModal();pv.play().catch(()=>{});return}
   dlg.showModal();
 }));
-function closePlayer(){pv.pause();pv.removeAttribute('src');pv.load();pf.removeAttribute('src');if(dlg.open)dlg.close()}
+function closePlayer(){pv.pause();pv.removeAttribute('src');pv.load();pfw.replaceChildren();if(dlg.open)dlg.close()}
 document.getElementById('px').onclick=closePlayer;
-dlg.addEventListener('close',()=>{pv.pause();pf.removeAttribute('src')});
+dlg.addEventListener('close',()=>{pv.pause();pfw.replaceChildren()});
 dlg.addEventListener('click',e=>{if(e.target===dlg||e.target.classList.contains('wrap'))closePlayer()});
 
 /* ---- top bar: absent on the cover, fades in as the cover scrolls away ---- */
