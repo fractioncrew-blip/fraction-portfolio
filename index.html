@@ -32,6 +32,15 @@ a{color:inherit}
   padding:calc(14px + env(safe-area-inset-top,0px)) clamp(16px,3vw,40px) 34px;
   background:linear-gradient(var(--ground) 35%,rgba(8,3,13,.7) 65%,transparent);opacity:var(--bar,0)}
 .bar .mark{width:104px;height:45px;pointer-events:auto}
+.bar-r{margin-left:auto;display:flex;align-items:center;gap:10px;pointer-events:auto}
+.bar:not(.on) .bar-r{pointer-events:none;visibility:hidden}
+.hire{font:600 14px/1 var(--body);color:#fff;background:var(--pink);text-decoration:none;border-radius:999px;padding:11px 18px;box-shadow:0 0 22px rgba(255,79,166,.45);
+  opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .5s,transform .5s,visibility .5s,background .2s}
+.hire.on{opacity:1;visibility:visible;transform:none}
+.hire:hover{background:#ff6ab6}
+.home{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;color:var(--ink);border:1px solid var(--line);background:rgba(8,3,13,.55);transition:color .2s,border-color .2s}
+.home svg{width:16px;height:16px}
+.home:hover{color:var(--pink-2);border-color:var(--pink-2)}
 .mark{display:block;background:var(--logo);-webkit-mask:url(media/logo.webp) center/contain no-repeat;mask:url(media/logo.webp) center/contain no-repeat}
 
 /* ---------- deck: true 16:9 stages scaled in cqw ---------- */
@@ -109,7 +118,7 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
 .brands .pad{gap:1.6cqw;padding-block:4.2cqw 3.6cqw}
 .brands .head{display:flex;justify-content:space-between;align-items:flex-end;gap:3cqw}
 /* collage: wide Kameezing, tall Fast&Up at true 9:16, two short tiles stacked; captions sit inside each tile */
-.cases{--ch:27cqw;display:grid;grid-template-columns:1fr repeat(3,calc(var(--ch)*9/16));grid-template-rows:var(--ch);gap:1.3cqw}
+.cases{--ch:27cqw;display:grid;grid-template-columns:1fr repeat(4,calc(var(--ch)*9/16));grid-template-rows:var(--ch);gap:1.3cqw}
 .case{position:relative;overflow:hidden;border-radius:.8cqw;background:#000;border:1px solid var(--line);min-height:0}
 .case .media{position:absolute;inset:0}
 .case .media video{width:100%;height:100%;display:block;object-fit:cover}
@@ -240,22 +249,30 @@ a.brand:hover{transform:translateY(-.2cqw)}
 .lines{display:grid;grid-template-columns:auto auto;gap:1.2cqw 3cqw}
 .lines div{display:flex;flex-direction:column;gap:.4cqw;border-top:1px solid rgba(255,255,255,.2);padding-top:.9cqw}
 .lines div:nth-child(2){grid-column:1/3;grid-row:2}
-.lines b{font:700 1.8cqw/1.15 var(--body);user-select:all}
-.lines b.wa{user-select:auto}
+.lines b{font:700 1.8cqw/1.15 var(--body)}
+.lines a{text-decoration:none}
+.lines a:hover{color:var(--pink-2)}
+.lines b.wa{font-size:1.25cqw}
 .wa{display:flex;align-items:center;gap:1cqw}
-.wa a{display:inline-flex;align-items:center;gap:.6cqw;text-decoration:none}
-.wa a:hover{color:var(--pink-2)}
+.wa a{display:inline-flex;align-items:center;gap:.5cqw}
 .wai{width:1.15em;height:1.15em;flex:none;color:#25d366}
 .wa .sep{font-weight:400;color:rgba(255,255,255,.35)}
 
-/* placeholder sections (corporate work, sangeet): three "coming soon" tiles until media arrives */
+/* three-tile sections: corporate work, and sangeet ("coming soon" tiles until media arrives) */
 .ph-slide .pad{gap:2.4cqw}
 .ph-slide .head{display:flex;justify-content:space-between;align-items:flex-end;gap:3cqw}
 .ph-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr;gap:1.3cqw}
 .ph-grid .cap{align-items:flex-start}
 .ph-grid .cap .row{align-self:stretch}
 .ph-grid.two{grid-template-columns:repeat(2,1fr)}
-.ph-grid.four{grid-template-columns:repeat(2,1fr);grid-template-rows:1fr 1fr}
+.ph-grid.four{grid-template-columns:repeat(2,1fr);grid-template-rows:none}
+.ph-grid.four .case{aspect-ratio:16/9}
+/* five vertical films side by side at their true 9:16, caption stacked as on the brand tiles */
+.ph-grid.five{flex:none;grid-template-columns:repeat(5,1fr);grid-template-rows:none}
+.ph-grid.five .case{aspect-ratio:9/16}
+.ph-grid.five .cap .row{flex-direction:column;align-items:flex-start;gap:.6cqw}
+#live-performances{aspect-ratio:auto}
+#live-performances .pad{position:relative;inset:auto}
 
 /* prompt targets stop clear of the fixed top bar */
 #brand-films,#dance-music-videos,#corporate-work,#sangeet-choreographies{scroll-margin-top:56px}
@@ -296,8 +313,10 @@ a.brand:hover{transform:translateY(-.2cqw)}
   .ask-opts li+li::before{display:none}
   .ask-opts a{padding:10px 6px;white-space:normal;line-height:1.2}
   .ph-slide .head{flex-direction:column;align-items:flex-start;gap:10px}
-  .ph-grid,.ph-grid.two,.ph-grid.four{grid-template-columns:1fr;grid-template-rows:none;gap:14px}
+  .ph-grid,.ph-grid.two,.ph-grid.four,.ph-grid.five{grid-template-columns:1fr;grid-template-rows:none;gap:14px}
   .ph-grid .case{aspect-ratio:16/9;flex:none}
+  #corporate-work .case{aspect-ratio:4/5}
+  #corporate-work .cap .row{flex-direction:row;align-items:baseline}
   .wa{gap:12px}.wa a{gap:7px}
   .cover .pad{flex:1;padding:24px;gap:22px;justify-content:center}
   .cover .mark{width:74vw;height:31.9vw}
@@ -382,7 +401,7 @@ a.brand:hover{transform:translateY(-.2cqw)}
   .contact .mark{width:52vw;height:22.4vw}
   .contact .foot{flex-direction:column;align-items:flex-start;gap:22px}
   .lines{grid-template-columns:1fr;gap:14px}.lines div:nth-child(2){grid-column:auto;grid-row:auto}
-  .lines b{font-size:18px}
+  .lines b{font-size:18px}.lines b.wa{font-size:15px}
 }
 @media (prefers-reduced-motion:reduce){.hint::after{animation:none}.flip-in{transition:transform .01s}.creators .flip .flip-in{animation:none!important}.track{animation:none;flex-wrap:wrap;justify-content:center;width:auto;row-gap:4cqw}.track [aria-hidden="true"]{display:none}.cue::before{animation:none}.ask,.ask.on{transition:none}.orb{animation:none}.mono{transition:none}}
 </style>
@@ -391,12 +410,16 @@ a.brand:hover{transform:translateY(-.2cqw)}
 
 <nav class="bar" aria-label="Fraction">
   <span class="mark" role="img" aria-label="Fraction"></span>
-  </nav>
+  <div class="bar-r">
+    <a class="hire" id="hire" href="#contact">Hire us</a>
+    <a class="home" href="#top" aria-label="Back to the homepage" title="Back to the homepage"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </div>
+</nav>
 
 <main class="deck" id="deck">
 
   <!-- 1 COVER: Fashion Film '26, edge to edge -->
-  <section class="slide cover media-slide" aria-label="Cover">
+  <section id="top" class="slide cover media-slide" aria-label="Cover">
     <video class="bg mono" data-dsrc="media/ff-loop.mp4" data-dposter="media/ff-loop-poster.webp" data-msrc="media/ffv-loop.mp4" data-mposter="media/ffv-loop-poster.webp" muted loop playsinline preload="metadata" aria-label="Fashion Film 2026"></video>
     <div class="shade"></div>
     <div class="pad">
@@ -424,7 +447,7 @@ a.brand:hover{transform:translateY(-.2cqw)}
         <li>Choreography</li><li>Direction</li><li>Cinematography</li><li>Editing</li><li class="brk" aria-hidden="true"></li><li>Styling &amp; costume</li><li>Music</li><li>Marketing</li>
       </ul>
     </div>
-    <div class="frame"><video class="mono" src="media/bebo.mp4" poster="media/bebo-poster.webp" muted loop playsinline preload="metadata" aria-label="Fraction crew dancing in front of a graffiti wall"></video></div>
+    <div class="frame"><video class="mono" src="media/coke-loop.mp4" poster="media/coke-poster.jpg" muted loop playsinline preload="metadata" aria-label="Fraction crew dancing to Magic, Coke Studio India"></video></div>
   </section>
 
   <!-- 3 FASHION FILM -->
@@ -477,6 +500,10 @@ a.brand:hover{transform:translateY(-.2cqw)}
           <div class="media"><video class="mono" src="media/tss-loop.mp4" poster="media/tss-loop-poster.webp" muted loop playsinline preload="metadata"></video></div>
           <div class="cap"><p class="eyebrow">Dance-led brand film</p><div class="row"><h3 class="h3">The Souled Store</h3><button class="watch pv" type="button" data-src="media/tss-film.mp4" data-title="The Souled Store · Dance-led brand film">Watch</button></div></div>
         </article>
+        <article class="case fu">
+          <div class="media"><video class="mono" src="media/fila-loop.mp4" poster="media/fila-poster.jpg" muted loop playsinline preload="metadata"></video></div>
+          <div class="cap"><p class="eyebrow">Ad campaign choreography</p><div class="row"><h3 class="h3">Fila</h3><button class="watch pv" type="button" data-src="media/fila-film.mp4" data-title="Fila · Ad campaign choreography">Watch</button></div></div>
+        </article>
       </div>
       <div class="wstrip">
         <p class="eyebrow">Worked with</p>
@@ -522,17 +549,33 @@ a.brand:hover{transform:translateY(-.2cqw)}
     </div>
   </section>
 
-  <!-- CORPORATE WORK: placeholder; swap each .case.soon for a real tile when media arrives -->
+  <!-- CORPORATE WORK: each tile loops a short cut of the vertical film and opens the film in the in-deck player -->
   <section class="slide ph-slide" id="corporate-work" aria-label="Corporate work">
     <div class="pad">
       <div class="head">
         <h2 class="h2">Corporate<br><span class="pink">work</span></h2>
-        <p class="small">Films and details coming soon.</p>
       </div>
-      <div class="ph-grid">
-        <article class="case soon"><div class="media"></div><div class="cap"><span class="tag">Media coming soon</span></div></article>
-        <article class="case soon"><div class="media"></div><div class="cap"><span class="tag">Media coming soon</span></div></article>
-        <article class="case soon"><div class="media"></div><div class="cap"><span class="tag">Media coming soon</span></div></article>
+      <div class="ph-grid five">
+        <article class="case">
+          <div class="media"><video class="mono" src="media/rank-loop.mp4" poster="media/rank-poster.jpg" muted loop playsinline preload="metadata" aria-label="Fraction leading a dance fitness session at Rank Group"></video></div>
+          <div class="cap"><p class="eyebrow">Group fitness session</p><div class="row"><h3 class="h3">Rank Group</h3><button class="watch pv" type="button" data-src="media/rank-film.mp4" data-title="Rank Group · Group fitness session">Watch</button></div></div>
+        </article>
+        <article class="case">
+          <div class="media"><video class="mono" src="media/watertec-loop.mp4" poster="media/watertec-poster.jpg" muted loop playsinline preload="metadata" aria-label="Fraction with the Watertec India team at their annual conference"></video></div>
+          <div class="cap"><p class="eyebrow">Annual conference</p><div class="row"><h3 class="h3">Watertec India</h3><button class="watch pv" type="button" data-src="media/watertec-film.mp4" data-title="Watertec India · Annual conference">Watch</button></div></div>
+        </article>
+        <article class="case">
+          <div class="media"><video class="mono" src="media/gofynd-loop.mp4" poster="media/gofynd-poster.jpg" muted loop playsinline preload="metadata" aria-label="Fraction leading the GoFynd team on the dance floor"></video></div>
+          <div class="cap"><p class="eyebrow">Event Launch</p><div class="row"><h3 class="h3">GoFynd</h3><button class="watch pv" type="button" data-src="media/gofynd-film.mp4" data-title="GoFynd · Event Launch">Watch</button></div></div>
+        </article>
+        <article class="case">
+          <div class="media"><video class="mono" src="media/airtel-loop.mp4" poster="media/airtel-poster.jpg" muted loop playsinline preload="metadata" aria-label="Fraction performing at an Airtel event"></video></div>
+          <div class="cap"><p class="eyebrow">Corporate event</p><div class="row"><h3 class="h3">Airtel</h3><button class="watch pv" type="button" data-src="media/airtel-film.mp4" data-title="Airtel · Corporate event">Watch</button></div></div>
+        </article>
+        <article class="case">
+          <div class="media"><video class="mono" src="media/pidilite-loop.mp4" poster="media/pidilite-poster.jpg" muted loop playsinline preload="metadata" aria-label="Fraction with the Pidilite team at their annual conference"></video></div>
+          <div class="cap"><p class="eyebrow">Annual conference</p><div class="row"><h3 class="h3">Pidilite</h3><button class="watch pv" type="button" data-src="media/pidilite-film.mp4" data-title="Pidilite · Annual conference">Watch</button></div></div>
+        </article>
       </div>
     </div>
   </section>
@@ -592,7 +635,7 @@ a.brand:hover{transform:translateY(-.2cqw)}
   </section>
 
   <!-- 10 CONTACT: group still, full bleed -->
-  <section class="slide contact media-slide" aria-label="Contact">
+  <section class="slide contact media-slide" id="contact" aria-label="Contact">
     <img class="bg mono" src="media/ff-01574.webp" alt="The Fraction collective on the shore, Fashion Film 2026">
     <div class="shade"></div>
     <div class="pad">
@@ -600,9 +643,9 @@ a.brand:hover{transform:translateY(-.2cqw)}
       <div class="foot">
         <h2 class="h2">Let’s make<br>the <span class="pink">next one.</span></h2>
         <div class="lines">
-          <div><span class="eyebrow">Email</span><b>fractioncrew@gmail.com</b></div>
+          <div><span class="eyebrow">Email</span><b><a href="mailto:fractioncrew@gmail.com">fractioncrew@gmail.com</a></b></div>
           <div><span class="eyebrow">Phone · WhatsApp</span><b class="wa"><a href="https://wa.me/919664276169?text=Hi%20Pratik%2C%20I%20wanted%20to%20know%20more%20about%20Team%20Fraction" target="_blank" rel="noopener" title="+91 9664276169" aria-label="WhatsApp Pratik, +91 9664276169"><svg class="wai" aria-hidden="true"><use href="#wa-icon"/></svg>Pratik</a><span class="sep" aria-hidden="true">|</span><a href="https://wa.me/917977275660?text=Hi%20Mitesh%2C%20I%20wanted%20to%20know%20more%20about%20Team%20Fraction" target="_blank" rel="noopener" title="+91 7977275660" aria-label="WhatsApp Mitesh, +91 7977275660"><svg class="wai" aria-hidden="true"><use href="#wa-icon"/></svg>Mitesh</a></b></div>
-          <div><span class="eyebrow">Instagram</span><b><a href="https://instagram.com/team.fraction" target="_blank" rel="noopener" style="text-decoration:none">@team.fraction</a></b></div>
+          <div><span class="eyebrow">Instagram</span><b><a href="https://instagram.com/team.fraction" target="_blank" rel="noopener">@team.fraction</a></b></div>
         </div>
       </div>
     </div>
@@ -635,11 +678,11 @@ function applySources(){
 applySources();phone.addEventListener('change',applySources);
 
 /* ---- slots: add a file with the slug as its name and it replaces the placeholder ---- */
-// [name, front photo, back photo (Fraction with the creator), "Watch here" link; a card without a group photo repeats its front]
+// [name, front photo, back photo (Fraction with the creator), "Watch here" link, local film (played instead of the Instagram embed); a card without a group photo repeats its front]
 const CREATORS=[
   ["Yashraj Mukhate","media/creators/yashraj-mukhate.webp","media/creators/yashraj-mukhate-group.webp","https://www.instagram.com/reel/CqQbEldDhk6/"],
-  ["Just Neel Things","media/creators/just-neel-things.webp","media/creators/just-neel-things-group.webp","https://www.instagram.com/reel/CfLVSBrDrl1/"],
-  ["Prosenjit Kundu","media/creators/prosenjit-kundu.webp","media/creators/prosenjit-kundu-group.webp","https://www.instagram.com/reel/CbxWSnKvh32/"],
+  ["Just Neel Things","media/creators/just-neel-things.webp","media/creators/just-neel-things-group.webp","https://www.instagram.com/reel/CfLVSBrDrl1/","media/jnt-film.mp4"],
+  ["Prosenjit Kundu","media/creators/prosenjit-kundu.webp","media/creators/prosenjit-kundu-group.webp","https://www.instagram.com/reel/CbxWSnKvh32/","media/kundu-film.mp4"],
   ["Ruhee Dosani","media/creators/ruhee-dosani.webp","media/creators/ruhee-dosani-group.webp","https://www.instagram.com/reel/CrkXioyNFtJ/"],
   ["Noel Alexander","media/creators/noel-alexander.jpg","media/creators/noel-alexander-group.jpg","https://www.instagram.com/reel/Cpm845-DHFQ/"]
 ];
@@ -662,17 +705,18 @@ const LOGOS=[
   ["Pidilite","media/logos/pidilite.png","",7.6],
   ["Fila","media/logos/fila.png","",5.4],
   ["Rank","media/logos/rank.png","",7.2],
-  ["GoFynd","media/logos/gofynd.png","",8.0]
+  ["GoFynd","media/logos/gofynd.png","",8.0],
+  ["Watertec","media/logos/watertec.png","",7.4]
 ];
 /* creator cards flip in 3D to show Fraction with that creator */
 const cardsEl=document.getElementById('creatorCards'),crSec=cardsEl.closest('.slide');
-CREATORS.forEach(([name,front,back,link],i)=>{
+CREATORS.forEach(([name,front,back,link,film],i)=>{
   const c=document.createElement('div');c.className='card';
   c.innerHTML='<button class="flip" type="button" aria-pressed="false" style="--d:'+(i*1.1)+'s">'
     +'<span class="flip-in"><span class="face front"><img class="mono" alt=""></span><span class="face back"><img alt=""></span></span>'
     +'<span class="hint" aria-hidden="true"></span></button><h3 class="h3"></h3><p class="eyebrow">Creator</p>'
     +(link?'<button class="watch pv" type="button">Watch here</button>':'<span class="watch off" aria-disabled="true" title="Link coming soon">Watch here</span>');
-  if(link){const w=c.querySelector('.pv');w.dataset.embed=link.replace(/\/?$/,'/embed/');w.dataset.link=link;w.dataset.title=name+' × Fraction';
+  if(link){const w=c.querySelector('.pv');if(film)w.dataset.src=film;else w.dataset.embed=link.replace(/\/?$/,'/embed/');w.dataset.link=link;w.dataset.title=name+' × Fraction';
     w.setAttribute('aria-label','Watch '+name+' with Fraction')}
   const [fi,bi]=c.querySelectorAll('img');fi.src=front;fi.alt=name;bi.src=back;bi.alt='Fraction with '+name;fi.loading=bi.loading='lazy';
   c.querySelector('h3').textContent=name;
@@ -804,7 +848,7 @@ function embed(src){const f=document.createElement('iframe');f.title='Video';f.a
 document.querySelectorAll('.play,.pv').forEach(b=>b.addEventListener('click',()=>{
   const em=b.dataset.embed,ig=/instagram\.com/.test(b.dataset.link||'');
   document.getElementById('pt').textContent=b.dataset.title;const pl=document.getElementById('pl');pl.hidden=!b.dataset.link;if(b.dataset.link)pl.href=b.dataset.link;
-  pl.textContent=ig?'Open on Instagram ↗':'Full film on Drive ↗';document.getElementById('pn').hidden=!!em;
+  pl.textContent=ig?'Open on Instagram ↗':'Full film on Drive ↗';document.getElementById('pn').hidden=!!em||ig||!b.dataset.link;
   pv.hidden=!!em;pfw.hidden=!em;pfw.classList.toggle('ig',ig);
   if(em)embed(em);else{pv.src=b.dataset.src;dlg.showModal();pv.play().catch(()=>{});return}
   dlg.showModal();
@@ -816,14 +860,19 @@ dlg.addEventListener('click',e=>{if(e.target===dlg||e.target.classList.contains(
 
 /* ---- top bar: absent on the cover, fades in as the cover scrolls away ---- */
 const bar=document.querySelector('.bar'),cover=document.querySelector('.cover');
-function barFade(){const h=cover.offsetHeight,t=(scrollY-h*.55)/(h*.35);bar.style.setProperty('--bar',Math.max(0,Math.min(1,t)).toFixed(3))}
+function barFade(){const h=cover.offsetHeight,t=(scrollY-h*.55)/(h*.35);bar.style.setProperty('--bar',Math.max(0,Math.min(1,t)).toFixed(3));bar.classList.toggle('on',t>.5)}
 addEventListener('scroll',barFade,{passive:true});addEventListener('resize',barFade);barFade();
 
 /* ---- scroll cue and prompt options ---- */
 function goTo(t){const y=scrollY;
   t.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
   setTimeout(()=>{if(scrollY===y)t.scrollIntoView()},600)}  // fallback where smooth scrolling is paused
-document.querySelectorAll('.cue,.ask a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();goTo(document.querySelector(a.getAttribute('href')))}));
+document.querySelectorAll('.cue,.ask a,.hire,.home').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();goTo(document.querySelector(a.getAttribute('href')))}));
+
+/* ---- "Hire us" pops up while one of the four main segments is on screen ---- */
+const hire=document.getElementById('hire'),inSeg=new Set();
+const segIO=new IntersectionObserver(es=>{es.forEach(e=>e.isIntersecting?inSeg.add(e.target):inSeg.delete(e.target));hire.classList.toggle('on',inSeg.size>0)},{rootMargin:'-40% 0px -40% 0px'});
+['dance-music-videos','brand-films','corporate-work','sangeet-choreographies'].forEach(id=>segIO.observe(document.getElementById(id)));
 
 /* ---- first scroll on the cover: hold the page and ask what they came for; the next scroll moves on ---- */
 const ask=document.getElementById('ask');let asked=false,askAt=0;
