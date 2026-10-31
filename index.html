@@ -158,11 +158,13 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
 @keyframes ping{0%{transform:scale(1);opacity:.9}100%{transform:scale(3.2);opacity:0}}
 .flip[aria-pressed="true"] .hint::after{animation:none;opacity:0}
 .card .h3{font-size:1.6cqw;min-height:2.1em}
-.music{display:flex;flex-wrap:wrap;align-items:baseline;gap:.6cqw 1.6cqw;border-top:1px solid var(--line);padding-top:1.2cqw}
-.music b,.music a{font:700 1.3cqw/1.2 var(--body)}
-.music a{text-decoration:none;border-bottom:.12cqw solid rgba(255,134,196,.6)}
-.music a::after{content:" ↗";color:var(--pink-2)}
-.music a:hover{color:var(--pink-2)}
+.music{display:flex;flex-direction:column;gap:1.6cqw;margin-top:2cqw}
+.music-list{display:flex;flex-wrap:wrap;gap:.8cqw}
+.music-list button,.music-list span{display:inline-flex;align-items:center;gap:.55cqw;font:600 1.25cqw/1 var(--body);color:#fff;background:var(--pink);border:0;border-radius:999px;padding:.85cqw 1.4cqw;white-space:nowrap}
+.music-list button::before,.music-list span::before{content:"";border-style:solid;border-width:.38cqw 0 .38cqw .62cqw;border-color:transparent transparent transparent currentColor}
+.music-list button{cursor:pointer;box-shadow:0 0 1.4cqw rgba(255,79,166,.45);transition:background .2s}
+.music-list button:hover{background:#ff6ab6}
+.music-list span{opacity:.55}  /* no video link yet */
 .card .watch{align-self:flex-start}
 .watch.off{opacity:.45;cursor:default}
 
@@ -271,8 +273,8 @@ a.brand:hover{transform:translateY(-.2cqw)}
 .ph-grid.five{flex:none;grid-template-columns:repeat(5,1fr);grid-template-rows:none}
 .ph-grid.five .case{aspect-ratio:9/16}
 .ph-grid.five .cap .row{flex-direction:column;align-items:flex-start;gap:.6cqw}
-#live-performances{aspect-ratio:auto}
-#live-performances .pad{position:relative;inset:auto}
+#live-performances,.creators{aspect-ratio:auto}
+#live-performances .pad,.creators .pad{position:relative;inset:auto}
 
 /* prompt targets stop clear of the fixed top bar */
 #brand-films,#dance-music-videos,#corporate-work,#sangeet-choreographies{scroll-margin-top:56px}
@@ -369,7 +371,7 @@ a.brand:hover{transform:translateY(-.2cqw)}
   .hint{width:9px;height:9px;right:10px;bottom:10px}
   .face,.flip{border-radius:10px}
   .card{gap:8px}.card .h3{font-size:17px;min-height:0}
-  .music{gap:8px 16px;padding-top:16px}.music b,.music a{font-size:15px}.music a{border-bottom-width:1.5px}
+  .music{gap:14px;margin-top:12px}.music .h2{font-size:min(44px,calc((100vw - 40px)/11))}.music-list{gap:8px}.music-list button,.music-list span{font-size:14px;padding:11px 16px;gap:8px}.music-list button::before,.music-list span::before{border-width:5px 0 5px 8px}
 
   /* dance films playlist */
   .films .pad{flex-direction:column;align-items:stretch;gap:18px}
@@ -520,8 +522,9 @@ a.brand:hover{transform:translateY(-.2cqw)}
         <p class="eyebrow">Creator collaborations</p>
       </div>
       <div class="cards" id="creatorCards"></div>
-      <div class="music" id="musicList">
-        <span class="eyebrow">Music videos &amp; promotions</span>
+      <div class="music">
+        <h2 class="h2">Choreography <span class="pink">work</span></h2>
+        <div class="music-list" id="musicList"></div>
       </div>
     </div>
   </section>
@@ -686,13 +689,15 @@ const CREATORS=[
   ["Ruhee Dosani","media/creators/ruhee-dosani.webp","media/creators/ruhee-dosani-group.webp","https://www.instagram.com/reel/CrkXioyNFtJ/"],
   ["Noel Alexander","media/creators/noel-alexander.jpg","media/creators/noel-alexander-group.jpg","https://www.instagram.com/reel/Cpm845-DHFQ/"]
 ];
-// Music videos & promotions: [name, video link]; a name without a link shows as plain text
+// Choreography work: [name, video file or YouTube link]; plays in the in-deck player, a name without a video shows dimmed
 const MUSIC=[
-  ["Nikhil & Rishabh",""],
-  ["Jaadu",""],
-  ["Anant Khamkar",""],
-  ["Riya Duggal",""],
-  ["RuhFikra",""]
+  ["Nikhil & Rishabh","media/nikhil-rishabh-film.mp4"],
+  ["Jaadu","https://youtu.be/vsIqlEOAmpQ"],
+  ["Anant Khamkar","https://youtu.be/PEKFrwLq2Bs"],
+  ["Riya Duggal","media/riya-film.mp4"],
+  ["RuhFikra","media/ruhfikra-film.mp4"],
+  ["Sharjah Warriors","media/sharjah-film.mp4"],
+  ["Bewafa Music Video","media/bewafa-film.mp4"]
 ];
 // Worked with: [name, logo file, full video link or "", logo height in cqw (evens out wide vs tall marks)]
 const LOGOS=[
@@ -728,8 +733,11 @@ CREATORS.forEach(([name,front,back,link,film],i)=>{
 });
 const musicEl=document.getElementById('musicList');
 MUSIC.forEach(([name,link])=>{
-  const el=document.createElement(link?'a':'b');el.textContent=name;
-  if(link){el.href=link;el.target='_blank';el.rel='noopener'}
+  if(!link){const off=document.createElement('span');off.textContent=name;off.title='Link coming soon';musicEl.appendChild(off);return}
+  const el=document.createElement('button');el.type='button';el.className='pv';el.textContent=name;
+  const yt=link.match(/youtu\.be\/([\w-]+)/);
+  if(yt)el.dataset.embed='https://www.youtube-nocookie.com/embed/'+yt[1]+'?autoplay=1&rel=0';else el.dataset.src=link;
+  el.dataset.title=name+' × Fraction';el.setAttribute('aria-label','Watch '+name+' with Fraction');
   musicEl.appendChild(el);
 });
 /* the row is drawn twice so the -50% loop is seamless; the copy is hidden from screen readers */
