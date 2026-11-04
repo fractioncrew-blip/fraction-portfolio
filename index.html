@@ -170,7 +170,7 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
 
 /* 7 dance films: playlist, stage left, scrolling thumbnails right */
 .films .pad{gap:1.8cqw}
-.films .h2{font-size:4cqw}
+.films .h2{font-size:5.6cqw}
 .films .frow{flex:1;min-height:0;display:flex;align-items:center;gap:2.6cqw}
 .films .stagewrap{width:55cqw;flex:none;display:flex;flex-direction:column;gap:1.3cqw}
 .stage{position:relative;aspect-ratio:16/9;border-radius:.8cqw;overflow:hidden;background:#000;border:1px solid var(--line)}
@@ -212,6 +212,36 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
   padding:.9cqw 1.5cqw .9cqw 1.1cqw;cursor:pointer;box-shadow:0 0 3cqw rgba(255,79,166,.45);white-space:nowrap;width:max-content}
 .play::before{content:"";width:0;height:0;border-left:.9cqw solid #fff;border-top:.55cqw solid transparent;border-bottom:.55cqw solid transparent}
 .play:hover{background:#ff6ab6}
+/* Fashion Film stills: full-screen collage in the deck's colours */
+.stills{border:0;padding:0;margin:0;background:var(--ground);color:var(--ink);width:100%;height:100%;max-width:none;max-height:none;overflow:auto;overscroll-behavior:contain}
+.stills::backdrop{background:var(--ground)}
+.st-head{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;padding:28px clamp(16px,4vw,56px) 20px;
+  background:linear-gradient(180deg,var(--ground) 70%,rgba(8,3,13,0))}
+.st-head .h2{font-size:clamp(30px,4.6vw,72px);margin-top:8px}
+.st-head .eyebrow{font-size:12px}
+.stills .x{font:500 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink);background:none;border:1px solid var(--line);border-radius:999px;padding:10px 14px;cursor:pointer}
+.stills .x:hover{border-color:var(--pink-2);color:var(--pink-2)}
+.st-grid{columns:3;column-gap:14px;padding:6px clamp(16px,4vw,56px) 56px}
+.st-tile{display:block;width:100%;margin:0 0 14px;padding:0;border:0;border-radius:10px;overflow:hidden;background:var(--ground-2);cursor:zoom-in;break-inside:avoid;
+  opacity:0;transform:translateY(28px) scale(.98);transition:opacity .7s ease calc(var(--i)*.09s),transform .7s cubic-bezier(.2,.7,.2,1) calc(var(--i)*.09s),box-shadow .3s}
+.st-tile.in{opacity:1;transform:none}
+.st-tile img{display:block;width:100%;height:auto;filter:grayscale(1) contrast(1.04);transition:filter .6s ease,transform .8s ease}
+.st-tile:hover,.st-tile:focus-visible{box-shadow:0 0 34px rgba(255,79,166,.4)}
+.st-tile:hover img,.st-tile:focus-visible img{filter:none;transform:scale(1.035)}
+@media (hover:none){.st-tile img{filter:none}}
+.st-view{position:fixed;inset:0;z-index:3;display:grid;place-items:center;background:rgba(8,3,13,.94);backdrop-filter:blur(6px);padding:70px 70px 50px}
+.st-view[hidden]{display:none}
+.st-view img{max-width:100%;max-height:calc(100dvh - 120px);border-radius:10px;box-shadow:0 0 80px rgba(255,79,166,.25);animation:stIn .45s ease}
+@keyframes stIn{from{opacity:0;transform:scale(.97)}}
+.st-nav{position:absolute;top:50%;width:46px;height:46px;margin-top:-23px;border-radius:50%;border:1px solid var(--line);background:rgba(8,3,13,.5);cursor:pointer}
+.st-nav::before{content:"";position:absolute;inset:0;margin:auto;width:10px;height:10px;border:solid var(--ink);border-width:2px 2px 0 0;transform:translateX(-2px) rotate(45deg)}
+.st-nav.prev{left:14px}.st-nav.prev::before{transform:translateX(2px) rotate(-135deg)}
+.st-nav.next{right:14px}
+.st-nav:hover{border-color:var(--pink);background:rgba(255,79,166,.25)}
+.st-n{position:absolute;bottom:18px;left:0;right:0;text-align:center;font-size:12px}
+@media (max-width:760px){.st-grid{columns:2;column-gap:8px}.st-tile{margin-bottom:8px;border-radius:8px}.st-head{padding-top:20px}.st-view{padding:60px 12px 50px}.st-nav{top:auto;bottom:8px;margin:0}}
+button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;padding:0 0 .35cqw;color:inherit;cursor:pointer}
+.open-stills::after{content:"+"}
 .player{border:0;padding:0;background:transparent;max-width:none;max-height:none;width:100%;height:100%;color:var(--ink)}
 .player::backdrop{background:rgba(8,3,13,.92);backdrop-filter:blur(6px)}
 .player .wrap{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px 16px}
@@ -251,10 +281,9 @@ a.brand:hover{transform:translateY(-.2cqw)}
 .lines{display:grid;grid-template-columns:auto auto;gap:1.2cqw 3cqw}
 .lines div{display:flex;flex-direction:column;gap:.4cqw;border-top:1px solid rgba(255,255,255,.2);padding-top:.9cqw}
 .lines div:nth-child(2){grid-column:1/3;grid-row:2}
-.lines b{font:700 1.8cqw/1.15 var(--body)}
+.lines b{font:700 1.25cqw/1.15 var(--body)}
 .lines a{text-decoration:none}
 .lines a:hover{color:var(--pink-2)}
-.lines b.wa{font-size:1.25cqw}
 .wa{display:flex;align-items:center;gap:1cqw}
 .wa a{display:inline-flex;align-items:center;gap:.5cqw}
 .wai{width:1.15em;height:1.15em;flex:none;color:#25d366}
@@ -403,7 +432,7 @@ a.brand:hover{transform:translateY(-.2cqw)}
   .contact .mark{width:52vw;height:22.4vw}
   .contact .foot{flex-direction:column;align-items:flex-start;gap:22px}
   .lines{grid-template-columns:1fr;gap:14px}.lines div:nth-child(2){grid-column:auto;grid-row:auto}
-  .lines b{font-size:18px}.lines b.wa{font-size:15px}
+  .lines b{font-size:15px}
 }
 @media (prefers-reduced-motion:reduce){.hint::after{animation:none}.flip-in{transition:transform .01s}.creators .flip .flip-in{animation:none!important}.track{animation:none;flex-wrap:wrap;justify-content:center;width:auto;row-gap:4cqw}.track [aria-hidden="true"]{display:none}.cue::before{animation:none}.ask,.ask.on{transition:none}.orb{animation:none}.mono{transition:none}}
 </style>
@@ -462,11 +491,9 @@ a.brand:hover{transform:translateY(-.2cqw)}
         <h2 class="h1">Fashion<br>Film ’26</h2>
         <div class="side">
           <p class="small">Produced, choreographed and styled by Fraction. Tailoring in slate, navy and charcoal against the sea at blue hour.</p>
-          <button class="play" type="button" data-src="media/ff-preview.mp4" data-dsrc="media/ff-preview.mp4" data-msrc="media/ffv-preview.mp4" data-title="Fashion Film ’26" data-link="https://drive.google.com/drive/folders/156qvhiV4oEejiGJ3RKOp1GNAXTfyrSbl">Play film</button>
+          <button class="play" type="button" data-src="media/ff-preview.mp4" data-dsrc="media/ff-preview.mp4" data-msrc="media/ffv-preview.mp4" data-title="Fashion Film ’26">Play film</button>
           <div class="links">
-            <a class="watch" href="https://drive.google.com/file/d/1u9PPbxMNm-GYIjbCVc7Xj17oBNj27EQm/view" target="_blank" rel="noopener">Watch 16:9</a>
-            <a class="watch" href="https://drive.google.com/file/d/1zSDPjlRtqqebGjZhawg_U0rnV_OAjbjN/view" target="_blank" rel="noopener">Watch 9:16</a>
-            <a class="watch" href="https://drive.google.com/drive/folders/156qvhiV4oEejiGJ3RKOp1GNAXTfyrSbl" target="_blank" rel="noopener">Stills</a>
+            <button class="watch open-stills" type="button" aria-haspopup="dialog">View stills</button>
           </div>
         </div>
       </div>
@@ -538,13 +565,13 @@ a.brand:hover{transform:translateY(-.2cqw)}
         <div class="stage" id="stage">
           <video id="fv" class="mono" src="media/dh-preview.mp4" poster="media/dh-thumb.webp" muted loop playsinline preload="metadata"></video>
           <button class="big" type="button" id="fplay" aria-label="Play preview"></button>
-          <div class="msg"><p class="eyebrow">Preview coming</p><h3 class="h3" id="fmsg"></h3><a class="watch" id="fmsglink" href="#" target="_blank" rel="noopener">Watch on Drive</a></div>
+          <div class="msg"><p class="eyebrow">Preview coming</p><h3 class="h3" id="fmsg"></h3><a class="watch" id="fmsglink" href="#" target="_blank" rel="noopener">Watch on YouTube</a></div>
         </div>
         <div class="nowbar" id="nowbar">
           <button class="nav prev" type="button" id="fprev" aria-label="Previous film"></button>
           <div class="nowtxt"><p class="eyebrow"><span class="nowlbl">Now playing · <span id="fc"></span></span><span id="fk"></span></p><h3 class="h3" id="ft" aria-live="polite"></h3></div>
           <button class="nav next" type="button" id="fnext" aria-label="Next film"></button>
-          <a class="watch" id="fl" href="#" target="_blank" rel="noopener">Full film</a>
+          <a class="watch" id="fl" href="#" target="_blank" rel="noopener">Watch on YouTube</a>
         </div>
       </div>
       <ol class="playlist" id="playlist" aria-label="Films"></ol>
@@ -565,7 +592,7 @@ a.brand:hover{transform:translateY(-.2cqw)}
         </article>
         <article class="case">
           <div class="media"><video class="mono" src="media/watertec-loop.mp4" poster="media/watertec-poster.jpg" muted loop playsinline preload="metadata" aria-label="Fraction with the Watertec India team at their annual conference"></video></div>
-          <div class="cap"><p class="eyebrow">Annual conference</p><div class="row"><h3 class="h3">Watertec India</h3><button class="watch pv" type="button" data-src="media/watertec-film.mp4" data-title="Watertec India · Annual conference">Watch</button></div></div>
+          <div class="cap"><p class="eyebrow">Choreography for Annual Conference</p><div class="row"><h3 class="h3">Watertec India</h3><button class="watch pv" type="button" data-src="media/watertec-film.mp4" data-title="Watertec India · Choreography for Annual Conference">Watch</button></div></div>
         </article>
         <article class="case">
           <div class="media"><video class="mono" src="media/gofynd-loop.mp4" poster="media/gofynd-poster.jpg" muted loop playsinline preload="metadata" aria-label="Fraction leading the GoFynd team on the dance floor"></video></div>
@@ -573,11 +600,11 @@ a.brand:hover{transform:translateY(-.2cqw)}
         </article>
         <article class="case">
           <div class="media"><video class="mono" src="media/airtel-loop.mp4" poster="media/airtel-poster.jpg" muted loop playsinline preload="metadata" aria-label="Fraction performing at an Airtel event"></video></div>
-          <div class="cap"><p class="eyebrow">Corporate event</p><div class="row"><h3 class="h3">Airtel</h3><button class="watch pv" type="button" data-src="media/airtel-film.mp4" data-title="Airtel · Corporate event">Watch</button></div></div>
+          <div class="cap"><p class="eyebrow">Choreography for Annual Event</p><div class="row"><h3 class="h3">Airtel</h3><button class="watch pv" type="button" data-src="media/airtel-film.mp4" data-title="Airtel · Choreography for Annual Event">Watch</button></div></div>
         </article>
         <article class="case">
           <div class="media"><video class="mono" src="media/pidilite-loop.mp4" poster="media/pidilite-poster.jpg" muted loop playsinline preload="metadata" aria-label="Fraction with the Pidilite team at their annual conference"></video></div>
-          <div class="cap"><p class="eyebrow">Annual conference</p><div class="row"><h3 class="h3">Pidilite</h3><button class="watch pv" type="button" data-src="media/pidilite-film.mp4" data-title="Pidilite · Annual conference">Watch</button></div></div>
+          <div class="cap"><p class="eyebrow">Choreography for Annual Conference and Movement Direction for In-house Music Video</p><div class="row"><h3 class="h3">Pidilite</h3><button class="watch pv" type="button" data-src="media/pidilite-film.mp4" data-title="Pidilite · Annual Conference and In-house Music Video">Watch</button></div></div>
         </article>
       </div>
     </div>
@@ -656,6 +683,17 @@ a.brand:hover{transform:translateY(-.2cqw)}
 </main>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="wa-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></symbol></svg>
+
+<dialog class="stills" id="stills" aria-label="Fashion Film 2026 stills">
+  <div class="st-head"><div><p class="eyebrow">Fashion Film ’26 · <span id="stc"></span> stills</p><h2 class="h2">The <span class="pink">stills</span></h2></div><button class="x" type="button" id="stx">Close</button></div>
+  <div class="st-grid" id="stgrid"></div>
+  <div class="st-view" id="stview" hidden>
+    <img id="stimg" alt="">
+    <button class="st-nav prev" type="button" id="stprev" aria-label="Previous photo"></button>
+    <button class="st-nav next" type="button" id="stnext" aria-label="Next photo"></button>
+    <p class="eyebrow st-n" id="stn"></p>
+  </div>
+</dialog>
 
 <dialog class="player" id="player" aria-label="Film preview">
   <div class="wrap">
@@ -784,21 +822,41 @@ function kick(){if(kickQueued)return;kickQueued=true;requestAnimationFrame(()=>{
   document.querySelectorAll('.slide.live video').forEach(v=>{if(v.muted&&v.paused)v.play().catch(()=>{})})})}
 ['touchstart','scroll','click'].forEach(t=>addEventListener(t,kick,{passive:true}));
 
+/* ---- Fashion Film stills: masonry collage, tiles rise in as they scroll into view, tap one to enlarge ---- */
+const STILLS="01499:480:720 01481:720:480 01523:720:480 01512:480:720 01482:720:480 01536:720:480 01514:480:720 01483:720:480 01550:720:480 01515:480:720 01484:720:480 01559:720:480 01516:480:720 01489:720:480 01562:720:480 01517:480:720 01492:720:480 01566:720:480 01567:420:720 01495:720:480 01572:720:480 01586:480:720 01505:720:480 01587:480:720 01588:480:720 01589:480:720 01590:480:720 01591:480:720 01592:480:720".split(' ').map(x=>x.split(':'));  // id:thumb width:thumb height, so tiles hold their shape before loading
+const sd=document.getElementById('stills'),sg=document.getElementById('stgrid'),sv=document.getElementById('stview'),si=document.getElementById('stimg');
+document.getElementById('stc').textContent=STILLS.length;
+const stIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');stIO.unobserve(e.target)}}),{root:sd,rootMargin:'0px 0px -6% 0px'});
+let stAt=0;
+function stShow(i){stAt=(i+STILLS.length)%STILLS.length;si.src='media/stills/ff-'+STILLS[stAt][0]+'.jpg';si.alt='Fashion Film 2026, still '+(stAt+1);
+  document.getElementById('stn').textContent=(stAt+1)+' / '+STILLS.length;sv.hidden=false}
+STILLS.forEach(([n,w,h],i)=>{const b=document.createElement('button');b.type='button';b.className='st-tile';b.style.setProperty('--i',i%3);
+  b.setAttribute('aria-label','Open still '+(i+1));b.innerHTML='<img src="media/stills/ff-'+n+'-s.jpg" width="'+w+'" height="'+h+'" alt="" loading="lazy">';
+  b.onclick=()=>stShow(i);sg.appendChild(b);stIO.observe(b)});
+document.querySelectorAll('.open-stills').forEach(b=>b.onclick=()=>{sv.hidden=true;sd.showModal();sd.scrollTop=0});
+document.getElementById('stx').onclick=()=>sv.hidden?sd.close():(sv.hidden=true);
+document.getElementById('stprev').onclick=()=>stShow(stAt-1);document.getElementById('stnext').onclick=()=>stShow(stAt+1);
+sv.addEventListener('click',e=>{if(e.target===sv)sv.hidden=true});
+sd.addEventListener('cancel',e=>{if(!sv.hidden){e.preventDefault();sv.hidden=true}});  // Esc steps back from a photo first
+sd.addEventListener('keydown',e=>{if(sv.hidden)return;if(e.key==='ArrowLeft')stShow(stAt-1);if(e.key==='ArrowRight')stShow(stAt+1)});
+let stx0=0;sv.addEventListener('touchstart',e=>{stx0=e.touches[0].clientX},{passive:true});
+sv.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-stx0;if(Math.abs(dx)>40)stShow(stAt+(dx<0?1:-1))},{passive:true});
+
 /* ---- dance films playlist: add a preview + thumb and the row becomes playable ---- */
 const FILMS=[
-  {t:"Dhurandhar · Jogi",k:"Music video · 45 sec",th:"media/dh-thumb.webp",src:"media/dh-preview.mp4",link:"https://drive.google.com/file/d/1xeY0_sowezvnXTvUyiyA6G2RKYYiDi0w/view"},
-  {t:"Manjha",k:"Dance film · 90 sec cut",th:"media/mj-thumb.webp",src:"media/mj-preview.mp4",link:"https://drive.google.com/file/d/1VEAoo6yDGeYRq0FK_6Z9c8SPoD3JiH-r/view"},
-  {t:"Big Magic",k:"Dance film · 90 sec cut",th:"media/bm-thumb.webp",src:"media/bm-preview.mp4",loop:"media/bm-loop.mp4",link:"https://drive.google.com/file/d/1acDWaoTfTBzJMs7BYr0LBbE1sm6u75bL/view"},
-  {t:"Sajna Ve · Bombay Rockers",k:"Music visual · 46 sec",th:"media/sv-dance.webp",src:"media/sv-preview.mp4",link:"https://drive.google.com/file/d/1oS6UdZAxPV_oqi-AIYq5fFeA-v0YbCqW/view"},
-  {t:"Pasoori",k:"Choreography · 45 sec",th:"media/ps-thumb.webp",src:"media/ps-preview.mp4",link:"https://drive.google.com/file/d/1xU51OneaEo5a5v9_Hjl6MYmPZeMni7MM/view"},
-  {t:"Chal Bombay",k:"Choreography · 45 sec",th:"media/cb-thumb.webp",src:"media/cb-preview.mp4",link:"https://drive.google.com/file/d/1267g0MK7yVTAQbhlAUDuAh0nFX3PLJBM/view"},
-  {t:"Behka Main Behka",k:"Dance visual · 45 sec",th:"media/bk-thumb.webp",src:"media/bk-preview.mp4",link:"https://drive.google.com/file/d/1HYT4orkt3Mjn0f8PEkPs1hWnzEG6IujC/view"},
-  {t:"By My Side",k:"Choreography · 45 sec",th:"media/bs-thumb.webp",src:"media/bs-preview.mp4",link:"https://drive.google.com/file/d/1Ug5JlzfBTp9mPRi_4IlyaiK9cPO03Fgl/view"},
-  {t:"Funk Song",k:"Choreography · 45 sec",th:"media/fs-thumb.webp",src:"media/fs-preview.mp4",link:"https://drive.google.com/file/d/15-Gp2q_knUIwzMJ7j8W9qFH2a5Fr3van/view"},
-  {t:"Project Throne",k:"Choreography · 45 sec",th:"media/pt-thumb.webp",src:"media/pt-preview.mp4",link:"https://drive.google.com/file/d/1XWgKTSum6rp7Jcppx12CBe3NU65wYTxV/view"},
-  {t:"Cham Cham",k:"Music video · 45 sec",th:"media/cc-thumb.webp",src:"media/cc-preview.mp4",link:"https://drive.google.com/file/d/1U06lXbnP7Kv0ULUJvGqiiAxYrSrXYpki/view"},
-  {t:"Mere Dil Vich Hai Hum Tum",k:"Choreography · 40 sec",th:"media/md-thumb.webp",src:"media/md-preview.mp4",link:"https://drive.google.com/file/d/1o-VeGjbz8em_tU8E5rtCoNxydW-w3MGG/view"},
-  {t:"Dynamite · BTS",k:"Choreography · 40 sec",th:"media/dy-thumb.webp",src:"media/dy-preview.mp4",link:"https://drive.google.com/file/d/1WFlgkPJaAUDUAaDkF2UmopiHKIYF17HI/view"}
+  {t:"Dhurandhar · Jogi",k:"Music video · 45 sec",th:"media/dh-thumb.webp",src:"media/dh-preview.mp4",link:"https://www.youtube.com/watch?v=NEdVDhBp0jY"},
+  {t:"Manjha",k:"Dance film · 90 sec cut",th:"media/mj-thumb.webp",src:"media/mj-preview.mp4",link:"https://www.youtube.com/watch?v=jNeASknQ-Bc"},
+  {t:"Big Magic",k:"Dance film · 90 sec cut",th:"media/bm-thumb.webp",src:"media/bm-preview.mp4",loop:"media/bm-loop.mp4",link:"https://www.youtube.com/watch?v=p3hTkLe2GlY"},
+  {t:"Sajna Ve · Bombay Rockers",k:"Music visual · 46 sec",th:"media/sv-dance.webp",src:"media/sv-preview.mp4",link:"https://www.youtube.com/watch?v=Nc1ZuW7u-Jo"},
+  {t:"Pasoori",k:"Choreography · 45 sec",th:"media/ps-thumb.webp",src:"media/ps-preview.mp4",link:"https://www.youtube.com/watch?v=W6HfO0VxIOc"},
+  {t:"Chal Bombay",k:"Choreography · 45 sec",th:"media/cb-thumb.webp",src:"media/cb-preview.mp4",link:"https://www.youtube.com/watch?v=P0csnWZquTc"},
+  {t:"Behka Main Behka",k:"Dance visual · 45 sec",th:"media/bk-thumb.webp",src:"media/bk-preview.mp4",link:"https://www.youtube.com/watch?v=PhWFRYh2K8w"},
+  {t:"By My Side",k:"Choreography · 45 sec",th:"media/bs-thumb.webp",src:"media/bs-preview.mp4",link:"https://www.youtube.com/watch?v=OcG7ID2EnHw"},
+  {t:"Funk Song",k:"Choreography · 45 sec",th:"media/fs-thumb.webp",src:"media/fs-preview.mp4",link:"https://www.youtube.com/watch?v=zaT4ICu2qoE"},
+  {t:"Project Throne",k:"Choreography · 45 sec",th:"media/pt-thumb.webp",src:"media/pt-preview.mp4",link:"https://www.youtube.com/watch?v=dvJn7dYtse8"},
+  {t:"Cham Cham",k:"Music video · 45 sec",th:"media/cc-thumb.webp",src:"media/cc-preview.mp4",link:"https://www.youtube.com/watch?v=m8nAtq-j_o0"},
+  {t:"Mere Dil Vich Hai Hum Tum",k:"Choreography · 40 sec",th:"media/md-thumb.webp",src:"media/md-preview.mp4",link:"https://www.youtube.com/watch?v=bZB7A8memsQ"},
+  {t:"Dynamite · BTS",k:"Choreography · 40 sec",th:"media/dy-thumb.webp",src:"media/dy-preview.mp4",link:"https://www.youtube.com/watch?v=QmvnLPL_eEA"}
 ];
 const stage=document.getElementById('stage'),fv=document.getElementById('fv'),plist=document.getElementById('playlist');
 function selectFilm(i,play){
