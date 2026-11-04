@@ -95,6 +95,11 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
 .cue{position:absolute;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));z-index:3;width:48px;height:48px;margin-left:-24px;display:grid;place-items:center;border-radius:50%}
 .cue::before{content:"";width:15px;height:15px;border-right:2px solid rgba(255,255,255,.85);border-bottom:2px solid rgba(255,255,255,.85);rotate:45deg;animation:nudge 2.2s ease-in-out infinite}
 .cue:hover::before{border-color:var(--pink-2)}
+/* cover: quiet channel links, top right, out of the way of the logo and prompt */
+.social{position:absolute;top:calc(22px + env(safe-area-inset-top,0px));right:26px;z-index:3;display:flex;gap:6px}
+.social a{display:grid;place-items:center;width:36px;height:36px;color:rgba(255,255,255,.55);transition:color .3s}
+.social a:hover,.social a:focus-visible{color:var(--pink-2)}
+.social svg{width:18px;height:18px}
 @keyframes nudge{0%,100%{translate:0 -5px;opacity:.45}50%{translate:0 5px;opacity:1}}
 
 /* 2 intro: portrait frame at full height, never cropped (9:16 = 31.64cqw wide) */
@@ -337,7 +342,8 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
 
   /* cover: still exactly one screen, film cropped to fill; logo and line sized to read */
   .cover{display:flex}
-  .cover > .bg,.cover > .cue,.cover > .ask{position:absolute}
+  .cover > .bg,.cover > .cue,.cover > .ask,.cover > .social{position:absolute}
+  .social{top:calc(14px + env(safe-area-inset-top,0px));right:12px;gap:2px}
   .ask{width:calc(100% - 32px)}
   .ask-opts{display:grid;grid-template-columns:1fr 1fr;width:100%}
   .ask-opts li{justify-content:center}
@@ -466,6 +472,10 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
       </ul>
     </nav>
     <a class="cue" href="#collective" aria-label="Scroll down"></a>
+    <div class="social">
+      <a href="https://www.youtube.com/@teamfractionyt" target="_blank" rel="noopener" aria-label="Team Fraction on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg></a>
+      <a href="https://instagram.com/team.fraction" target="_blank" rel="noopener" aria-label="Team Fraction on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M7 2.5h10A4.5 4.5 0 0 1 21.5 7v10a4.5 4.5 0 0 1-4.5 4.5H7A4.5 4.5 0 0 1 2.5 17V7A4.5 4.5 0 0 1 7 2.5z"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor"/></svg></a>
+    </div>
   </section>
 
   <!-- 2 INTRO -->
@@ -730,7 +740,6 @@ const CREATORS=[
 // Choreography work: [name, video file or YouTube link]; plays in the in-deck player, a name without a video shows dimmed
 const MUSIC=[
   ["Nikhil & Rishabh","media/nikhil-rishabh-film.mp4"],
-  ["Jaadu","https://youtu.be/vsIqlEOAmpQ"],
   ["Anant Khamkar","https://youtu.be/PEKFrwLq2Bs"],
   ["Riya Duggal","media/riya-film.mp4"],
   ["RuhFikra","media/ruhfikra-film.mp4"],
@@ -844,6 +853,7 @@ sv.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-stx0;if(
 
 /* ---- dance films playlist: add a preview + thumb and the row becomes playable ---- */
 const FILMS=[
+  {t:"Long Way From Home",k:"Film · MC Square · 20 sec",th:"media/lw-thumb.jpg",src:"media/lw-preview.mp4",link:"https://www.youtube.com/watch?v=0EsMt-ewIzU"},
   {t:"Dhurandhar · Jogi",k:"Music video · 45 sec",th:"media/dh-thumb.webp",src:"media/dh-preview.mp4",link:"https://www.youtube.com/watch?v=NEdVDhBp0jY"},
   {t:"Manjha",k:"Dance film · 90 sec cut",th:"media/mj-thumb.webp",src:"media/mj-preview.mp4",link:"https://www.youtube.com/watch?v=jNeASknQ-Bc"},
   {t:"Big Magic",k:"Dance film · 90 sec cut",th:"media/bm-thumb.webp",src:"media/bm-preview.mp4",loop:"media/bm-loop.mp4",link:"https://www.youtube.com/watch?v=p3hTkLe2GlY"},
