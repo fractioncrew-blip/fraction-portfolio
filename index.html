@@ -635,19 +635,19 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
       <div class="ph-grid four">
         <article class="case">
           <div class="media"><video class="mono" src="media/imap-preview.mp4" poster="media/imap-thumb.jpg" muted loop playsinline preload="metadata" aria-label="Bombay Rockers, live at the IMAP Annual Jam"></video></div>
-          <div class="cap"><p class="eyebrow">Stage · IMAP Annual Jam</p><div class="row"><h3 class="h3">Bombay Rockers</h3><button class="watch pv" type="button" data-src="media/imap-preview.mp4" data-title="Bombay Rockers · IMAP Annual Jam" data-link="https://drive.google.com/file/d/1SitAvQ8rYsJT6x098egbPqTXoB3qGq5E/view?usp=drive_link">Watch</button></div></div>
+          <div class="cap"><p class="eyebrow">Stage · IMAP Annual Jam</p><div class="row"><h3 class="h3">Bombay Rockers</h3><button class="watch pv" type="button" data-src="media/imap-preview.mp4" data-title="Bombay Rockers · IMAP Annual Jam" data-link="https://www.youtube.com/watch?v=JkEO_AqEi7k">Watch</button></div></div>
         </article>
         <article class="case">
           <div class="media"><video class="mono" src="media/replay-preview.mp4" poster="media/replay-thumb.jpg" muted loop playsinline preload="metadata" aria-label="Fraction Replay, live at The Movement Hub"></video></div>
-          <div class="cap"><p class="eyebrow">Stage · The Movement Hub</p><div class="row"><h3 class="h3">Fraction Replay</h3><button class="watch pv" type="button" data-src="media/replay-preview.mp4" data-title="Fraction Replay · The Movement Hub" data-link="https://drive.google.com/file/d/1HTOi825k9OS_z0D_dTLAv4vnqz85N0Rz/view">Watch</button></div></div>
+          <div class="cap"><p class="eyebrow">Stage · The Movement Hub</p><div class="row"><h3 class="h3">Fraction Replay</h3><button class="watch pv" type="button" data-src="media/replay-preview.mp4" data-title="Fraction Replay · The Movement Hub" data-link="https://www.instagram.com/reel/DXtvoSZCIAz/">Watch</button></div></div>
         </article>
         <article class="case">
           <div class="media"><video class="mono" src="media/sp-preview.mp4" poster="media/sp-thumb.webp" muted loop playsinline preload="metadata" aria-label="Silent Poison, live at Evolution 2"></video></div>
-          <div class="cap"><p class="eyebrow">Stage · Evolution 2</p><div class="row"><h3 class="h3">Silent Poison</h3><button class="watch pv" type="button" data-src="media/sp-preview.mp4" data-title="Silent Poison · Evolution 2" data-link="https://drive.google.com/file/d/12hDgQVGBTYqI-YriWgWZVPXxnJ4vewnO/view">Watch</button></div></div>
+          <div class="cap"><p class="eyebrow">Stage · Evolution 2</p><div class="row"><h3 class="h3">Silent Poison</h3><button class="watch pv" type="button" data-src="media/sp-preview.mp4" data-title="Silent Poison · Evolution 2" data-link="https://www.youtube.com/watch?v=Kv9uQUPNB80">Watch</button></div></div>
         </article>
         <article class="case">
           <div class="media"><video class="mono" src="media/evo-preview.mp4" poster="media/evo-thumb.jpg" muted loop playsinline preload="metadata" aria-label="Game of Thrones, live at Evolution 1"></video></div>
-          <div class="cap"><p class="eyebrow">Stage · Evolution 1</p><div class="row"><h3 class="h3">Game of Thrones</h3><button class="watch pv" type="button" data-src="media/evo-preview.mp4" data-title="Game of Thrones · Evolution 1" data-link="https://drive.google.com/file/d/1di30OpGhONzVNMaSg93pyN_quUMaJFnm/view">Watch</button></div></div>
+          <div class="cap"><p class="eyebrow">Stage · Evolution 1</p><div class="row"><h3 class="h3">Game of Thrones</h3><button class="watch pv" type="button" data-src="media/evo-preview.mp4" data-title="Game of Thrones · Evolution 1" data-link="https://www.youtube.com/watch?v=pTFzKSBxVy8">Watch</button></div></div>
         </article>
       </div>
     </div>
@@ -660,7 +660,7 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
       <p class="eyebrow">Programme · Hosted by Fraction · Edition 2</p>
       <h2 class="h1">Exclusive<br><span class="pink">Exchange</span></h2>
       <p class="lede ee-lede">Fraction invites a teacher from another dance studio to lead a class on its floor. Dancers from every style and studio train side by side, trade ideas and leave as one community.</p>
-      <button class="play" type="button" data-src="media/ee-preview.mp4" data-title="Exclusive Exchange · Edition 2" data-link="https://drive.google.com/file/d/1Di_B6sYDkLTVpzFda9utr1wu00qlpCQU/view">Play after movie</button>
+      <button class="play" type="button" data-src="media/ee-preview.mp4" data-title="Exclusive Exchange · Edition 2" data-link="https://www.instagram.com/reel/DZP95Yooao7/">Play after movie</button>
     </div>
   </section>
 
@@ -699,8 +699,8 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
   <div class="wrap">
     <video id="pv" controls playsinline preload="none"></video>
     <div class="frame" id="pfw" hidden></div>
-    <div class="ctl"><b id="pt"></b><a id="pl" href="#" target="_blank" rel="noopener">Full film on Drive ↗</a><button class="x" type="button" id="px">Close</button></div>
-    <p class="note" id="pn">Preview encode · full quality on Drive</p>
+    <div class="ctl"><b id="pt"></b><a id="pl" href="#" target="_blank" rel="noopener">Full film on YouTube ↗</a><button class="x" type="button" id="px">Close</button></div>
+    <p class="note" id="pn" hidden></p>
   </div>
 </dialog>
 
@@ -914,7 +914,7 @@ function embed(src){const f=document.createElement('iframe');f.title='Video';f.a
 document.querySelectorAll('.play,.pv').forEach(b=>b.addEventListener('click',()=>{
   const em=b.dataset.embed,ig=/instagram\.com/.test(b.dataset.link||'');
   document.getElementById('pt').textContent=b.dataset.title;const pl=document.getElementById('pl');pl.hidden=!b.dataset.link;if(b.dataset.link)pl.href=b.dataset.link;
-  pl.textContent=ig?'Open on Instagram ↗':'Full film on Drive ↗';document.getElementById('pn').hidden=!!em||ig||!b.dataset.link;
+  pl.textContent=ig?'Open on Instagram ↗':'Full film on YouTube ↗';document.getElementById('pn').hidden=true;
   pv.hidden=!!em;pfw.hidden=!em;pfw.classList.toggle('ig',ig);
   if(em)embed(em);else{pv.src=b.dataset.src;dlg.showModal();pv.play().catch(()=>{});return}
   dlg.showModal();
