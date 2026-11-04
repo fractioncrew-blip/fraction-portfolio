@@ -267,10 +267,10 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
 .track{display:flex;align-items:center;gap:5cqw;width:max-content;padding:.4cqw 0;animation:marquee 34s linear infinite}
 .marquee:hover .track,.marquee:focus-within .track{animation-play-state:paused}
 @keyframes marquee{to{transform:translateX(-50%)}}
-.brand{flex:none;display:block;height:calc(var(--h,6cqw) * .5);transition:transform .4s}
+.brand{flex:none;display:block;padding:0;border:0;background:none;cursor:pointer;height:calc(var(--h,6cqw) * .5);transition:transform .4s}
 .brand img{height:100%;width:auto;display:block;filter:grayscale(1) brightness(1.25) contrast(.9);opacity:.72;transition:filter .5s,opacity .5s}
 .brand:hover img,.brand:focus-visible img{filter:none;opacity:1}
-a.brand:hover{transform:translateY(-.2cqw)}
+.brand:hover{transform:translateY(-.2cqw)}
 
 /* 10 contact: group photo full bleed, black gradient under the text */
 .contact .shade{background:linear-gradient(0deg,rgba(0,0,0,.94) 0%,rgba(0,0,0,.78) 30%,rgba(0,0,0,.2) 58%,transparent 72%)}
@@ -515,11 +515,11 @@ a.brand:hover{transform:translateY(-.2cqw)}
       <div class="cases" id="cases">
         <article class="case km">
           <div class="media"><video class="mono" src="media/kameezing.mp4" poster="media/kameezing-poster.webp" muted loop playsinline preload="metadata"></video></div>
-          <div class="cap"><p class="eyebrow">Fashion film · Two brand films</p><div class="row"><h3 class="h3">Kameezing</h3><a class="watch" href="https://drive.google.com/file/d/1-MhSileXfluf2xsWMEDwWiIwKIus7_jN/view" target="_blank" rel="noopener">Watch</a></div></div>
+          <div class="cap"><p class="eyebrow">Fashion film · Two brand films</p><div class="row"><h3 class="h3">Kameezing</h3><button class="watch pv" type="button" data-src="media/kameezing-film.mp4" data-title="Kameezing · Fashion film">Watch</button></div></div>
         </article>
         <article class="case fu">
           <div class="media"><video class="mono" src="media/fastandup.mp4" poster="media/fastandup-poster.webp" muted loop playsinline preload="metadata"></video></div>
-          <div class="cap"><p class="eyebrow">Good Eatz</p><div class="row"><h3 class="h3">Fast&amp;Up</h3><a class="watch" href="https://drive.google.com/file/d/10fDIy6hIRUFmTQFtrC_J2JBtZXr5hwqd/view" target="_blank" rel="noopener">Watch</a></div></div>
+          <div class="cap"><p class="eyebrow">Good Eatz</p><div class="row"><h3 class="h3">Fast&amp;Up</h3><button class="watch pv" type="button" data-src="media/goodeatz-film.mp4" data-title="Fast&amp;Up · Good Eatz">Watch</button></div></div>
         </article>
         <article class="case fu">
           <div class="media"><video class="mono" src="media/fu7-loop.mp4" poster="media/fu7-loop-poster.webp" muted loop playsinline preload="metadata"></video></div>
@@ -737,19 +737,19 @@ const MUSIC=[
   ["Sharjah Warriors","media/sharjah-film.mp4"],
   ["Bewafa Music Video","media/bewafa-film.mp4"]
 ];
-// Worked with: [name, logo file, full video link or "", logo height in cqw (evens out wide vs tall marks)]
+// Worked with: [name, logo file, video on this site, player title, logo height in cqw (evens out wide vs tall marks)]
 const LOGOS=[
-  ["Fast&Up","media/logos/fastandup.png","https://drive.google.com/file/d/10fDIy6hIRUFmTQFtrC_J2JBtZXr5hwqd/view",6.0],
-  ["Kameezing","media/logos/kameezing.png","https://drive.google.com/file/d/1-MhSileXfluf2xsWMEDwWiIwKIus7_jN/view",7.0],
-  ["The Souled Store","media/logos/the-souled-store.png","",9.4],
-  ["Sharjah Warriors","media/logos/sharjah-warriors.png","",12.0],
-  ["Airtel","media/logos/airtel.png","",6.2],
-  ["iMAP","media/logos/imap.png","https://drive.google.com/file/d/1b_HZUwgLZbLA9Z2V4EBTm1M1h_bYPL37/view",6.8],
-  ["Pidilite","media/logos/pidilite.png","",7.6],
-  ["Fila","media/logos/fila.png","",5.4],
-  ["Rank","media/logos/rank.png","",7.2],
-  ["GoFynd","media/logos/gofynd.png","",8.0],
-  ["Watertec","media/logos/watertec.png","",7.4]
+  ["Fast&Up","media/logos/fastandup.png","media/fu7-film.mp4","Fast&Up · 7th anniversary ad film",6.0],
+  ["Kameezing","media/logos/kameezing.png","media/kameezing-film.mp4","Kameezing · Fashion film",7.0],
+  ["The Souled Store","media/logos/the-souled-store.png","media/tss-film.mp4","The Souled Store · Dance-led brand film",9.4],
+  ["Sharjah Warriors","media/logos/sharjah-warriors.png","media/sharjah-film.mp4","Sharjah Warriors · Choreography for ad shoot",12.0],
+  ["Airtel","media/logos/airtel.png","media/airtel-film.mp4","Airtel · Choreography for Annual Event",6.2],
+  ["iMAP","media/logos/imap.png","media/imap-preview.mp4","Bombay Rockers · IMAP Annual Jam",6.8],
+  ["Pidilite","media/logos/pidilite.png","media/pidilite-film.mp4","Pidilite · Annual Conference and In-house Music Video",7.6],
+  ["Fila","media/logos/fila.png","media/fila-film.mp4","Fila · Ad campaign choreography",5.4],
+  ["Rank","media/logos/rank.png","media/rank-film.mp4","Rank Group · Group fitness session",7.2],
+  ["GoFynd","media/logos/gofynd.png","media/gofynd-film.mp4","GoFynd · Event Launch",8.0],
+  ["Watertec","media/logos/watertec.png","media/watertec-film.mp4","Watertec India · Choreography for Annual Conference",7.4]
 ];
 /* creator cards flip in 3D to show Fraction with that creator */
 const cardsEl=document.getElementById('creatorCards'),crSec=cardsEl.closest('.slide');
@@ -780,10 +780,10 @@ MUSIC.forEach(([name,link])=>{
 });
 /* the row is drawn twice so the -50% loop is seamless; the copy is hidden from screen readers */
 const track=document.getElementById('logoTrack');
-[0,1].forEach(copy=>LOGOS.forEach(([name,src,link,h])=>{
-  const el=document.createElement(link?'a':'span');el.className='brand';el.style.setProperty('--h',h+'cqw');
-  if(link){el.href=link;el.target='_blank';el.rel='noopener';el.setAttribute('aria-label',name+', watch the film')}
-  if(copy){el.setAttribute('aria-hidden','true');if(link)el.tabIndex=-1}
+[0,1].forEach(copy=>LOGOS.forEach(([name,src,film,title,h])=>{
+  const el=document.createElement('button');el.type='button';el.className='brand pv';el.style.setProperty('--h',h+'cqw');
+  el.dataset.src=film;el.dataset.title=title;el.setAttribute('aria-label',name+', watch the film');
+  if(copy){el.setAttribute('aria-hidden','true');el.tabIndex=-1}
   const img=new Image();img.src=src;img.alt=copy?'':name;img.loading='lazy';el.appendChild(img);track.appendChild(el);
 }));
 
