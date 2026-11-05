@@ -119,6 +119,10 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
 .ff .top,.ff .bottom{display:flex;justify-content:space-between;gap:4cqw}
 .ff .bottom{align-items:flex-end}
 .ff .side{display:flex;flex-direction:column;gap:1.6cqw;max-width:32cqw}
+.sangeet .h1{font-size:5.6cqw}
+.sangeet .shade{background:linear-gradient(0deg,rgba(8,3,13,.94),rgba(8,3,13,.62) 42%,rgba(8,3,13,.18) 72%),linear-gradient(180deg,rgba(8,3,13,.55),transparent 25%)}  /* the white stage sets need more shade than the Fashion Film shore */
+.sangeet .side{max-width:34cqw}
+.sangeet .stat{color:var(--pink);font-weight:800;font-size:1.25em;white-space:nowrap}
 .links{display:flex;gap:2cqw;flex-wrap:wrap}
 
 /* 5 brands */
@@ -377,6 +381,7 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
   .ff .top{flex-direction:column;gap:6px}
   .ff .bottom{flex-direction:column;align-items:flex-start;gap:18px}
   .ff .side{max-width:none}
+  .sangeet .h1{font-size:min(44px,calc((100vw - 40px)/12.4))}.sangeet .side{max-width:none}
   .ff .pad{color:#fff}.ff .eyebrow{color:rgba(255,255,255,.7)}.ff .small{color:rgba(255,255,255,.82)}
 
   /* intro and exchange: words first, then the vertical film */
@@ -506,7 +511,7 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
     <video class="bg mono" data-dsrc="media/ff-loop2.mp4" data-dposter="media/ff-loop2-poster.webp" data-msrc="media/ffv-loop2.mp4" data-mposter="media/ffv-loop2-poster.webp" muted loop playsinline preload="metadata" aria-label="Fashion Film 2026, the collective in tailoring on the shore"></video>
     <div class="shade"></div>
     <div class="pad">
-      <div class="top"><p class="eyebrow">Self-produced · 2026</p><p class="eyebrow">Horizontal · Vertical · YouTube cut</p></div>
+      <div class="top"><p class="eyebrow">Self-produced · 2026</p></div>
       <div class="bottom">
         <h2 class="h1">Fashion<br>Film ’26</h2>
         <div class="side">
@@ -630,17 +635,18 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
     </div>
   </section>
 
-  <!-- SANGEET CHOREOGRAPHIES: placeholder; swap each .case.soon for a real tile when media arrives -->
-  <section class="slide ph-slide" id="sangeet-choreographies" aria-label="Sangeet choreographies">
+  <!-- SANGEET CHOREOGRAPHIES: one reel for all the sangeet work, laid out like the Fashion Film slide -->
+  <section class="slide ff sangeet media-slide" id="sangeet-choreographies" aria-label="Sangeet choreographies">
+    <video class="bg mono" src="media/sangeet-loop.mp4" poster="media/sangeet-poster.jpg" muted loop playsinline preload="metadata" aria-label="Families dancing on stage at a sangeet choreographed by Fraction"></video>
+    <div class="shade"></div>
     <div class="pad">
-      <div class="head">
-        <h2 class="h2">Sangeet<br><span class="pink">choreographies</span></h2>
-        <p class="small">Films and details coming soon.</p>
-      </div>
-      <div class="ph-grid">
-        <article class="case soon"><div class="media"></div><div class="cap"><span class="tag">Media coming soon</span></div></article>
-        <article class="case soon"><div class="media"></div><div class="cap"><span class="tag">Media coming soon</span></div></article>
-        <article class="case soon"><div class="media"></div><div class="cap"><span class="tag">Media coming soon</span></div></article>
+      <div class="top"><p class="eyebrow">Weddings · Sangeet nights</p></div>
+      <div class="bottom">
+        <h2 class="h1">Sangeet<br>Choreographies</h2>
+        <div class="side">
+          <p class="small">Turning special moments into spectacular celebrations through movement, music and choreography. With <b class="stat">30+ Sangeets</b> choreographed and counting, we bring everything from family performances to grand wedding spectacles to life.</p>
+          <button class="play" type="button" data-src="media/sangeet-film.mp4" data-title="Sangeet Choreographies">Play film</button>
+        </div>
       </div>
     </div>
   </section>
