@@ -23,11 +23,10 @@
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Team Fraction","url":"https://www.teamfraction.in/","logo":"https://www.teamfraction.in/icon-192.png","email":"fractioncrew@gmail.com","address":{"@type":"PostalAddress","addressLocality":"Mumbai","addressCountry":"IN"},"sameAs":["https://instagram.com/team.fraction","https://www.youtube.com/@teamfractionyt","https://www.facebook.com/teamfraction/"]}</script>
 <script>
-/* Lite mode: on a slow or data-saving connection the site shows stills instead of moving video, and plays films only on tap.
-   Phones that report their network decide here; the rest are checked once the page is up (see goLite below). */
-(function(){var c=navigator.connection,l=false;try{l=sessionStorage.getItem('lite')==='1'}catch(e){}
-  if(c&&(c.saveData||/2g|3g/.test(c.effectiveType||'')))l=true;
-  if(l)document.documentElement.classList.add('lite')})();
+/* Lite mode, only for a really poor connection: stills instead of moving video, films only on tap. Everyone else gets the full site.
+   Phones that report their network decide here (2G-class only); the rest are checked once the page is up (see goLite below). */
+(function(){var c=navigator.connection;
+  if(c&&/(^|-)2g$/.test(c.effectiveType||''))document.documentElement.classList.add('lite')})();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -906,7 +905,7 @@ function stripVideos(){
   document.querySelectorAll('video').forEach(v=>{if(!v.muted||v.id==='pv')return;v.pause();if(v.getAttribute('src')){v.removeAttribute('src');v.load()}});
   document.querySelectorAll('iframe.cw-yt').forEach(f=>f.remove());
 }
-function goLite(){if(isLite())return;document.documentElement.classList.add('lite');try{sessionStorage.setItem('lite','1')}catch(e){}stripVideos()}
+function goLite(){if(isLite())return;document.documentElement.classList.add('lite');stripVideos()}
 function playLoop(v){if(!isLite()&&v.muted)v.play().catch(()=>{})}
 
 /* ---- phone-only cuts: elements with data-msrc swap to the vertical version under 760px ---- */
@@ -1064,13 +1063,14 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{
 }),{threshold:0,rootMargin:'-35% 0px -35% 0px'});
 if(isLite())stripVideos();
 slides.forEach(s=>io.observe(s));
-/* phones that don't report their network (iPhones, most desktops) are judged by how the page itself arrived:
-   a slow page download, or a cover video still not moving after 4 s while it's on screen, switches the rest of the visit to Lite */
+/* phones that don't report their network (iPhones, most desktops) are judged by how the page itself arrived. Only a clearly
+   crawling connection switches this visit to Lite: the 100 KB page taking over 4 s, or the cover video trying to play for 8 s
+   without enough data to move (a video the phone simply refused to autoplay doesn't count) */
 if(!isLite()){
   const nav=performance.getEntriesByType('navigation')[0];
-  if(nav&&nav.responseEnd-nav.requestStart>1500)goLite();
+  if(nav&&nav.responseEnd-nav.responseStart>4000)goLite();
   else setTimeout(()=>{const h=document.querySelector('#top video.bg');
-    if(document.visibilityState==='visible'&&scrollY<innerHeight*.5&&h&&h.getAttribute('src')&&h.readyState<3)goLite()},4000);
+    if(document.visibilityState==='visible'&&scrollY<innerHeight*.5&&h&&h.getAttribute('src')&&!h.paused&&h.readyState<3&&h.networkState===2)goLite()},8000);
 }
 /* phones can hold back muted autoplay until the first touch (iOS Low Power Mode); retry visible loops */
 let kickQueued=false;
