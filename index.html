@@ -249,6 +249,9 @@ a.tk-item:hover .tk-name,a.tk-item:focus-visible .tk-name{color:#fff}
 .fw-tag{position:absolute;top:1cqw;left:1.2cqw;z-index:1;font:500 .8cqw/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.55)}
 .fw-card:not(.soon):hover,.fw-card:not(.soon):focus-visible{border-color:rgba(255,79,166,.7);box-shadow:0 0 2.4cqw rgba(255,79,166,.28)}
 .fw-card:not(.soon):hover img,.fw-card:not(.soon):focus-visible img{filter:none}
+/* a ticker name lands here: the tile lights up as if hovered, then settles */
+.fw-card.flash,.cw-tile.flash{border-color:rgba(255,79,166,.9);box-shadow:0 0 2.8cqw rgba(255,79,166,.45)}
+.fw-card.flash video,.fw-card.flash img,.cw-tile.flash video,.cw-tile.flash .cw-yt{filter:none}
 
 /* 7 dance films: playlist, stage left, scrolling thumbnails right */
 .films .pad{gap:1.8cqw}
@@ -906,7 +909,7 @@ const CW=[
 // leave the loop and video as "" until the media arrives; the card then shows as "coming soon"
 const FEATURED=[
   ["Vicky Kaushal","A23 · Featured in Ad Film","","media/fw-vicky-loop.mp4","media/fw-vicky-film.mp4"],
-  ["Netflix","Ayushmann Khurrana Video","","media/fw-netflix-loop.mp4","media/fw-netflix-film.mp4"],
+  ["Netflix · Ayushmann Khurrana","The Railway Men Music Video","","media/fw-netflix-loop.mp4","media/fw-netflix-film.mp4"],
   ["Varun Dhawan","Perfect — Music Video","","media/fw-perfect-loop.mp4","media/fw-perfect-film.mp4"],
   ["Tu Yaa Main","Featuring Gourav Adarsh & Shanaya Kapoor","","media/fw-tuyaamain-loop.mp4","media/fw-tuyaamain-film.mp4"],
   ["Conan O’Brien Must Go","Featured in Music Video","","media/fw-conan-loop.mp4","media/fw-conan-film.mp4"],
@@ -952,7 +955,7 @@ FEATURED.forEach(([name,line,still,clip,link])=>{
     +(ready?'':'<span class="fw-tag">Clip coming soon</span>')+'<span class="fw-cap"><span class="h3"></span><small></small></span>';
   if(still)c.querySelector('img').src=still;
   if(clip){const v=c.querySelector('video');v.src=clip;if(still)v.poster=still}
-  c.querySelector('.h3').textContent=name;c.querySelector('small').textContent=line;
+  c.querySelector('.h3').textContent=name;c.querySelector('small').textContent=line;c.dataset.work=name;
   if(link){c.classList.add('pv');const yt=link.match(/youtu(?:\.be\/|be\.com\/watch\?v=)([\w-]+)/);
     if(yt)c.dataset.embed='https://www.youtube-nocookie.com/embed/'+yt[1]+'?autoplay=1&rel=0';
     else if(/instagram\.com/.test(link)){c.dataset.embed=link.replace(/\/?$/,'/embed/');c.dataset.link=link}else c.dataset.src=link;
@@ -971,7 +974,7 @@ CW.forEach(([name,role,link,loop,shape,wide],i)=>{
   if(loop)b.querySelector('video').src=loop;
   else{const f=b.querySelector('iframe');f.src='https://www.youtube-nocookie.com/embed/'+yt[1]+'?autoplay=1&mute=1&loop=1&playlist='+yt[1]+'&controls=0&modestbranding=1&playsinline=1&rel=0&disablekb=1';
     f.onload=()=>setTimeout(()=>f.classList.add('on'),4500)}  // YouTube shows its title and play state for the first seconds; fade in once they have gone
-  b.querySelector('.h3').textContent=name;b.querySelector('.eyebrow').textContent=role;
+  b.querySelector('.h3').textContent=name;b.querySelector('.eyebrow').textContent=role;b.dataset.work=name;
   if(yt)b.dataset.embed='https://www.youtube-nocookie.com/embed/'+yt[1]+'?autoplay=1&rel=0';else b.dataset.src=link;
   b.dataset.title=name+' · '+role;b.setAttribute('aria-label','Watch '+name+', '+role);
   cwGrid.appendChild(b);
@@ -1134,6 +1137,10 @@ addEventListener('scroll',barFade,{passive:true});addEventListener('resize',barF
 function goTo(t){const y=scrollY;
   t.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
   setTimeout(()=>{if(scrollY===y)t.scrollIntoView()},600)}  // fallback where smooth scrolling is paused
+/* bring one tile to the middle of the screen (and into view inside a sideways row), then light it up for a moment */
+function goToTile(t){const y=scrollY,o={behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center',inline:'center'};
+  t.scrollIntoView(o);setTimeout(()=>{if(scrollY===y)t.scrollIntoView({block:'center',inline:'center'})},600);
+  t.classList.remove('flash');clearTimeout(t._flash);setTimeout(()=>t.classList.add('flash'),400);t._flash=setTimeout(()=>t.classList.remove('flash'),2800)}
 document.querySelectorAll('.cue,.ask a,.hire,.home').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();goTo(document.querySelector(a.getAttribute('href')))}));
 
 /* ---- "Hire us" pops up while one of the four main segments is on screen ---- */
@@ -1181,25 +1188,30 @@ function wakeAudio(){try{tkAudio=tkAudio||new (window.AudioContext||window.webki
 ['pointerdown','touchend','keydown'].forEach(t=>addEventListener(t,wakeAudio,{passive:true}));
 function tick(){
   if(!tkAudio||tkAudio.state!=='running'||document.hidden||!cover.classList.contains('asked')||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  const t=tkAudio.currentTime,o=tkAudio.createOscillator(),g=tkAudio.createGain(),f=tkAudio.createBiquadFilter();
-  o.type='triangle';o.frequency.setValueAtTime(2300,t);o.frequency.exponentialRampToValueAtTime(900,t+.035);
-  f.type='highpass';f.frequency.value=600;
-  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.09,t+.004);g.gain.exponentialRampToValueAtTime(.0001,t+.06);
-  o.connect(f).connect(g).connect(tkAudio.destination);o.start(t);o.stop(t+.07);
+  /* a scroll-wheel detent: a short filtered noise snap over a soft low knock */
+  const t=tkAudio.currentTime,len=Math.round(tkAudio.sampleRate*.03),buf=tkAudio.createBuffer(1,len,tkAudio.sampleRate),d=buf.getChannelData(0);
+  for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/(len*.12));
+  const n=tkAudio.createBufferSource(),bp=tkAudio.createBiquadFilter(),ng=tkAudio.createGain();
+  n.buffer=buf;bp.type='bandpass';bp.frequency.value=3200;bp.Q.value=1.4;ng.gain.value=.22;
+  n.connect(bp).connect(ng).connect(tkAudio.destination);n.start(t);
+  const o=tkAudio.createOscillator(),g=tkAudio.createGain();
+  o.type='sine';o.frequency.setValueAtTime(320,t);o.frequency.exponentialRampToValueAtTime(140,t+.02);
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.05,t+.002);g.gain.exponentialRampToValueAtTime(.0001,t+.03);
+  o.connect(g).connect(tkAudio.destination);o.start(t);o.stop(t+.04);
 }
 
 /* ---- cover ticker: one project at a time rises into place every 1.5 s; hover or focus pauses, linked names jump to their section ---- */
-const TICKER=[  // [name, line, category, section on this page or ""]
-  ["Vicky Kaushal","Featured in Ad Film","Celebrity Campaign",""],
-  ["Netflix","Ayushmann Khurrana Video","Entertainment",""],
-  ["Varun Dhawan","Perfect — Music Video","Music Video",""],
-  ["Tu Yaa Main","Featuring Gourav Adarsh & Shanaya Kapoor","Music Video",""],
-  ["Conan O’Brien Must Go","Featured in Music Video","",""],
-  ["Navratri Parody","Choreographed & Featured in a Music Video","",""],
+const TICKER=[  // [name, line, category, where it goes: "@Name" is that tile in Featured or Commercial work, "#id" a section]
+  ["Vicky Kaushal","Featured in Ad Film","Celebrity Campaign","@Vicky Kaushal"],
+  ["Netflix · Ayushmann Khurrana","The Railway Men Music Video","Entertainment","@Netflix · Ayushmann Khurrana"],
+  ["Varun Dhawan","Perfect — Music Video","Music Video","@Varun Dhawan"],
+  ["Tu Yaa Main","Featuring Gourav Adarsh & Shanaya Kapoor","Music Video","@Tu Yaa Main"],
+  ["Conan O’Brien Must Go","Featured in Music Video","","@Conan O’Brien Must Go"],
+  ["Navratri Parody","Choreographed & Featured in a Music Video","","@Navratri Parody"],
   ["Fast&Up","Brand Campaign","","#brand-films"],
   ["The Souled Store","Fashion Campaign","","#brand-films"],
-  ["Fila","Brand Campaign","","#brand-films"],
-  ["Falguni & Shane Peacock","Runway Performance","Blenders Pride 2022",""],
+  ["Fila","Brand Campaign","","@Fila"],
+  ["Falguni & Shane Peacock","Runway Performance","Blenders Pride 2022","@Falguni & Shane Peacock"],
   ["Airtel","Corporate Project","","#corporate-work"],
   ["Pidilite","Corporate Project","","#corporate-work"],
   ["30+ Sangeet Productions","Wedding & Live Experiences","","#sangeet-choreographies"],
@@ -1210,7 +1222,9 @@ const TICKER=[  // [name, line, category, section on this page or ""]
   const N=TICKER.length,SHOW=3;   // the first SHOW rows are repeated at the end so the loop never jumps
   [...TICKER,...TICKER.slice(0,SHOW)].forEach(([name,line,cat,href],k)=>{
     const li=document.createElement('li'),el=document.createElement(href?'a':'div');el.className='tk-item';
-    if(href){el.href=href;el.addEventListener('click',e=>{e.preventDefault();goTo(document.querySelector(href))})}
+    if(href){const tile=href[0]==='@'?[...document.querySelectorAll('[data-work]')].find(t=>t.dataset.work===href.slice(1)):null;
+      el.href=tile?'#'+tile.closest('section').id:href;
+      el.addEventListener('click',e=>{e.preventDefault();if(tile)goToTile(tile);else goTo(document.querySelector(href))})}
     const n=document.createElement('span');n.className='tk-name';n.textContent=name;
     const sub=document.createElement('span');sub.className='tk-sub';sub.textContent=line;
     if(cat){const c=document.createElement('i');c.textContent=' · '+cat;sub.appendChild(c)}
