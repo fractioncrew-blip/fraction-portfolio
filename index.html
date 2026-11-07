@@ -98,6 +98,28 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
 .cue{position:absolute;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));z-index:3;width:48px;height:48px;margin-left:-24px;display:grid;place-items:center;border-radius:50%}
 .cue::before{content:"";width:15px;height:15px;border-right:2px solid rgba(255,255,255,.85);border-bottom:2px solid rgba(255,255,255,.85);rotate:45deg;animation:nudge 2.2s ease-in-out infinite}
 .cue:hover::before{border-color:var(--pink-2)}
+/* cover: featured-work ticker. It arrives with the first-scroll prompt: the film dims to 50%, the logo lifts to
+   make room and the credits sit centred just above "What are you looking for?" (bottom set by script) */
+.cover .bg{transition:opacity .9s ease}
+.cover.asked .bg{opacity:.5}
+.cover .mark{transition:transform .9s cubic-bezier(.2,.7,.2,1),filter .9s ease,opacity .9s ease}
+.cover.asked .mark{filter:grayscale(1) brightness(1.9);opacity:.8}  /* the logo steps back to a quiet white mark at the top */
+.ticker{position:absolute;left:50%;bottom:160px;z-index:3;width:min(1000px,calc(100% - 40px));transform:translate(-50%,12px);--row:max(6.6cqw,76px);
+  color:#fff;text-align:center;text-shadow:0 1px 16px rgba(8,3,13,.75);
+  opacity:0;visibility:hidden;transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1),visibility 0s .9s}
+.cover.asked .ticker{opacity:1;visibility:visible;transform:translate(-50%,0);transition:opacity .9s ease .15s,transform .9s cubic-bezier(.2,.7,.2,1) .15s}
+.tk-head{margin:0 0 max(1.2cqw,12px);font:500 max(1.05cqw,11px)/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--pink-2)}
+.tk-win{height:calc(var(--row) * 2);overflow:hidden;
+  -webkit-mask-image:linear-gradient(180deg,#000 55%,transparent);mask-image:linear-gradient(180deg,#000 55%,transparent)}
+.tk-list{list-style:none;margin:0;padding:0;transition:transform .9s cubic-bezier(.22,.7,.2,1);will-change:transform}
+.tk-list li{height:var(--row);opacity:0;transition:opacity .9s ease}
+.tk-list li.on{opacity:1}.tk-list li.n1{opacity:.3}.tk-list li.n2{opacity:0}
+.tk-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:max(.7cqw,7px);height:100%;width:100%;padding:0;border:0;background:none;color:inherit;text-align:center;font:inherit;text-decoration:none;cursor:default}
+a.tk-item{cursor:pointer}
+.tk-name{font:800 max(3.1cqw,26px)/1 var(--display);text-transform:uppercase;letter-spacing:-.01em;white-space:nowrap;color:var(--pink);text-shadow:0 0 22px rgba(255,79,166,.45),0 1px 14px rgba(8,3,13,.6);transition:color .3s}
+.tk-sub{max-width:100%;font:400 max(1.3cqw,14px)/1.25 var(--body);color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tk-sub i{font-style:normal;color:rgba(255,255,255,.45)}
+a.tk-item:hover .tk-name,a.tk-item:focus-visible .tk-name{color:#fff}
 /* cover: quiet channel links, top right, out of the way of the logo and prompt */
 .social{position:absolute;top:calc(22px + env(safe-area-inset-top,0px));right:26px;z-index:3;display:flex;gap:6px}
 .social a{display:grid;place-items:center;width:36px;height:36px;color:rgba(255,255,255,.55);transition:color .3s}
@@ -398,7 +420,10 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
 
   /* cover: still exactly one screen, film cropped to fill; logo and line sized to read */
   .cover{display:flex}
-  .cover > .bg,.cover > .cue,.cover > .ask,.cover > .social{position:absolute}
+  .cover > .bg,.cover > .cue,.cover > .ask,.cover > .social,.cover > .ticker{position:absolute}
+  .ticker{--row:72px}
+  .tk-head{font-size:11px;margin-bottom:10px}
+  .tk-name{font-size:27px}.tk-sub{font-size:13px}.tk-item{gap:7px}
   .social{top:calc(14px + env(safe-area-inset-top,0px));right:12px;gap:2px}
   .ask{width:calc(100% - 32px)}
   .ask-opts{display:grid;grid-template-columns:1fr 1fr;width:100%}
@@ -510,6 +535,7 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
   .lines{grid-template-columns:1fr;gap:14px}.lines div:nth-child(2){grid-column:auto;grid-row:auto}
   .lines b{font-size:15px}
 }
+@media (prefers-reduced-motion:reduce){.tk-list,.tk-list li{transition:none}}
 @media (prefers-reduced-motion:reduce){.hint::after{animation:none}.flip-in{transition:transform .01s}.creators .flip .flip-in{animation:none!important}.track{animation:none;flex-wrap:wrap;justify-content:center;width:auto;row-gap:4cqw}.track [aria-hidden="true"]{display:none}.cue::before{animation:none}.ask,.ask.on{transition:none}.orb{animation:none}.mono{transition:none}}
 </style>
 </head>
@@ -542,6 +568,10 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
       </ul>
     </nav>
     <a class="cue" href="#collective" aria-label="Scroll down"></a>
+    <aside class="ticker" id="ticker" aria-label="A fraction of what we do">
+      <p class="tk-head">A fraction of what we do</p>
+      <div class="tk-win"><ol class="tk-list" id="tkList"></ol></div>
+    </aside>
     <div class="social">
       <a href="https://www.youtube.com/@teamfractionyt" target="_blank" rel="noopener" aria-label="Team Fraction on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg></a>
       <a href="https://instagram.com/team.fraction" target="_blank" rel="noopener" aria-label="Team Fraction on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M7 2.5h10A4.5 4.5 0 0 1 21.5 7v10a4.5 4.5 0 0 1-4.5 4.5H7A4.5 4.5 0 0 1 2.5 17V7A4.5 4.5 0 0 1 7 2.5z"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor"/></svg></a>
@@ -763,7 +793,7 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
   </section>
 
   <!-- 3 FASHION FILM -->
-  <section class="slide ff media-slide" aria-label="Fashion Film 2026">
+  <section class="slide ff media-slide" id="fashion-film" aria-label="Fashion Film 2026">
     <video class="bg mono" data-dsrc="media/ff-loop2.mp4" data-dposter="media/ff-loop2-poster.webp" data-msrc="media/ffv-loop2.mp4" data-mposter="media/ffv-loop2-poster.webp" muted loop playsinline preload="metadata" aria-label="Fashion Film 2026, the collective in tailoring on the shore"></video>
     <div class="shade"></div>
     <div class="pad">
@@ -1088,20 +1118,99 @@ const hire=document.getElementById('hire'),inSeg=new Set();
 const segIO=new IntersectionObserver(es=>{es.forEach(e=>e.isIntersecting?inSeg.add(e.target):inSeg.delete(e.target));hire.classList.toggle('on',inSeg.size>0)},{rootMargin:'-40% 0px -40% 0px'});
 ['dance-music-videos','brand-films','corporate-work','sangeet-choreographies'].forEach(id=>segIO.observe(document.getElementById(id)));
 
-/* ---- first scroll on the cover: hold the page and ask what they came for; the next scroll moves on ---- */
+/* ---- first scroll on the cover: hold the page and ask what they came for; the next scroll moves on.
+   Scrolling back up on the cover puts the ticker back, and returning to the top resets it, so the prompt can be seen again ---- */
 const ask=document.getElementById('ask');let asked=false,askAt=0;
 ask.inert=true;
 function holdFirst(e){
   if(asked){if(Date.now()-askAt<700&&e.cancelable)e.preventDefault();return}  // swallow trackpad momentum from the same gesture
   if(scrollY>5)return;
   if(e.cancelable)e.preventDefault();
-  asked=true;askAt=Date.now();ask.classList.add('on');ask.inert=false;
+  asked=true;askAt=Date.now();ask.classList.add('on');ask.inert=false;cover.classList.add('asked');placeTicker();
 }
-let ty=0;
-addEventListener('wheel',e=>{if(e.deltaY>0)holdFirst(e)},{passive:false});
+function unask(){if(!asked)return;asked=false;ask.classList.remove('on');ask.inert=true;cover.classList.remove('asked');cover.querySelector('.mark').style.transform=''}
+/* while the prompt is up: the logo shrinks to the top centre, level with the YouTube and Instagram icons, and the
+   ticker takes the logo's place in the middle of the screen (never lower than 18px above the prompt) */
+function placeTicker(){
+  if(!asked)return;const tk=document.getElementById('ticker'),mk=cover.querySelector('.mark'),soc=cover.querySelector('.social'),H=cover.clientHeight;
+  const cTop=cover.getBoundingClientRect().top;
+  mk.style.transition='none';mk.style.transform='';const r=mk.getBoundingClientRect();mk.offsetHeight;mk.style.transition='';
+  const logoMid=r.top-cTop+r.height/2,sr=soc.getBoundingClientRect(),iconMid=sr.top-cTop+sr.height/2;
+  const sc=sr.height*1.1/r.height;   // logo about as tall as the icon buttons
+  mk.style.transform='translateY('+(iconMid-logoMid)+'px) scale('+sc+')';
+  const askTop=H-parseFloat(getComputedStyle(ask).bottom)-ask.offsetHeight,th=tk.offsetHeight;
+  const bottom=Math.max(H-askTop+18,H-(logoMid+th/2));   // centred where the logo was, unless that would crowd the prompt
+  tk.style.bottom=bottom+'px';
+}
+addEventListener('resize',placeTicker);
+function backUp(e){if(asked&&scrollY<=5&&Date.now()-askAt>400){if(e.cancelable)e.preventDefault();unask()}}
+let ty=0,away=false;
+addEventListener('wheel',e=>{if(e.deltaY>0)holdFirst(e);else if(e.deltaY<0)backUp(e)},{passive:false});
 addEventListener('touchstart',e=>{ty=e.touches[0].clientY},{passive:true});
-addEventListener('touchmove',e=>{if(ty-e.touches[0].clientY>8)holdFirst(e)},{passive:false});
-addEventListener('keydown',e=>{if(['ArrowDown','PageDown',' ','End'].includes(e.key)&&!e.target.closest('a,button,input,textarea'))holdFirst(e)});
+addEventListener('touchmove',e=>{const d=ty-e.touches[0].clientY;if(d>8)holdFirst(e);else if(d<-8)backUp(e)},{passive:false});
+addEventListener('keydown',e=>{if(e.target.closest?.('a,button,input,textarea'))return;
+  if(['ArrowDown','PageDown',' ','End'].includes(e.key))holdFirst(e);else if(['ArrowUp','PageUp','Home'].includes(e.key))backUp(e)});
+addEventListener('scroll',()=>{if(scrollY>innerHeight*.3)away=true;else if(scrollY<=5&&away){away=false;unask()}},{passive:true});
+
+/* ---- ticker sound: browsers only allow audio after a tap, click or key press, so it wakes on the first one ---- */
+let tkAudio=null;
+function wakeAudio(){try{tkAudio=tkAudio||new (window.AudioContext||window.webkitAudioContext)();if(tkAudio.state==='suspended')tkAudio.resume()}catch(e){}}
+['pointerdown','touchend','keydown'].forEach(t=>addEventListener(t,wakeAudio,{passive:true}));
+function tick(){
+  if(!tkAudio||tkAudio.state!=='running'||document.hidden||!cover.classList.contains('asked')||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const t=tkAudio.currentTime,o=tkAudio.createOscillator(),g=tkAudio.createGain(),f=tkAudio.createBiquadFilter();
+  o.type='triangle';o.frequency.setValueAtTime(2300,t);o.frequency.exponentialRampToValueAtTime(900,t+.035);
+  f.type='highpass';f.frequency.value=600;
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.09,t+.004);g.gain.exponentialRampToValueAtTime(.0001,t+.06);
+  o.connect(f).connect(g).connect(tkAudio.destination);o.start(t);o.stop(t+.07);
+}
+
+/* ---- cover ticker: one project at a time rises into place every 1.5 s; hover or focus pauses, linked names jump to their section ---- */
+const TICKER=[  // [name, line, category, section on this page or ""]
+  ["Vicky Kaushal","Featured in Ad Film","Celebrity Campaign",""],
+  ["Netflix","Ayushmann Khurrana Video","Entertainment",""],
+  ["Varun Dhawan","Perfect — Music Video","Music Video",""],
+  ["Tu Yaa Main","Featuring Gourav Adarsh & Shanaya Kapoor","Music Video",""],
+  ["Conan O’Brien Must Go","Featured in Music Video","",""],
+  ["Navarathri Parody","Choreographed & Featured in a Music Video","",""],
+  ["Fast&Up","Brand Campaign","","#brand-films"],
+  ["The Souled Store","Fashion Campaign","","#brand-films"],
+  ["Fila","Brand Campaign","","#brand-films"],
+  ["Falguni & Shane Peacock","Runway Performance","Blenders Pride 2022",""],
+  ["Airtel","Corporate Project","","#corporate-work"],
+  ["Pidilite","Corporate Project","","#corporate-work"],
+  ["30+ Sangeet Productions","Wedding & Live Experiences","","#sangeet-choreographies"],
+  ["Fashion Film ’26","Original Production","","#fashion-film"]
+];
+(function(){
+  const box=document.getElementById('ticker'),list=document.getElementById('tkList');if(!box)return;
+  const N=TICKER.length,SHOW=3;   // the first SHOW rows are repeated at the end so the loop never jumps
+  [...TICKER,...TICKER.slice(0,SHOW)].forEach(([name,line,cat,href],k)=>{
+    const li=document.createElement('li'),el=document.createElement(href?'a':'div');el.className='tk-item';
+    if(href){el.href=href;el.addEventListener('click',e=>{e.preventDefault();goTo(document.querySelector(href))})}
+    const n=document.createElement('span');n.className='tk-name';n.textContent=name;
+    const sub=document.createElement('span');sub.className='tk-sub';sub.textContent=line;
+    if(cat){const c=document.createElement('i');c.textContent=' · '+cat;sub.appendChild(c)}
+    el.append(n,sub);li.appendChild(el);
+    if(k>=N){li.setAttribute('aria-hidden','true');if(href)el.tabIndex=-1}
+    list.appendChild(li);
+  });
+  const rows=[...list.children];let at=0,timer=0,held=false,seen=true,swapT=0;
+  function paint(){rows.forEach((r,k)=>{r.className=k===at?'on':k===at+1?'n1':k===at+2?'n2':''});
+    list.style.transform='translateY(calc(var(--row) * '+(-at)+'))'}
+  function still(fn){list.style.transition='none';rows.forEach(r=>r.style.transition='none');fn();list.offsetHeight;list.style.transition='';rows.forEach(r=>r.style.transition='')}
+  function norm(){if(at>=N)still(()=>{at-=N;paint()})}   // land on the copy, then swap to the original unseen
+  function go(){clearTimeout(swapT);norm();at++;paint();if(at===N)swapT=setTimeout(norm,950);tick()}
+  function run(){clearInterval(timer);if(!held&&seen)timer=setInterval(go,1500)}
+  box.addEventListener('mouseenter',()=>{held=true;run()});box.addEventListener('mouseleave',()=>{held=false;run()});
+  box.addEventListener('focusin',e=>{held=true;run();const r=e.target.closest('li'),k=rows.indexOf(r);if(k>=0&&k<N&&k!==at){at=k;paint()}});
+  box.addEventListener('focusout',()=>{held=false;run()});
+  new IntersectionObserver(es=>{seen=es[0].isIntersecting;run()}).observe(cover);
+  /* long names shrink to fit the width they have */
+  function fit(){box.querySelectorAll('.tk-name').forEach(n=>{n.style.fontSize='';const w=box.clientWidth,sw=n.scrollWidth;if(sw>w)n.style.fontSize=(parseFloat(getComputedStyle(n).fontSize)*w/sw*.97)+'px'})}
+  addEventListener('resize',fit);document.fonts?document.fonts.ready.then(fit):fit();fit();
+  paint();run();
+})();
 
 /* ---- cover line: exactly the logo's width, largest size that stays on two lines ---- */
 function fitLede(){
