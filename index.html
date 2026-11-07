@@ -22,6 +22,13 @@
 <meta property="og:image:alt" content="The Team Fraction collective on the beach in Mumbai">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Team Fraction","url":"https://www.teamfraction.in/","logo":"https://www.teamfraction.in/icon-192.png","email":"fractioncrew@gmail.com","address":{"@type":"PostalAddress","addressLocality":"Mumbai","addressCountry":"IN"},"sameAs":["https://instagram.com/team.fraction","https://www.youtube.com/@teamfractionyt"]}</script>
+<script>
+/* Lite mode: on a slow or data-saving connection the site shows stills instead of moving video, and plays films only on tap.
+   Phones that report their network decide here; the rest are checked once the page is up (see goLite below). */
+(function(){var c=navigator.connection,l=false;try{l=sessionStorage.getItem('lite')==='1'}catch(e){}
+  if(c&&(c.saveData||/2g|3g/.test(c.effectiveType||'')))l=true;
+  if(l)document.documentElement.classList.add('lite')})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Unbounded:wght@300;500;700;800&display=swap">
@@ -220,7 +227,9 @@ a.tk-item:hover .tk-name,a.tk-item:focus-visible .tk-name{color:#fff}
 .cw-br{flex-basis:100%;height:0}
 .cw-tile{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:.9cqw;padding:0;background:var(--ground-2);color:#fff;text-align:left;cursor:pointer;font:inherit;
   transition:border-color .35s,box-shadow .35s,transform .5s cubic-bezier(.2,.7,.2,1)}
-.cw-tile video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cw-tile video,.cw-tile .cw-still{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cw-tile .cw-still{filter:grayscale(1) contrast(1.05);transition:filter .6s ease}.cw-tile:hover .cw-still,.cw-tile:focus-visible .cw-still{filter:none}
+@media (hover:none){.cw-tile .cw-still{filter:none}}
 .cw-tile .cw-yt{position:absolute;top:50%;left:50%;height:100%;width:auto;aspect-ratio:16/9;min-width:100%;border:0;pointer-events:none;transform:translate(-50%,-50%) scale(1.6);opacity:0;transition:opacity 1.2s ease,filter .6s ease}
 .cw-tile .cw-yt.on{opacity:1}  /* cover the tile; the film is letterboxed inside YouTube, so zoom past its bars */
 .cw-tile video,.cw-tile .cw-yt{filter:grayscale(1) contrast(1.05)}
@@ -253,7 +262,7 @@ a.tk-item:hover .tk-name,a.tk-item:focus-visible .tk-name{color:#fff}
 .fw-card img{filter:grayscale(1) contrast(1.05);transition:filter .6s ease,opacity .5s}
 .fw-card video{filter:grayscale(1) contrast(1.05);transform:scale(1.02);transition:filter .6s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
 .fw-card:not(.soon):hover video,.fw-card:not(.soon):focus-visible video{filter:none;transform:scale(1.06)}
-@media (hover:none){.fw-card video{filter:none}}
+@media (hover:none){.fw-card video,.fw-card img{filter:none}}
 .fw-card::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(8,3,13,.92),rgba(8,3,13,.05) 55%,transparent);pointer-events:none}
 .fw-cap{position:absolute;left:1.2cqw;right:1.2cqw;bottom:1.2cqw;z-index:1;display:flex;flex-direction:column;gap:.5cqw}
 .fw-cap .h3{font-size:1.55cqw;line-height:1.05;color:var(--pink);text-shadow:0 0 18px rgba(255,79,166,.35)}
@@ -891,6 +900,15 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
 </dialog>
 
 <script>
+/* ---- Lite mode: stills stand in for every silent loop, and nothing moving downloads until someone taps play ---- */
+const isLite=()=>document.documentElement.classList.contains('lite');
+function stripVideos(){
+  document.querySelectorAll('video').forEach(v=>{if(!v.muted||v.id==='pv')return;v.pause();if(v.getAttribute('src')){v.removeAttribute('src');v.load()}});
+  document.querySelectorAll('iframe.cw-yt').forEach(f=>f.remove());
+}
+function goLite(){if(isLite())return;document.documentElement.classList.add('lite');try{sessionStorage.setItem('lite','1')}catch(e){}stripVideos()}
+function playLoop(v){if(!isLite()&&v.muted)v.play().catch(()=>{})}
+
 /* ---- phone-only cuts: elements with data-msrc swap to the vertical version under 760px ---- */
 const phone=matchMedia('(max-width:760px)');
 function applySources(){
@@ -898,8 +916,8 @@ function applySources(){
     const m=phone.matches,src=m?el.dataset.msrc:el.dataset.dsrc;
     if(el.tagName!=='VIDEO'){el.dataset.src=src;return}
     if(el.getAttribute('src')===src)return;
-    el.poster=(m?el.dataset.mposter:el.dataset.dposter)||'';el.src=src;
-    if(el.closest('.slide')?.classList.contains('live'))el.play().catch(()=>{});
+    el.poster=(m?el.dataset.mposter:el.dataset.dposter)||'';if(isLite())return;el.src=src;
+    if(el.closest('.slide')?.classList.contains('live'))playLoop(el);
   });
 }
 applySources();phone.addEventListener('change',applySources);
@@ -927,13 +945,13 @@ const CW=[
 // Featured work: [name, credit line, still image (optional), 8 s silent loop, full video (file, YouTube or Instagram link)]
 // leave the loop and video as "" until the media arrives; the card then shows as "coming soon"
 const FEATURED=[
-  ["Vicky Kaushal","A23 · Featured in Ad Film","","media/fw-vicky-loop.mp4","media/fw-vicky-film.mp4"],
-  ["Netflix · Ayushmann Khurrana","Featured in The Railway Men Music Video","","media/fw-netflix-loop.mp4","media/fw-netflix-film.mp4"],
-  ["Varun Dhawan","Perfect — Music Video","","media/fw-perfect-loop.mp4","media/fw-perfect-film.mp4"],
-  ["Tu Yaa Main","Featuring Gourav Adarsh & Shanaya Kapoor","","media/fw-tuyaamain-loop.mp4","media/fw-tuyaamain-film.mp4"],
-  ["Conan O’Brien Must Go","Featured in Music Video","","media/fw-conan-loop.mp4","media/fw-conan-film.mp4"],
-  ["Falguni & Shane Peacock","Runway Performance · Blenders Pride 2022","","media/fw-falguni-loop.mp4","media/fw-falguni-film.mp4"],
-  ["Navratri Parody","Choreographed & Featured in a Music Video","","media/fw-navarathri-loop.mp4","media/fw-navarathri-film.mp4"]
+  ["Vicky Kaushal","A23 · Featured in Ad Film","media/fw-vicky-poster.jpg","media/fw-vicky-loop.mp4","media/fw-vicky-film.mp4"],
+  ["Netflix · Ayushmann Khurrana","Featured in The Railway Men Music Video","media/fw-netflix-poster.jpg","media/fw-netflix-loop.mp4","media/fw-netflix-film.mp4"],
+  ["Varun Dhawan","Perfect — Music Video","media/fw-perfect-poster.jpg","media/fw-perfect-loop.mp4","media/fw-perfect-film.mp4"],
+  ["Tu Yaa Main","Featuring Gourav Adarsh & Shanaya Kapoor","media/fw-tuyaamain-poster.jpg","media/fw-tuyaamain-loop.mp4","media/fw-tuyaamain-film.mp4"],
+  ["Conan O’Brien Must Go","Featured in Music Video","media/fw-conan-poster.jpg","media/fw-conan-loop.mp4","media/fw-conan-film.mp4"],
+  ["Falguni & Shane Peacock","Runway Performance · Blenders Pride 2022","media/fw-falguni-poster.jpg","media/fw-falguni-loop.mp4","media/fw-falguni-film.mp4"],
+  ["Navratri Parody","Choreographed & Featured in a Music Video","media/fw-navarathri-poster.jpg","media/fw-navarathri-loop.mp4","media/fw-navarathri-film.mp4"]
 ];
 // Worked with: [name, logo file, video on this site, player title, logo height in cqw (evens out wide vs tall marks)]
 const LOGOS=[
@@ -974,7 +992,7 @@ CREATORS.forEach(([name,front,back,link,film],i)=>{
 const fwRow=document.getElementById('fwRow');
 FEATURED.forEach(([name,line,still,clip,link])=>{
   const ready=!!(still||clip),c=document.createElement(link?'button':'div');c.className='fw-card'+(ready?'':' soon');if(link)c.type='button';
-  c.innerHTML=(still?'<img alt="" loading="lazy">':'')+(clip?'<video muted loop playsinline autoplay preload="metadata"></video>':'')
+  c.innerHTML=(still?'<img alt="" loading="lazy">':'')+(clip?'<video muted loop playsinline preload="none"></video>':'')
     +(ready?'':'<span class="fw-tag">Clip coming soon</span>')+'<span class="fw-cap"><span class="h3"></span><small></small></span>';
   if(still)c.querySelector('img').src=still;
   if(clip){const v=c.querySelector('video');v.src=clip;if(still)v.poster=still}
@@ -992,11 +1010,12 @@ CW.forEach(([name,role,link,loop,shape,wide],i)=>{
   const b=document.createElement('button');b.type='button';b.className='cw-tile pv '+shape+(wide?' wide':'');
   const yt=link.match(/youtu\.be\/([\w-]+)/);
   /* the tile is always moving: a silent loop of the film, or the YouTube video itself muted and looping */
-  b.innerHTML=(loop?'<video muted loop playsinline autoplay preload="metadata"></video>'
-    :'<iframe class="cw-yt" tabindex="-1" aria-hidden="true" allow="autoplay; encrypted-media" loading="lazy"></iframe>')
+  b.innerHTML=(loop?'<video muted loop playsinline preload="none"></video>'
+    :'<img class="cw-still" alt="" loading="lazy"><iframe class="cw-yt" tabindex="-1" aria-hidden="true" allow="autoplay; encrypted-media" loading="lazy"></iframe>')
     +'<span class="cw-cap"><span class="cw-txt"><span class="eyebrow"></span><span class="h3"></span></span></span><span class="cw-play" aria-hidden="true"></span>';
-  if(loop)b.querySelector('video').src=loop;
-  else{const f=b.querySelector('iframe');f.src='https://www.youtube-nocookie.com/embed/'+yt[1]+'?autoplay=1&mute=1&loop=1&playlist='+yt[1]+'&controls=0&modestbranding=1&playsinline=1&rel=0&disablekb=1';
+  if(loop){const v=b.querySelector('video');v.poster=loop.replace('-loop.mp4','-poster.jpg');v.src=loop}
+  else{b.querySelector('.cw-still').src='https://i.ytimg.com/vi/'+yt[1]+'/hqdefault.jpg';  // YouTube's own still, under the player
+    const f=b.querySelector('iframe');if(!isLite())f.src='https://www.youtube-nocookie.com/embed/'+yt[1]+'?autoplay=1&mute=1&loop=1&playlist='+yt[1]+'&controls=0&modestbranding=1&playsinline=1&rel=0&disablekb=1';
     f.onload=()=>setTimeout(()=>f.classList.add('on'),4500)}  // YouTube shows its title and play state for the first seconds; fade in once they have gone
   b.querySelector('.h3').textContent=name;b.querySelector('.eyebrow').textContent=role;b.dataset.work=name;
   if(yt)b.dataset.embed='https://www.youtube-nocookie.com/embed/'+yt[1]+'?autoplay=1&rel=0';else b.dataset.src=link;
@@ -1040,13 +1059,22 @@ slides.forEach((s,idx)=>{
 const io=new IntersectionObserver(es=>es.forEach(e=>{
   const s=e.target,on=e.isIntersecting;
   s.classList.toggle('live',on);
-  s.querySelectorAll('video').forEach(v=>on?(v.muted&&v.play().catch(()=>{})):v.pause());
+  s.querySelectorAll('video').forEach(v=>on?playLoop(v):v.pause());
 }),{threshold:0,rootMargin:'-35% 0px -35% 0px'});
+if(isLite())stripVideos();
 slides.forEach(s=>io.observe(s));
+/* phones that don't report their network (iPhones, most desktops) are judged by how the page itself arrived:
+   a slow page download, or a cover video still not moving after 4 s while it's on screen, switches the rest of the visit to Lite */
+if(!isLite()){
+  const nav=performance.getEntriesByType('navigation')[0];
+  if(nav&&nav.responseEnd-nav.requestStart>1500)goLite();
+  else setTimeout(()=>{const h=document.querySelector('#top video.bg');
+    if(document.visibilityState==='visible'&&scrollY<innerHeight*.5&&h&&h.getAttribute('src')&&h.readyState<3)goLite()},4000);
+}
 /* phones can hold back muted autoplay until the first touch (iOS Low Power Mode); retry visible loops */
 let kickQueued=false;
 function kick(){if(kickQueued)return;kickQueued=true;requestAnimationFrame(()=>{kickQueued=false;
-  document.querySelectorAll('.slide.live video').forEach(v=>{if(v.muted&&v.paused)v.play().catch(()=>{})})})}
+  document.querySelectorAll('.slide.live video').forEach(v=>{if(v.paused)playLoop(v)})})}
 ['touchstart','scroll','click'].forEach(t=>addEventListener(t,kick,{passive:true}));
 
 /* ---- Fashion Film stills: masonry collage, tiles rise in as they scroll into view, tap one to enlarge ---- */
@@ -1099,7 +1127,7 @@ function selectFilm(i,play){
     stage.classList.add('playing');fv.play().catch(()=>{});
     if(innerWidth<=760)stage.scrollIntoView({block:'center',behavior:'smooth'});  // phones: list sits below the player
   }else{
-    fv.controls=false;fv.muted=true;fv.loop=true;fv.classList.add('mono');fv.poster=f.th;fv.src=f.loop||f.src;if(stage.closest('.slide').classList.contains('live'))fv.play().catch(()=>{});
+    fv.controls=false;fv.muted=true;fv.loop=true;fv.classList.add('mono');fv.poster=f.th;if(isLite()){fv.removeAttribute('src');fv.load()}else{fv.src=f.loop||f.src;if(stage.closest('.slide').classList.contains('live'))playLoop(fv)}
     stage.dataset.idx=i;
   }
   stage.dataset.idx=i;
