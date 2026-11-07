@@ -1245,6 +1245,7 @@ const TICKER=[  // [name, line, category, where it goes: "@Name" is that tile in
   function startSpin(){cancelAnimationFrame(spin);clearTimeout(swapT);clearInterval(timer);
     if(matchMedia('(prefers-reduced-motion: reduce)').matches){at=0;paint();return}
     list.style.transition='none';rows.forEach(r=>r.style.transition='none');  // frames drive the motion; still() hands it back
+    rows.forEach(r=>r.className='');  // every name spins past in white; pink returns on the one it lands on
     spin=requestAnimationFrame(now=>{spin=requestAnimationFrame(spinFrame(now))})}
   function stopSpin(){if(!spin)return;cancelAnimationFrame(spin);spin=0;still(()=>{list.style.filter='';rows.forEach(r=>r.style.opacity='');at=0;paint()});run()}
   let wasAsked=cover.classList.contains('asked');
