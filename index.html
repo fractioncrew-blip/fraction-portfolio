@@ -202,8 +202,8 @@ a.tk-item:hover .tk-name,a.tk-item:focus-visible .tk-name{color:#fff}
 #commercial-work,#commercial-work .pad{aspect-ratio:auto}
 #commercial-work .pad{position:relative;inset:auto;gap:2.2cqw}
 .cw .head{display:flex;justify-content:space-between;align-items:flex-end;gap:3cqw}
-.cw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1cqw}
-.cw-tile.l{aspect-ratio:16/9}.cw-tile.v{aspect-ratio:4/5}  /* landscape music videos on top, the vertical films below */
+.cw-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:1.1cqw}
+.cw-tile.l{grid-column:span 4;aspect-ratio:16/9}.cw-tile.v{grid-column:span 3;aspect-ratio:3/4}  /* landscape music videos on top, the vertical films below */
 .cw-tile{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:.9cqw;padding:0;background:var(--ground-2);color:#fff;text-align:left;cursor:pointer;font:inherit;
   transition:border-color .35s,box-shadow .35s,transform .5s cubic-bezier(.2,.7,.2,1)}
 .cw-tile video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -506,6 +506,7 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
   .cw .head{flex-direction:column;align-items:flex-start;gap:10px}
   .cw-grid{grid-template-columns:1fr 1fr;gap:10px}
   .cw-tile{border-radius:10px}
+  .cw-tile.l,.cw-tile.v{grid-column:auto}.cw-tile.v{aspect-ratio:4/5}
   .cw-tile.wide{grid-column:1/-1;aspect-ratio:16/9}
   .cw-tile.l:not(.wide){aspect-ratio:1/1}
   .cw-tile.v.wide{aspect-ratio:16/10}
@@ -889,7 +890,8 @@ const CW=[
   ["Anant Khamkar","https://youtu.be/PEKFrwLq2Bs","","l",0],
   ["Riya Duggal","media/riya-film.mp4","media/cw-riya-loop.mp4","v",0],
   ["RuhFikra","media/ruhfikra-film.mp4","media/cw-ruhfikra-loop.mp4","v",0],
-  ["Sharjah Warriors","media/sharjah-film.mp4","media/cw-sharjah-loop.mp4","v",1]
+  ["Sharjah Warriors","media/sharjah-film.mp4","media/cw-sharjah-loop.mp4","v",0],
+  ["Fila","media/fila-film.mp4","media/cw-fila-loop.mp4","v",0]
 ];
 // Featured work: [name, credit line, still image, short silent clip, full video (file, YouTube or Instagram link)]
 // leave still/clip/video as "" until the media arrives; the card then shows as "coming soon"
