@@ -142,6 +142,7 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
 .cap .eyebrow{color:rgba(255,255,255,.72);font-size:.9cqw}
 .cap .row{display:flex;justify-content:space-between;align-items:baseline;gap:1cqw;flex-wrap:wrap}
 .cap .h3{font-size:1.75cqw;color:#fff}
+.brands .cap .h3{color:var(--pink)}
 .case.fu .cap .row{flex-direction:column;align-items:flex-start;gap:.6cqw}
 .case.soon .media{background:radial-gradient(60% 90% at 80% 10%,rgba(255,79,166,.28),transparent 70%),
   repeating-linear-gradient(135deg,rgba(248,238,251,.035) 0 1px,transparent 1px 14px),#120a1c}
@@ -172,15 +173,28 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
 @keyframes ping{0%{transform:scale(1);opacity:.9}100%{transform:scale(3.2);opacity:0}}
 .flip[aria-pressed="true"] .hint::after{animation:none;opacity:0}
 .card .h3{font-size:1.6cqw;min-height:2.1em}
-.music{display:flex;flex-direction:column;gap:1.6cqw;margin-top:2cqw}
-.music-list{display:flex;flex-wrap:wrap;gap:.8cqw}
-.music-list button,.music-list span{display:inline-flex;align-items:center;gap:.55cqw;font:600 1.25cqw/1 var(--body);color:#fff;background:var(--pink);border:0;border-radius:999px;padding:.85cqw 1.4cqw;white-space:nowrap}
-.music-list button::before,.music-list span::before{content:"";border-style:solid;border-width:.38cqw 0 .38cqw .62cqw;border-color:transparent transparent transparent currentColor}
-.music-list button{cursor:pointer;box-shadow:0 0 1.4cqw rgba(255,79,166,.45);transition:background .2s}
-.music-list button:hover{background:#ff6ab6}
-.music-list span{opacity:.55}  /* no video link yet */
 .card .watch{align-self:flex-start}
 .watch.off{opacity:.45;cursor:default}
+
+/* commercial work: bento grid, tall tiles for the vertical films, a wide one for the landscape music video */
+#commercial-work,#commercial-work .pad{aspect-ratio:auto}
+#commercial-work .pad{position:relative;inset:auto;gap:2.2cqw}
+.cw .head{display:flex;justify-content:space-between;align-items:flex-end;gap:3cqw}
+.cw-grid{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:1fr 1fr;aspect-ratio:2.8/1;gap:1.1cqw;
+  grid-template-areas:"riya bewafa bewafa ruhfikra sharjah" "riya nikhil anant ruhfikra sharjah"}
+.cw-tile{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:.9cqw;padding:0;background:var(--ground-2);color:#fff;text-align:left;cursor:pointer;font:inherit;
+  transition:border-color .35s,box-shadow .35s,transform .5s cubic-bezier(.2,.7,.2,1)}
+.cw-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.05);transform:scale(1.02);transition:filter .6s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
+.cw-tile::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(8,3,13,.92),rgba(8,3,13,.1) 55%,transparent);pointer-events:none}
+.cw-cap{position:absolute;left:1.1cqw;right:1.1cqw;bottom:1.1cqw;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:1cqw}
+.cw-cap .h3{font-size:1.45cqw;line-height:1.05}
+.cw-play{flex:none;width:2.6cqw;height:2.6cqw;border-radius:50%;background:var(--pink);display:grid;place-items:center;box-shadow:0 0 1.6cqw rgba(255,79,166,.5);transform:scale(.85);opacity:.85;transition:transform .35s,opacity .35s}
+.cw-play::before{content:"";margin-left:.2cqw;border-left:.75cqw solid #fff;border-top:.45cqw solid transparent;border-bottom:.45cqw solid transparent}
+.cw-tile:hover,.cw-tile:focus-visible{border-color:rgba(255,79,166,.7);box-shadow:0 0 2.4cqw rgba(255,79,166,.28);transform:translateY(-.2cqw)}
+.cw-tile:hover img,.cw-tile:focus-visible img{filter:none;transform:scale(1.07)}
+.cw-tile:hover .cw-play,.cw-tile:focus-visible .cw-play{transform:none;opacity:1}
+.cw-tile:hover .h3,.cw-tile:focus-visible .h3{color:var(--pink-2)}
+@media (hover:none){.cw-tile img{filter:none}}
 
 /* 7 dance films: playlist, stage left, scrolling thumbnails right */
 .films .pad{gap:1.8cqw}
@@ -429,8 +443,15 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
   .hint{width:9px;height:9px;right:10px;bottom:10px}
   .face,.flip{border-radius:10px}
   .card{gap:8px}.card .h3{font-size:17px;min-height:0}
-  .music{gap:14px;margin-top:12px}.music .h2{font-size:min(44px,calc((100vw - 40px)/11))}.music-list{gap:8px}.music-list button,.music-list span{font-size:14px;padding:11px 16px;gap:8px}.music-list button::before,.music-list span::before{border-width:5px 0 5px 8px}
 
+  /* commercial work: two columns, wide tiles span both */
+  #commercial-work .pad{gap:16px}
+  .cw .head{flex-direction:column;align-items:flex-start;gap:10px}
+  .cw-grid{grid-template-columns:1fr 1fr;grid-template-rows:none;grid-template-areas:none;aspect-ratio:auto;gap:10px}
+  .cw-tile{grid-area:auto!important;aspect-ratio:4/5;border-radius:10px}
+  .cw-tile.wide{grid-column:1/-1!important;aspect-ratio:16/9}
+  .cw-cap{left:12px;right:12px;bottom:12px;gap:8px}.cw-cap .h3{font-size:16px}
+  .cw-play{width:32px;height:32px}.cw-play::before{margin-left:3px;border-left-width:10px;border-top-width:6px;border-bottom-width:6px}
   /* dance films playlist */
   .films .pad{flex-direction:column;align-items:stretch;gap:18px}
   .films .h2{font-size:clamp(30px,9vw,44px)}
@@ -501,6 +522,17 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
     </div>
   </section>
 
+  <!-- COMMERCIAL WORK: music videos and campaigns as a bento grid; every tile opens in the in-deck player -->
+  <section class="slide cw" id="commercial-work" aria-label="Commercial work">
+    <div class="pad">
+      <div class="head">
+        <h2 class="h2">Commercial <span class="pink">work</span></h2>
+        <p class="eyebrow">Music videos · Artists · Campaigns</p>
+      </div>
+      <div class="cw-grid" id="cwGrid"></div>
+    </div>
+  </section>
+
   <!-- 2 INTRO -->
   <section class="slide intro" id="collective" aria-label="About us">
     <div class="pad">
@@ -518,30 +550,11 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
     <div class="frame"><video class="mono" src="media/coke-loop.mp4" poster="media/coke-poster.jpg" muted loop playsinline preload="metadata" aria-label="Fraction crew dancing to Magic, Coke Studio India"></video></div>
   </section>
 
-  <!-- 3 FASHION FILM -->
-  <section class="slide ff media-slide" aria-label="Fashion Film 2026">
-    <video class="bg mono" data-dsrc="media/ff-loop2.mp4" data-dposter="media/ff-loop2-poster.webp" data-msrc="media/ffv-loop2.mp4" data-mposter="media/ffv-loop2-poster.webp" muted loop playsinline preload="metadata" aria-label="Fashion Film 2026, the collective in tailoring on the shore"></video>
-    <div class="shade"></div>
-    <div class="pad">
-      <div class="top"><p class="eyebrow">Self-produced · 2026</p></div>
-      <div class="bottom">
-        <h2 class="h1">Fashion<br>Film ’26</h2>
-        <div class="side">
-          <p class="small">Produced, choreographed and styled by Fraction. Tailoring in slate, navy and charcoal against the sea at blue hour.</p>
-          <button class="play" type="button" data-src="media/ff-preview.mp4" data-dsrc="media/ff-preview.mp4" data-msrc="media/ffv-preview.mp4" data-title="Fashion Film ’26">Play film</button>
-          <div class="links">
-            <button class="watch open-stills" type="button" aria-haspopup="dialog">View stills</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- 5 BRANDS -->
   <section class="slide brands" id="brand-films" aria-label="Brand films">
     <div class="pad">
       <div class="head">
-        <h2 class="h2">Brand films</h2>
+        <h2 class="h2">Brand <span class="pink">films</span></h2>
         <p class="small" style="max-width:30cqw">Bringing brand stories to life through creative direction, movement, cinematography and seamless in-house production.</p>
       </div>
       <div class="bnav" aria-label="Browse brand films">
@@ -586,10 +599,6 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
         <p class="eyebrow">Creator collaborations</p>
       </div>
       <div class="cards" id="creatorCards"></div>
-      <div class="music">
-        <h2 class="h2">Choreography <span class="pink">work</span></h2>
-        <div class="music-list" id="musicList"></div>
-      </div>
     </div>
   </section>
 
@@ -654,7 +663,7 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
     <div class="pad">
       <div class="top"><p class="eyebrow">Weddings · Sangeet nights</p></div>
       <div class="bottom">
-        <h2 class="h1">Sangeet<br>Choreographies</h2>
+        <h2 class="h1">Sangeet<br><span class="pink">Choreographies</span></h2>
         <div class="side">
           <p class="small">Turning special moments into spectacular celebrations through movement, music and choreography. With <b class="stat">30+ Sangeets</b> choreographed and counting, we bring everything from family performances to grand wedding spectacles to life.</p>
           <button class="play" type="button" data-src="media/sangeet-film.mp4" data-title="Sangeet Choreographies">Play film</button>
@@ -716,6 +725,25 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
     </div>
   </section>
 
+  <!-- 3 FASHION FILM -->
+  <section class="slide ff media-slide" aria-label="Fashion Film 2026">
+    <video class="bg mono" data-dsrc="media/ff-loop2.mp4" data-dposter="media/ff-loop2-poster.webp" data-msrc="media/ffv-loop2.mp4" data-mposter="media/ffv-loop2-poster.webp" muted loop playsinline preload="metadata" aria-label="Fashion Film 2026, the collective in tailoring on the shore"></video>
+    <div class="shade"></div>
+    <div class="pad">
+      <div class="top"><p class="eyebrow">Self-produced · 2026</p></div>
+      <div class="bottom">
+        <h2 class="h1">Fashion<br><span class="pink">Film ’26</span></h2>
+        <div class="side">
+          <p class="small">Produced, choreographed and styled by Fraction. Tailoring in slate, navy and charcoal against the sea at blue hour.</p>
+          <button class="play" type="button" data-src="media/ff-preview.mp4" data-dsrc="media/ff-preview.mp4" data-msrc="media/ffv-preview.mp4" data-title="Fashion Film ’26">Play film</button>
+          <div class="links">
+            <button class="watch open-stills" type="button" aria-haspopup="dialog">View stills</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- 10 CONTACT: group still, full bleed -->
   <section class="slide contact media-slide" id="contact" aria-label="Contact">
     <img class="bg mono" src="media/ff-01574.webp" alt="The Fraction collective on the shore, Fashion Film 2026">
@@ -726,7 +754,7 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
         <h2 class="h2">Let’s make<br>the <span class="pink">next one.</span></h2>
         <div class="lines">
           <div><span class="eyebrow">Email</span><b><a href="mailto:fractioncrew@gmail.com">fractioncrew@gmail.com</a></b></div>
-          <div><span class="eyebrow">Phone · WhatsApp</span><b class="wa"><a href="https://wa.me/919664276169?text=Hi%20Pratik%2C%20I%20wanted%20to%20know%20more%20about%20Team%20Fraction" target="_blank" rel="noopener" title="+91 9664276169" aria-label="WhatsApp Pratik, +91 9664276169"><svg class="wai" aria-hidden="true"><use href="#wa-icon"/></svg>Pratik</a><span class="sep" aria-hidden="true">|</span><a href="https://wa.me/917977275660?text=Hi%20Mitesh%2C%20I%20wanted%20to%20know%20more%20about%20Team%20Fraction" target="_blank" rel="noopener" title="+91 7977275660" aria-label="WhatsApp Mitesh, +91 7977275660"><svg class="wai" aria-hidden="true"><use href="#wa-icon"/></svg>Mitesh</a></b></div>
+          <div><span class="eyebrow">Phone · WhatsApp</span><b class="wa"><a href="https://wa.me/919664276169?text=Hi%20Pratik%2C%20I%20would%20like%20to%20know%20more%20on.." target="_blank" rel="noopener" title="+91 9664276169" aria-label="WhatsApp Pratik, +91 9664276169"><svg class="wai" aria-hidden="true"><use href="#wa-icon"/></svg>Pratik</a><span class="sep" aria-hidden="true">|</span><a href="https://wa.me/917977275660?text=Hi%20Mitesh%2C%20I%20would%20like%20to%20know%20more%20on.." target="_blank" rel="noopener" title="+91 7977275660" aria-label="WhatsApp Mitesh, +91 7977275660"><svg class="wai" aria-hidden="true"><use href="#wa-icon"/></svg>Mitesh</a></b></div>
           <div><span class="eyebrow">Instagram</span><b><a href="https://instagram.com/team.fraction" target="_blank" rel="noopener">@team.fraction</a></b></div>
         </div>
       </div>
@@ -779,14 +807,14 @@ const CREATORS=[
   ["Ruhee Dosani","media/creators/ruhee-dosani.webp","media/creators/ruhee-dosani-group.webp","https://www.instagram.com/reel/CrkXioyNFtJ/"],
   ["Noel Alexander","media/creators/noel-alexander.jpg","media/creators/noel-alexander-group.jpg","https://www.instagram.com/reel/Cpm845-DHFQ/"]
 ];
-// Choreography work: [name, video file or YouTube link]; plays in the in-deck player, a name without a video shows dimmed
-const MUSIC=[
-  ["Nikhil & Rishabh","media/nikhil-rishabh-film.mp4"],
-  ["Anant Khamkar","https://youtu.be/PEKFrwLq2Bs"],
-  ["Riya Duggal","media/riya-film.mp4"],
-  ["RuhFikra","media/ruhfikra-film.mp4"],
-  ["Sharjah Warriors","media/sharjah-film.mp4"],
-  ["Bewafa Music Video","media/bewafa-film.mp4"]
+// Commercial work: [name, video file or YouTube link, poster, grid area, wide on phones]; plays in the in-deck player
+const CW=[
+  ["Bewafa Music Video","media/bewafa-film.mp4","media/cw-bewafa.jpg","bewafa",1],
+  ["Riya Duggal","media/riya-film.mp4","media/cw-riya.jpg","riya",0],
+  ["RuhFikra","media/ruhfikra-film.mp4","media/cw-ruhfikra.jpg","ruhfikra",0],
+  ["Nikhil & Rishabh","media/nikhil-rishabh-film.mp4","media/cw-nikhil.jpg","nikhil",1],
+  ["Sharjah Warriors","media/sharjah-film.mp4","media/cw-sharjah.jpg","sharjah",0],
+  ["Anant Khamkar","https://youtu.be/PEKFrwLq2Bs","media/cw-anant.jpg","anant",0]
 ];
 // Worked with: [name, logo file, video on this site, player title, logo height in cqw (evens out wide vs tall marks)]
 const LOGOS=[
@@ -820,14 +848,15 @@ CREATORS.forEach(([name,front,back,link,film],i)=>{
     tag.textContent=on?'With Fraction':'Creator';crSec.classList.add('learned')};
   cardsEl.appendChild(c);
 });
-const musicEl=document.getElementById('musicList');
-MUSIC.forEach(([name,link])=>{
-  if(!link){const off=document.createElement('span');off.textContent=name;off.title='Link coming soon';musicEl.appendChild(off);return}
-  const el=document.createElement('button');el.type='button';el.className='pv';el.textContent=name;
+const cwGrid=document.getElementById('cwGrid');
+CW.forEach(([name,link,poster,area,wide],i)=>{
+  const b=document.createElement('button');b.type='button';b.className='cw-tile pv'+(wide?' wide':'');b.style.gridArea=area;
+  b.innerHTML='<img alt="" loading="lazy"><span class="cw-cap"><span class="h3"></span><span class="cw-play" aria-hidden="true"></span></span>';
+  b.querySelector('img').src=poster;b.querySelector('.h3').textContent=name;
   const yt=link.match(/youtu\.be\/([\w-]+)/);
-  if(yt)el.dataset.embed='https://www.youtube-nocookie.com/embed/'+yt[1]+'?autoplay=1&rel=0';else el.dataset.src=link;
-  el.dataset.title=name+' × Fraction';el.setAttribute('aria-label','Watch '+name+' with Fraction');
-  musicEl.appendChild(el);
+  if(yt)b.dataset.embed='https://www.youtube-nocookie.com/embed/'+yt[1]+'?autoplay=1&rel=0';else b.dataset.src=link;
+  b.dataset.title=name+' × Fraction';b.setAttribute('aria-label','Watch '+name+' with Fraction');
+  cwGrid.appendChild(b);
 });
 /* the row is drawn twice so the -50% loop is seamless; the copy is hidden from screen readers */
 const track=document.getElementById('logoTrack');
