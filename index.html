@@ -202,8 +202,10 @@ a.tk-item:hover .tk-name,a.tk-item:focus-visible .tk-name{color:#fff}
 #commercial-work,#commercial-work .pad{aspect-ratio:auto}
 #commercial-work .pad{position:relative;inset:auto;gap:2.2cqw}
 .cw .head{display:flex;justify-content:space-between;align-items:flex-end;gap:3cqw}
-.cw-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:1.1cqw}
-.cw-tile.l{grid-column:span 4;aspect-ratio:16/9}.cw-tile.v{grid-column:span 3;aspect-ratio:3/4}  /* landscape music videos on top, the vertical films below */
+.cw-grid{display:flex;flex-wrap:wrap;column-gap:1.1cqw}
+.cw-tile{margin-bottom:1.1cqw}
+.cw-tile.l{flex:1.778 1 0;aspect-ratio:16/9}.cw-tile.v{flex:.75 1 0;aspect-ratio:3/4}  /* each row shares one height: tiles grow in proportion to their shape */
+.cw-br{flex-basis:100%;height:0}
 .cw-tile{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:.9cqw;padding:0;background:var(--ground-2);color:#fff;text-align:left;cursor:pointer;font:inherit;
   transition:border-color .35s,box-shadow .35s,transform .5s cubic-bezier(.2,.7,.2,1)}
 .cw-tile video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -508,11 +510,12 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
   /* commercial work: two columns, wide tiles span both */
   #commercial-work .pad{gap:16px}
   .cw .head{flex-direction:column;align-items:flex-start;gap:10px}
-  .cw-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .cw-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .cw-tile{margin-bottom:0}.cw-br{display:none}
   .cw-tile{border-radius:10px}
   .cw-tile.l,.cw-tile.v{grid-column:auto}.cw-tile.v{aspect-ratio:4/5}
   .cw-tile.wide{grid-column:1/-1;aspect-ratio:16/9}
-  .cw-tile.l:not(.wide){aspect-ratio:1/1}
+  .cw-tile.l:not(.wide){aspect-ratio:4/5}  /* pairs mix landscape and vertical films, so every paired tile shares one shape */
   .cw-tile.v.wide{aspect-ratio:16/10}
   .cw-cap{left:10px;right:10px;bottom:10px;gap:8px}.cw-cap .h3{font-size:13px}
   .cw-txt{gap:4px}.cw-txt .eyebrow{font-size:7.5px;line-height:1.35;letter-spacing:.08em}.cw-play{width:28px;height:28px;top:10px;right:10px;bottom:auto}.cw-play::before{margin-left:3px;border-left-width:10px;border-top-width:6px;border-bottom-width:6px}
@@ -892,12 +895,12 @@ const CREATORS=[
 //   8 s silent loop for the tile ("" = loop the YouTube video), "l"andscape or "v"ertical, wide on phones]
 const CW=[
   ["Bewafa Music Video","Choreography","media/bewafa-film.mp4","media/cw-bewafa-loop.mp4","l",1],
+  ["Fila","Choreography · Ad Film","media/fila-film.mp4","media/cw-fila-loop.mp4","v",0],
   ["Nikhil & Rishabh","Choreography & Featured · Music Video","media/nikhil-rishabh-film.mp4","media/cw-nikhil-loop.mp4","l",0],
   ["Anant Khamkar","Direction & Production · Music Video","https://youtu.be/PEKFrwLq2Bs","","l",0],
   ["Riya W.I.S.H","Song Promotion · Bollywood","media/riya-film.mp4","media/cw-riya-loop.mp4","v",0],
   ["RuhFikra","Song Promotion","media/ruhfikra-film.mp4","media/cw-ruhfikra-loop.mp4","v",0],
-  ["Sharjah Warriors","Choreography & Featured · Music Video","media/sharjah-film.mp4","media/cw-sharjah-loop.mp4","v",0],
-  ["Fila","Choreography · Ad Film","media/fila-film.mp4","media/cw-fila-loop.mp4","v",0]
+  ["Sharjah Warriors","Choreography & Featured · Music Video","media/sharjah-film.mp4","media/cw-sharjah-loop.mp4","v",0]
 ];
 // Featured work: [name, credit line, still image (optional), 8 s silent loop, full video (file, YouTube or Instagram link)]
 // leave the loop and video as "" until the media arrives; the card then shows as "coming soon"
@@ -957,7 +960,8 @@ FEATURED.forEach(([name,line,still,clip,link])=>{
   fwRow.appendChild(c);
 });
 const cwGrid=document.getElementById('cwGrid');
-CW.forEach(([name,role,link,loop,shape,wide])=>{
+let cwRow=0;  // desktop rows close once their tiles add up to about four landscape widths' worth of shape
+CW.forEach(([name,role,link,loop,shape,wide],i)=>{
   const b=document.createElement('button');b.type='button';b.className='cw-tile pv '+shape+(wide?' wide':'');
   const yt=link.match(/youtu\.be\/([\w-]+)/);
   /* the tile is always moving: a silent loop of the film, or the YouTube video itself muted and looping */
@@ -971,6 +975,8 @@ CW.forEach(([name,role,link,loop,shape,wide])=>{
   if(yt)b.dataset.embed='https://www.youtube-nocookie.com/embed/'+yt[1]+'?autoplay=1&rel=0';else b.dataset.src=link;
   b.dataset.title=name+' · '+role;b.setAttribute('aria-label','Watch '+name+', '+role);
   cwGrid.appendChild(b);
+  cwRow+=shape=='l'?1.778:.75;
+  if(cwRow>=4&&i<CW.length-1){cwGrid.appendChild(Object.assign(document.createElement('i'),{className:'cw-br'}));cwRow=0}
 });
 /* the row is drawn twice so the -50% loop is seamless; the copy is hidden from screen readers */
 const track=document.getElementById('logoTrack');
