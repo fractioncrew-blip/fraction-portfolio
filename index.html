@@ -321,6 +321,9 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
 .ph-grid.two{grid-template-columns:repeat(2,1fr)}
 .ph-grid.four{grid-template-columns:repeat(2,1fr);grid-template-rows:none}
 .ph-grid.four .case{aspect-ratio:16/9}
+/* live performances: five stages, two large on top and three below */
+@media (min-width:761px){#live-performances .ph-grid{grid-template-columns:repeat(6,1fr)}
+  #live-performances .case{grid-column:span 2}#live-performances .case:nth-child(-n+2){grid-column:span 3}}
 /* five vertical films side by side at their true 9:16, caption stacked as on the brand tiles */
 .ph-grid.five{flex:none;grid-template-columns:repeat(5,1fr);grid-template-rows:none}
 .ph-grid.five .case{aspect-ratio:9/16}
@@ -671,6 +674,10 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
         <article class="case">
           <div class="media"><video class="mono" src="media/imap-preview.mp4" poster="media/imap-thumb.jpg" muted loop playsinline preload="metadata" aria-label="Bombay Rockers, live at the IMAP Annual Jam"></video></div>
           <div class="cap"><p class="eyebrow">Stage · IMAP Annual Jam</p><div class="row"><h3 class="h3">Bombay Rockers</h3><button class="watch pv" type="button" data-src="media/imap-preview.mp4" data-title="Bombay Rockers · IMAP Annual Jam" data-link="https://www.youtube.com/watch?v=JkEO_AqEi7k">Watch</button></div></div>
+        </article>
+        <article class="case">
+          <div class="media"><video class="mono" src="media/aloo-preview.mp4" poster="media/aloo-thumb.jpg" muted loop playsinline preload="metadata" aria-label="Aloo Chaat, live performance to RDB, Nindy Kaur and Smooth"></video></div>
+          <div class="cap"><p class="eyebrow">Stage · RDB, Nindy Kaur &amp; Smooth</p><div class="row"><h3 class="h3">Aloo Chaat</h3><button class="watch pv" type="button" data-src="media/aloo-preview.mp4" data-title="Aloo Chaat · RDB, Nindy Kaur &amp; Smooth" data-link="https://www.youtube.com/watch?v=1N4wECTvdik">Watch</button></div></div>
         </article>
         <article class="case">
           <div class="media"><video class="mono" src="media/replay-preview.mp4" poster="media/replay-thumb.jpg" muted loop playsinline preload="metadata" aria-label="Fraction Replay, live at The Movement Hub"></video></div>
