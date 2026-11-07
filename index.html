@@ -1214,13 +1214,13 @@ const TICKER=[  // [name, line, category, where it goes: "@Name" is that tile in
     if(k>=N){li.setAttribute('aria-hidden','true');if(href)el.tabIndex=-1}
     list.appendChild(li);
   });
-  const rows=[...list.children];let at=0,timer=0,held=false,seen=true,swapT=0;
+  const rows=[...list.children];let at=0,timer=0,held=false,seen=true,swapT=0,spin=0;
   function paint(){rows.forEach((r,k)=>{r.className=k===at?'on':k===at+1?'n1':k===at+2?'n2':''});
     list.style.transform='translateY(calc(var(--row) * '+(-at)+'))'}
   function still(fn){list.style.transition='none';rows.forEach(r=>r.style.transition='none');fn();list.offsetHeight;list.style.transition='';rows.forEach(r=>r.style.transition='')}
   function norm(){if(at>=N)still(()=>{at-=N;paint()})}   // land on the copy, then swap to the original unseen
   function go(){clearTimeout(swapT);norm();at++;paint();if(at===N)swapT=setTimeout(norm,950)}
-  function run(){clearInterval(timer);if(!held&&seen)timer=setInterval(go,1500)}
+  function run(){clearInterval(timer);if(!held&&seen&&!spin)timer=setInterval(go,1500)}
   box.addEventListener('mouseenter',()=>{held=true;run()});box.addEventListener('mouseleave',()=>{held=false;run()});
   box.addEventListener('focusin',e=>{held=true;run();const r=e.target.closest('li'),k=rows.indexOf(r);if(k>=0&&k<N&&k!==at){at=k;paint()}});
   box.addEventListener('focusout',()=>{held=false;run()});
@@ -1228,6 +1228,23 @@ const TICKER=[  // [name, line, category, where it goes: "@Name" is that tile in
   /* long names shrink to fit the width they have */
   function fit(){box.querySelectorAll('.tk-name').forEach(n=>{n.style.fontSize='';const w=box.clientWidth,sw=n.scrollWidth;if(sw>w)n.style.fontSize=(parseFloat(getComputedStyle(n).fontSize)*w/sw*.97)+'px'})}
   addEventListener('resize',fit);document.fonts?document.fonts.ready.then(fit):fit();fit();
+  /* Option C: as the ticker appears it spins through every title at speed, then eases down and lands on the first one,
+     where the steady 1.5 s rhythm takes over; fast rows blur and fade by distance so the slowdown reads as one motion */
+  const LAPS=2,SPIN=3400,T=N*LAPS;
+  function spinFrame(t0){return now=>{
+    const u=Math.min(1,(now-t0)/SPIN),e=1-Math.pow(1-u,4),pos=T*e,v=4*T*Math.pow(1-u,3)/SPIN*1000,m=pos%N;  // v: rows per second
+    list.style.transform='translateY(calc(var(--row) * '+(-m)+'))';
+    list.style.filter=v>2?'blur('+Math.min(3.5,v/9).toFixed(2)+'px)':'';
+    rows.forEach((r,k)=>{let d=k-m;if(d<-N/2)d+=N;r.style.opacity=Math.max(0,d<0?1+d*1.6:1-d*.7).toFixed(3)});
+    if(u<1){spin=requestAnimationFrame(spinFrame(t0));return}
+    still(()=>{list.style.filter='';rows.forEach(r=>r.style.opacity='');at=0;paint()});spin=0;run()}}
+  function startSpin(){cancelAnimationFrame(spin);clearTimeout(swapT);clearInterval(timer);
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches){at=0;paint();return}
+    list.style.transition='none';rows.forEach(r=>r.style.transition='none');  // frames drive the motion; still() hands it back
+    spin=requestAnimationFrame(now=>{spin=requestAnimationFrame(spinFrame(now))})}
+  function stopSpin(){if(!spin)return;cancelAnimationFrame(spin);spin=0;still(()=>{list.style.filter='';rows.forEach(r=>r.style.opacity='');at=0;paint()});run()}
+  let wasAsked=cover.classList.contains('asked');
+  new MutationObserver(()=>{const a=cover.classList.contains('asked');if(a&&!wasAsked)startSpin();else if(!a&&wasAsked)stopSpin();wasAsked=a}).observe(cover,{attributes:true,attributeFilter:['class']});
   paint();run();
 })();
 
