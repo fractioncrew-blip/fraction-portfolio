@@ -102,12 +102,13 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
    make room and the credits sit centred just above "What are you looking for?" (bottom set by script) */
 .cover .bg{transition:opacity .9s ease}
 .cover.asked .bg{opacity:.5}
-.cover .mark{transition:transform .9s cubic-bezier(.2,.7,.2,1)}
+.cover .mark{transition:transform .9s cubic-bezier(.2,.7,.2,1),filter .9s ease,opacity .9s ease}
+.cover.asked .mark{filter:grayscale(1) brightness(1.9);opacity:.8}  /* the logo steps back to a quiet white mark */
 .ticker{position:absolute;left:50%;bottom:160px;z-index:3;width:min(620px,calc(100% - 40px));transform:translate(-50%,12px);--row:max(4.4cqw,54px);
   color:#fff;text-align:center;text-shadow:0 1px 16px rgba(8,3,13,.75);
   opacity:0;visibility:hidden;transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1),visibility 0s .9s}
 .cover.asked .ticker{opacity:1;visibility:visible;transform:translate(-50%,0);transition:opacity .9s ease .15s,transform .9s cubic-bezier(.2,.7,.2,1) .15s}
-.tk-head{margin:0 0 max(.9cqw,10px);font:500 max(.85cqw,10px)/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.66)}
+.tk-head{margin:0 0 max(.9cqw,10px);font:500 max(.85cqw,10px)/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--pink-2)}
 .tk-win{height:calc(var(--row) * 2);overflow:hidden;
   -webkit-mask-image:linear-gradient(180deg,#000 55%,transparent);mask-image:linear-gradient(180deg,#000 55%,transparent)}
 .tk-list{list-style:none;margin:0;padding:0;transition:transform .9s cubic-bezier(.22,.7,.2,1);will-change:transform}
@@ -115,10 +116,10 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
 .tk-list li.on{opacity:1}.tk-list li.n1{opacity:.3}.tk-list li.n2{opacity:0}
 .tk-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:max(.45cqw,5px);height:100%;width:100%;padding:0;border:0;background:none;color:inherit;text-align:center;font:inherit;text-decoration:none;cursor:default}
 a.tk-item{cursor:pointer}
-.tk-name{font:800 max(1.9cqw,18px)/1 var(--display);text-transform:uppercase;letter-spacing:-.01em;white-space:nowrap;transition:color .3s}
+.tk-name{font:800 max(1.9cqw,18px)/1 var(--display);text-transform:uppercase;letter-spacing:-.01em;white-space:nowrap;color:var(--pink);text-shadow:0 0 22px rgba(255,79,166,.45),0 1px 14px rgba(8,3,13,.6);transition:color .3s}
 .tk-sub{max-width:100%;font:400 max(1cqw,12px)/1.25 var(--body);color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tk-sub i{font-style:normal;color:rgba(255,255,255,.45)}
-a.tk-item:hover .tk-name,a.tk-item:focus-visible .tk-name{color:var(--pink-2)}
+a.tk-item:hover .tk-name,a.tk-item:focus-visible .tk-name{color:#fff}
 /* cover: quiet channel links, top right, out of the way of the logo and prompt */
 .social{position:absolute;top:calc(22px + env(safe-area-inset-top,0px));right:26px;z-index:3;display:flex;gap:6px}
 .social a{display:grid;place-items:center;width:36px;height:36px;color:rgba(255,255,255,.55);transition:color .3s}
@@ -1025,15 +1026,15 @@ function holdFirst(e){
   asked=true;askAt=Date.now();ask.classList.add('on');ask.inert=false;cover.classList.add('asked');placeTicker();
 }
 function unask(){if(!asked)return;asked=false;ask.classList.remove('on');ask.inert=true;cover.classList.remove('asked');cover.querySelector('.mark').style.transform=''}
-/* while the prompt is up: ticker 18px above it, logo lifted (and scaled down if it must) to clear the ticker by 24px */
+/* while the prompt is up: ticker 18px above it, logo shrunk to at most 55% and lifted to clear the ticker by 24px */
 function placeTicker(){
   if(!asked)return;const tk=document.getElementById('ticker'),mk=cover.querySelector('.mark'),H=cover.clientHeight;
   const askTop=H-parseFloat(getComputedStyle(ask).bottom)-ask.offsetHeight,tkBottom=H-askTop+18;
   tk.style.bottom=tkBottom+'px';const tkTop=H-tkBottom-tk.offsetHeight;
   mk.style.transition='none';mk.style.transform='';const r=mk.getBoundingClientRect(),cTop=cover.getBoundingClientRect().top;
   const top=r.top-cTop,h=r.height,room=tkTop-24-72;   // 72px kept clear at the top for the social icons
-  const sc=Math.min(1,room/h),lift=Math.max(0,(top+h*(1+sc)/2)-(tkTop-24));   // scale about the centre, then raise
-  mk.offsetHeight;mk.style.transition='';mk.style.transform=lift>0?'translateY('+(-lift)+'px) scale('+sc+')':'';
+  const sc=Math.min(.55,room/h),lift=Math.max(0,(top+h*(1+sc)/2)-(tkTop-24));   // scale about the centre, then raise
+  mk.offsetHeight;mk.style.transition='';mk.style.transform='translateY('+(-lift)+'px) scale('+sc+')';
 }
 addEventListener('resize',placeTicker);
 function backUp(e){if(asked&&scrollY<=5&&Date.now()-askAt>400){if(e.cancelable)e.preventDefault();unask()}}
