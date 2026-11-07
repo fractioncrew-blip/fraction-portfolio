@@ -104,20 +104,20 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
 .cover.asked .bg{opacity:.5}
 .cover .mark{transition:transform .9s cubic-bezier(.2,.7,.2,1),filter .9s ease,opacity .9s ease}
 .cover.asked .mark{filter:grayscale(1) brightness(1.9);opacity:.8}  /* the logo steps back to a quiet white mark at the top */
-.ticker{position:absolute;left:50%;bottom:160px;z-index:3;width:min(620px,calc(100% - 40px));transform:translate(-50%,12px);--row:max(4.4cqw,54px);
+.ticker{position:absolute;left:50%;bottom:160px;z-index:3;width:min(1000px,calc(100% - 40px));transform:translate(-50%,12px);--row:max(6.6cqw,76px);touch-action:none;
   color:#fff;text-align:center;text-shadow:0 1px 16px rgba(8,3,13,.75);
   opacity:0;visibility:hidden;transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1),visibility 0s .9s}
 .cover.asked .ticker{opacity:1;visibility:visible;transform:translate(-50%,0);transition:opacity .9s ease .15s,transform .9s cubic-bezier(.2,.7,.2,1) .15s}
-.tk-head{margin:0 0 max(.9cqw,10px);font:500 max(.85cqw,10px)/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--pink-2)}
+.tk-head{margin:0 0 max(1.2cqw,12px);font:500 max(1.05cqw,11px)/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--pink-2)}
 .tk-win{height:calc(var(--row) * 2);overflow:hidden;
   -webkit-mask-image:linear-gradient(180deg,#000 55%,transparent);mask-image:linear-gradient(180deg,#000 55%,transparent)}
 .tk-list{list-style:none;margin:0;padding:0;transition:transform .9s cubic-bezier(.22,.7,.2,1);will-change:transform}
 .tk-list li{height:var(--row);opacity:0;transition:opacity .9s ease}
 .tk-list li.on{opacity:1}.tk-list li.n1{opacity:.3}.tk-list li.n2{opacity:0}
-.tk-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:max(.45cqw,5px);height:100%;width:100%;padding:0;border:0;background:none;color:inherit;text-align:center;font:inherit;text-decoration:none;cursor:default}
+.tk-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:max(.7cqw,7px);height:100%;width:100%;padding:0;border:0;background:none;color:inherit;text-align:center;font:inherit;text-decoration:none;cursor:default}
 a.tk-item{cursor:pointer}
-.tk-name{font:800 max(1.9cqw,18px)/1 var(--display);text-transform:uppercase;letter-spacing:-.01em;white-space:nowrap;color:var(--pink);text-shadow:0 0 22px rgba(255,79,166,.45),0 1px 14px rgba(8,3,13,.6);transition:color .3s}
-.tk-sub{max-width:100%;font:400 max(1cqw,12px)/1.25 var(--body);color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tk-name{font:800 max(3.1cqw,26px)/1 var(--display);text-transform:uppercase;letter-spacing:-.01em;white-space:nowrap;color:var(--pink);text-shadow:0 0 22px rgba(255,79,166,.45),0 1px 14px rgba(8,3,13,.6);transition:color .3s}
+.tk-sub{max-width:100%;font:400 max(1.3cqw,14px)/1.25 var(--body);color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tk-sub i{font-style:normal;color:rgba(255,255,255,.45)}
 a.tk-item:hover .tk-name,a.tk-item:focus-visible .tk-name{color:#fff}
 /* cover: quiet channel links, top right, out of the way of the logo and prompt */
@@ -383,9 +383,9 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
   /* cover: still exactly one screen, film cropped to fill; logo and line sized to read */
   .cover{display:flex}
   .cover > .bg,.cover > .cue,.cover > .ask,.cover > .social,.cover > .ticker{position:absolute}
-  .ticker{--row:52px}
-  .tk-head{font-size:10px;margin-bottom:8px}
-  .tk-name{font-size:18px}.tk-sub{font-size:12px}.tk-item{gap:5px}
+  .ticker{--row:72px}
+  .tk-head{font-size:11px;margin-bottom:10px}
+  .tk-name{font-size:27px}.tk-sub{font-size:13px}.tk-item{gap:7px}
   .social{top:calc(14px + env(safe-area-inset-top,0px));right:12px;gap:2px}
   .ask{width:calc(100% - 32px)}
   .ask-opts{display:grid;grid-template-columns:1fr 1fr;width:100%}
@@ -1049,6 +1049,19 @@ addEventListener('keydown',e=>{if(e.target.closest?.('a,button,input,textarea'))
   if(['ArrowDown','PageDown',' ','End'].includes(e.key))holdFirst(e);else if(['ArrowUp','PageUp','Home'].includes(e.key))backUp(e)});
 addEventListener('scroll',()=>{if(scrollY>innerHeight*.3)away=true;else if(scrollY<=5&&away){away=false;unask()}},{passive:true});
 
+/* ---- ticker sound: browsers only allow audio after a tap, click or key press, so it wakes on the first one ---- */
+let tkAudio=null;
+function wakeAudio(){try{tkAudio=tkAudio||new (window.AudioContext||window.webkitAudioContext)();if(tkAudio.state==='suspended')tkAudio.resume()}catch(e){}}
+['pointerdown','touchend','keydown'].forEach(t=>addEventListener(t,wakeAudio,{passive:true}));
+function tick(){
+  if(!tkAudio||tkAudio.state!=='running'||document.hidden||!cover.classList.contains('asked')||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const t=tkAudio.currentTime,o=tkAudio.createOscillator(),g=tkAudio.createGain(),f=tkAudio.createBiquadFilter();
+  o.type='triangle';o.frequency.setValueAtTime(2300,t);o.frequency.exponentialRampToValueAtTime(900,t+.035);
+  f.type='highpass';f.frequency.value=600;
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.09,t+.004);g.gain.exponentialRampToValueAtTime(.0001,t+.06);
+  o.connect(f).connect(g).connect(tkAudio.destination);o.start(t);o.stop(t+.07);
+}
+
 /* ---- cover ticker: one project at a time rises into place every 1.5 s; hover or focus pauses, linked names jump to their section ---- */
 const TICKER=[  // [name, line, category, section on this page or ""]
   ["Vicky Kaushal","Featured in Ad Film","Celebrity Campaign",""],
@@ -1076,17 +1089,33 @@ const TICKER=[  // [name, line, category, section on this page or ""]
     if(k>=N){li.setAttribute('aria-hidden','true');if(href)el.tabIndex=-1}
     list.appendChild(li);
   });
-  const rows=[...list.children];let at=0,timer=0,held=false,seen=true;
+  const rows=[...list.children];let at=0,timer=0,held=false,seen=true,swapT=0,idleT=0,manual=false;
   function paint(){rows.forEach((r,k)=>{r.className=k===at?'on':k===at+1?'n1':k===at+2?'n2':''});
     list.style.transform='translateY(calc(var(--row) * '+(-at)+'))'}
-  function step(){at++;paint();
-    if(at===N)setTimeout(()=>{list.style.transition='none';rows.forEach(r=>r.style.transition='none');at=0;paint();
-      list.offsetHeight;list.style.transition='';rows.forEach(r=>r.style.transition='')},950)}  // land on the copy, then swap to the original unseen
-  function run(){clearInterval(timer);if(!held&&seen)timer=setInterval(step,1500)}
+  function still(fn){list.style.transition='none';rows.forEach(r=>r.style.transition='none');fn();list.offsetHeight;list.style.transition='';rows.forEach(r=>r.style.transition='')}
+  function norm(){if(at>=N)still(()=>{at-=N;paint()})}   // land on the copy, then swap to the original unseen
+  function go(d){clearTimeout(swapT);
+    if(d>0){norm();at++;paint();if(at===N)swapT=setTimeout(norm,950)}
+    else{if(at===0)still(()=>{at=N;paint()});at--;paint()}
+    tick()}
+  function run(){clearInterval(timer);if(!held&&!manual&&seen)timer=setInterval(()=>go(1),1500)}
+  /* hand control to the visitor for a few seconds after they move it themselves */
+  function nudge(d){go(d);manual=true;run();clearTimeout(idleT);idleT=setTimeout(()=>{manual=false;run()},4000)}
   box.addEventListener('mouseenter',()=>{held=true;run()});box.addEventListener('mouseleave',()=>{held=false;run()});
   box.addEventListener('focusin',e=>{held=true;run();const r=e.target.closest('li'),k=rows.indexOf(r);if(k>=0&&k<N&&k!==at){at=k;paint()}});
   box.addEventListener('focusout',()=>{held=false;run()});
+  let acc=0,lastW=0;   // wheel or trackpad over the ticker scrolls the credits, not the page
+  box.addEventListener('wheel',e=>{e.preventDefault();e.stopPropagation();acc+=e.deltaY;const now=Date.now();
+    if(Math.abs(acc)>=30&&now-lastW>320){nudge(acc>0?1:-1);acc=0;lastW=now}},{passive:false});
+  let sy=0,moved=false;  // swipe on the ticker steps it; a plain tap still opens a linked project
+  box.addEventListener('touchstart',e=>{sy=e.touches[0].clientY;moved=false;e.stopPropagation()},{passive:true});
+  box.addEventListener('touchmove',e=>{if(e.cancelable)e.preventDefault();e.stopPropagation();if(Math.abs(e.touches[0].clientY-sy)>10)moved=true},{passive:false});
+  box.addEventListener('touchend',e=>{const dy=e.changedTouches[0].clientY-sy;if(moved&&Math.abs(dy)>24){nudge(dy<0?1:-1);if(e.cancelable)e.preventDefault()}});
+  box.addEventListener('keydown',e=>{if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();e.stopPropagation();nudge(e.key==='ArrowDown'?1:-1)}});
   new IntersectionObserver(es=>{seen=es[0].isIntersecting;run()}).observe(cover);
+  /* long names shrink to fit the width they have */
+  function fit(){box.querySelectorAll('.tk-name').forEach(n=>{n.style.fontSize='';const w=box.clientWidth,sw=n.scrollWidth;if(sw>w)n.style.fontSize=(parseFloat(getComputedStyle(n).fontSize)*w/sw*.97)+'px'})}
+  addEventListener('resize',fit);document.fonts?document.fonts.ready.then(fit):fit();fit();
   paint();run();
 })();
 
