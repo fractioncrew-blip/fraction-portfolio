@@ -103,7 +103,7 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
 .cover .bg{transition:opacity .9s ease}
 .cover.asked .bg{opacity:.5}
 .cover .mark{transition:transform .9s cubic-bezier(.2,.7,.2,1),filter .9s ease,opacity .9s ease}
-.cover.asked .mark{filter:grayscale(1) brightness(1.9);opacity:.8}  /* the logo steps back to a quiet white mark */
+.cover.asked .mark{filter:grayscale(1) brightness(1.9);opacity:.8}  /* the logo steps back to a quiet white mark at the top */
 .ticker{position:absolute;left:50%;bottom:160px;z-index:3;width:min(620px,calc(100% - 40px));transform:translate(-50%,12px);--row:max(4.4cqw,54px);
   color:#fff;text-align:center;text-shadow:0 1px 16px rgba(8,3,13,.75);
   opacity:0;visibility:hidden;transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1),visibility 0s .9s}
@@ -1026,15 +1026,18 @@ function holdFirst(e){
   asked=true;askAt=Date.now();ask.classList.add('on');ask.inert=false;cover.classList.add('asked');placeTicker();
 }
 function unask(){if(!asked)return;asked=false;ask.classList.remove('on');ask.inert=true;cover.classList.remove('asked');cover.querySelector('.mark').style.transform=''}
-/* while the prompt is up: ticker 18px above it, logo shrunk to at most 55% and lifted to clear the ticker by 24px */
+/* while the prompt is up: the logo shrinks to the top centre, level with the YouTube and Instagram icons, and the
+   ticker takes the logo's place in the middle of the screen (never lower than 18px above the prompt) */
 function placeTicker(){
-  if(!asked)return;const tk=document.getElementById('ticker'),mk=cover.querySelector('.mark'),H=cover.clientHeight;
-  const askTop=H-parseFloat(getComputedStyle(ask).bottom)-ask.offsetHeight,tkBottom=H-askTop+18;
-  tk.style.bottom=tkBottom+'px';const tkTop=H-tkBottom-tk.offsetHeight;
-  mk.style.transition='none';mk.style.transform='';const r=mk.getBoundingClientRect(),cTop=cover.getBoundingClientRect().top;
-  const top=r.top-cTop,h=r.height,room=tkTop-24-72;   // 72px kept clear at the top for the social icons
-  const sc=Math.min(.55,room/h),lift=Math.max(0,(top+h*(1+sc)/2)-(tkTop-24));   // scale about the centre, then raise
-  mk.offsetHeight;mk.style.transition='';mk.style.transform='translateY('+(-lift)+'px) scale('+sc+')';
+  if(!asked)return;const tk=document.getElementById('ticker'),mk=cover.querySelector('.mark'),soc=cover.querySelector('.social'),H=cover.clientHeight;
+  const cTop=cover.getBoundingClientRect().top;
+  mk.style.transition='none';mk.style.transform='';const r=mk.getBoundingClientRect();mk.offsetHeight;mk.style.transition='';
+  const logoMid=r.top-cTop+r.height/2,sr=soc.getBoundingClientRect(),iconMid=sr.top-cTop+sr.height/2;
+  const sc=sr.height*1.1/r.height;   // logo about as tall as the icon buttons
+  mk.style.transform='translateY('+(iconMid-logoMid)+'px) scale('+sc+')';
+  const askTop=H-parseFloat(getComputedStyle(ask).bottom)-ask.offsetHeight,th=tk.offsetHeight;
+  const bottom=Math.max(H-askTop+18,H-(logoMid+th/2));   // centred where the logo was, unless that would crowd the prompt
+  tk.style.bottom=bottom+'px';
 }
 addEventListener('resize',placeTicker);
 function backUp(e){if(asked&&scrollY<=5&&Date.now()-askAt>400){if(e.cancelable)e.preventDefault();unask()}}
