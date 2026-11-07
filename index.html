@@ -196,6 +196,27 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
 .cw-tile:hover .h3,.cw-tile:focus-visible .h3{color:var(--pink-2)}
 @media (hover:none){.cw-tile img{filter:none}}
 
+/* featured work: a scrolling row of portrait credit cards; stills in mono, a silent clip plays in colour on hover */
+#featured-work,#featured-work .pad{aspect-ratio:auto}
+#featured-work .pad{position:relative;inset:auto;gap:2.2cqw}
+.fw .head{display:flex;justify-content:space-between;align-items:flex-end;gap:3cqw}
+.fw-row{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 3 * 1.2cqw) / 4.3);gap:1.2cqw;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:1cqw;
+  scrollbar-width:thin;scrollbar-color:rgba(255,79,166,.5) transparent}
+.fw-card{position:relative;aspect-ratio:3/4;overflow:hidden;border:1px solid var(--line);border-radius:.9cqw;background:var(--ground-2);color:#fff;text-align:left;
+  scroll-snap-align:start;padding:0;font:inherit;cursor:pointer;transition:border-color .35s,box-shadow .35s}
+.fw-card.soon{cursor:default;background:radial-gradient(120% 90% at 20% 0%,rgba(155,134,255,.28),transparent 60%),radial-gradient(110% 80% at 100% 100%,rgba(255,79,166,.3),transparent 60%),var(--ground-2)}
+.fw-card img,.fw-card video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.fw-card img{filter:grayscale(1) contrast(1.05);transition:filter .6s ease,opacity .5s}
+.fw-card video{opacity:0;transition:opacity .5s}
+.fw-card.playing video{opacity:1}.fw-card.playing img{opacity:0}
+.fw-card::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(8,3,13,.92),rgba(8,3,13,.05) 55%,transparent);pointer-events:none}
+.fw-cap{position:absolute;left:1.2cqw;right:1.2cqw;bottom:1.2cqw;z-index:1;display:flex;flex-direction:column;gap:.5cqw}
+.fw-cap .h3{font-size:1.55cqw;line-height:1.05;color:var(--pink);text-shadow:0 0 18px rgba(255,79,166,.35)}
+.fw-cap small{font:400 .95cqw/1.3 var(--body);color:rgba(255,255,255,.75)}
+.fw-tag{position:absolute;top:1cqw;left:1.2cqw;z-index:1;font:500 .8cqw/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.fw-card:not(.soon):hover,.fw-card:not(.soon):focus-visible{border-color:rgba(255,79,166,.7);box-shadow:0 0 2.4cqw rgba(255,79,166,.28)}
+.fw-card:not(.soon):hover img,.fw-card:not(.soon):focus-visible img{filter:none}
+
 /* 7 dance films: playlist, stage left, scrolling thumbnails right */
 .films .pad{gap:1.8cqw}
 .films .h2{font-size:5.6cqw}
@@ -444,6 +465,11 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
   .face,.flip{border-radius:10px}
   .card{gap:8px}.card .h3{font-size:17px;min-height:0}
 
+  /* featured work: swipeable row, about one and a half cards on screen */
+  #featured-work .pad{gap:16px}
+  .fw .head{flex-direction:column;align-items:flex-start;gap:10px}
+  .fw-row{grid-auto-columns:62%;gap:10px;padding-bottom:8px}
+  .fw-card{border-radius:10px}.fw-cap{left:14px;right:14px;bottom:14px;gap:6px}.fw-cap .h3{font-size:19px}.fw-cap small{font-size:12.5px}.fw-tag{top:12px;left:14px;font-size:10px}
   /* commercial work: two columns, wide tiles span both */
   #commercial-work .pad{gap:16px}
   .cw .head{flex-direction:column;align-items:flex-start;gap:10px}
@@ -530,6 +556,17 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
         <p class="eyebrow">Music videos · Artists · Campaigns</p>
       </div>
       <div class="cw-grid" id="cwGrid"></div>
+    </div>
+  </section>
+
+  <!-- FEATURED WORK: artist and celebrity credits as a row of portrait cards; a still in mono, a short silent clip on hover -->
+  <section class="slide fw" id="featured-work" aria-label="Featured work">
+    <div class="pad">
+      <div class="head">
+        <h2 class="h2">Featured <span class="pink">work</span></h2>
+        <p class="eyebrow">Artists · Film · Fashion</p>
+      </div>
+      <div class="fw-row" id="fwRow"></div>
     </div>
   </section>
 
@@ -816,6 +853,17 @@ const CW=[
   ["Sharjah Warriors","media/sharjah-film.mp4","media/cw-sharjah.jpg","sharjah",0],
   ["Anant Khamkar","https://youtu.be/PEKFrwLq2Bs","media/cw-anant.jpg","anant",0]
 ];
+// Featured work: [name, credit line, still image, short silent clip, full video (file, YouTube or Instagram link)]
+// leave still/clip/video as "" until the media arrives; the card then shows as "coming soon"
+const FEATURED=[
+  ["Vicky Kaushal","A23 · Featured in Ad Film","","",""],
+  ["Netflix","Ayushmann Khurrana Video","","",""],
+  ["Varun Dhawan","Perfect — Music Video","","",""],
+  ["Tu Yaa Main","Featuring Gourav Adarsh & Shanaya Kapoor","","",""],
+  ["Conan O’Brien Must Go","Featured in Music Video","","",""],
+  ["Falguni & Shane Peacock","Runway Performance · Blenders Pride 2022","","",""],
+  ["Navarathri Parody","Choreographed & Featured in a Music Video","","",""]
+];
 // Worked with: [name, logo file, video on this site, player title, logo height in cqw (evens out wide vs tall marks)]
 const LOGOS=[
   ["Fast&Up","media/logos/fastandup.png","media/fu7-film.mp4","Fast&Up · 7th anniversary ad film",6.0],
@@ -848,6 +896,25 @@ CREATORS.forEach(([name,front,back,link,film],i)=>{
     tag.textContent=on?'With Fraction':'Creator';crSec.classList.add('learned')};
   cardsEl.appendChild(c);
 });
+const fwRow=document.getElementById('fwRow');
+FEATURED.forEach(([name,line,still,clip,link])=>{
+  const ready=!!(still||clip),c=document.createElement(link?'button':'div');c.className='fw-card'+(ready?'':' soon');if(link)c.type='button';
+  c.innerHTML=(still?'<img alt="" loading="lazy">':'')+(clip?'<video muted loop playsinline preload="none"></video>':'')
+    +(ready?'':'<span class="fw-tag">Clip coming soon</span>')+'<span class="fw-cap"><span class="h3"></span><small></small></span>';
+  if(still)c.querySelector('img').src=still;
+  if(clip){const v=c.querySelector('video');v.src=clip;if(still)v.poster=still;
+    const on=()=>{c.classList.add('playing');v.play().catch(()=>{})},off=()=>{c.classList.remove('playing');v.pause()};
+    c.addEventListener('mouseenter',on);c.addEventListener('mouseleave',off);c.addEventListener('focus',on);c.addEventListener('blur',off)}
+  c.querySelector('.h3').textContent=name;c.querySelector('small').textContent=line;
+  if(link){c.classList.add('pv');const yt=link.match(/youtu(?:\.be\/|be\.com\/watch\?v=)([\w-]+)/);
+    if(yt)c.dataset.embed='https://www.youtube-nocookie.com/embed/'+yt[1]+'?autoplay=1&rel=0';
+    else if(/instagram\.com/.test(link)){c.dataset.embed=link.replace(/\/?$/,'/embed/');c.dataset.link=link}else c.dataset.src=link;
+    c.dataset.title=name+' × Fraction';c.setAttribute('aria-label','Watch '+name+' with Fraction')}
+  fwRow.appendChild(c);
+});
+/* phones have no hover: clips play while their card is mostly on screen */
+if(matchMedia('(hover:none)').matches){const fio=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target.querySelector('video');if(!v)return;
+  e.target.classList.toggle('playing',e.isIntersecting);e.isIntersecting?v.play().catch(()=>{}):v.pause()}),{threshold:.7});fwRow.querySelectorAll('.fw-card').forEach(c=>fio.observe(c))}
 const cwGrid=document.getElementById('cwGrid');
 CW.forEach(([name,link,poster,area,wide],i)=>{
   const b=document.createElement('button');b.type='button';b.className='cw-tile pv'+(wide?' wide':'');b.style.gridArea=area;
