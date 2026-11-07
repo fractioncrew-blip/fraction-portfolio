@@ -204,7 +204,7 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
 .cw-tile:hover .h3,.cw-tile:focus-visible .h3{color:var(--pink-2)}
 @media (hover:none){.cw-tile video,.cw-tile .cw-yt{filter:none}}
 
-/* featured work: a scrolling row of portrait credit cards; stills in mono, a silent clip plays in colour on hover */
+/* featured work: a scrolling row of portrait credit cards, each looping a silent clip; mono at rest, colour on hover */
 #featured-work,#featured-work .pad{aspect-ratio:auto}
 #featured-work .pad{position:relative;inset:auto;gap:2.2cqw}
 .fw .head{display:flex;justify-content:space-between;align-items:flex-end;gap:3cqw}
@@ -215,8 +215,9 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
 .fw-card.soon{cursor:default;background:radial-gradient(120% 90% at 20% 0%,rgba(155,134,255,.28),transparent 60%),radial-gradient(110% 80% at 100% 100%,rgba(255,79,166,.3),transparent 60%),var(--ground-2)}
 .fw-card img,.fw-card video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .fw-card img{filter:grayscale(1) contrast(1.05);transition:filter .6s ease,opacity .5s}
-.fw-card video{opacity:0;transition:opacity .5s}
-.fw-card.playing video{opacity:1}.fw-card.playing img{opacity:0}
+.fw-card video{filter:grayscale(1) contrast(1.05);transform:scale(1.02);transition:filter .6s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
+.fw-card:not(.soon):hover video,.fw-card:not(.soon):focus-visible video{filter:none;transform:scale(1.06)}
+@media (hover:none){.fw-card video{filter:none}}
 .fw-card::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(8,3,13,.92),rgba(8,3,13,.05) 55%,transparent);pointer-events:none}
 .fw-cap{position:absolute;left:1.2cqw;right:1.2cqw;bottom:1.2cqw;z-index:1;display:flex;flex-direction:column;gap:.5cqw}
 .fw-cap .h3{font-size:1.55cqw;line-height:1.05;color:var(--pink);text-shadow:0 0 18px rgba(255,79,166,.35)}
@@ -570,7 +571,7 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
     </div>
   </section>
 
-  <!-- FEATURED WORK: artist and celebrity credits as a row of portrait cards; a still in mono, a short silent clip on hover -->
+  <!-- FEATURED WORK: artist and celebrity credits as a row of portrait cards, each looping a short silent clip -->
   <section class="slide fw" id="featured-work" aria-label="Featured work">
     <div class="pad">
       <div class="head">
@@ -866,13 +867,13 @@ const CW=[
   ["Sharjah Warriors","Choreography & Featured · Music Video","media/sharjah-film.mp4","media/cw-sharjah-loop.mp4","v",0],
   ["Fila","Choreography · Ad Film","media/fila-film.mp4","media/cw-fila-loop.mp4","v",0]
 ];
-// Featured work: [name, credit line, still image, short silent clip, full video (file, YouTube or Instagram link)]
-// leave still/clip/video as "" until the media arrives; the card then shows as "coming soon"
+// Featured work: [name, credit line, still image (optional), 8 s silent loop, full video (file, YouTube or Instagram link)]
+// leave the loop and video as "" until the media arrives; the card then shows as "coming soon"
 const FEATURED=[
-  ["Vicky Kaushal","A23 · Featured in Ad Film","","",""],
-  ["Netflix","Ayushmann Khurrana Video","","",""],
-  ["Varun Dhawan","Perfect — Music Video","","",""],
-  ["Tu Yaa Main","Featuring Gourav Adarsh & Shanaya Kapoor","","",""],
+  ["Vicky Kaushal","A23 · Featured in Ad Film","","media/fw-vicky-loop.mp4","media/fw-vicky-film.mp4"],
+  ["Netflix","Ayushmann Khurrana Video","","media/fw-netflix-loop.mp4","media/fw-netflix-film.mp4"],
+  ["Varun Dhawan","Perfect — Music Video","","media/fw-perfect-loop.mp4","media/fw-perfect-film.mp4"],
+  ["Tu Yaa Main","Featuring Gourav Adarsh & Shanaya Kapoor","","media/fw-tuyaamain-loop.mp4","media/fw-tuyaamain-film.mp4"],
   ["Conan O’Brien Must Go","Featured in Music Video","","",""],
   ["Falguni & Shane Peacock","Runway Performance · Blenders Pride 2022","","",""],
   ["Navarathri Parody","Choreographed & Featured in a Music Video","","",""]
@@ -912,12 +913,10 @@ CREATORS.forEach(([name,front,back,link,film],i)=>{
 const fwRow=document.getElementById('fwRow');
 FEATURED.forEach(([name,line,still,clip,link])=>{
   const ready=!!(still||clip),c=document.createElement(link?'button':'div');c.className='fw-card'+(ready?'':' soon');if(link)c.type='button';
-  c.innerHTML=(still?'<img alt="" loading="lazy">':'')+(clip?'<video muted loop playsinline preload="none"></video>':'')
+  c.innerHTML=(still?'<img alt="" loading="lazy">':'')+(clip?'<video muted loop playsinline autoplay preload="metadata"></video>':'')
     +(ready?'':'<span class="fw-tag">Clip coming soon</span>')+'<span class="fw-cap"><span class="h3"></span><small></small></span>';
   if(still)c.querySelector('img').src=still;
-  if(clip){const v=c.querySelector('video');v.src=clip;if(still)v.poster=still;
-    const on=()=>{c.classList.add('playing');v.play().catch(()=>{})},off=()=>{c.classList.remove('playing');v.pause()};
-    c.addEventListener('mouseenter',on);c.addEventListener('mouseleave',off);c.addEventListener('focus',on);c.addEventListener('blur',off)}
+  if(clip){const v=c.querySelector('video');v.src=clip;if(still)v.poster=still}
   c.querySelector('.h3').textContent=name;c.querySelector('small').textContent=line;
   if(link){c.classList.add('pv');const yt=link.match(/youtu(?:\.be\/|be\.com\/watch\?v=)([\w-]+)/);
     if(yt)c.dataset.embed='https://www.youtube-nocookie.com/embed/'+yt[1]+'?autoplay=1&rel=0';
@@ -925,9 +924,6 @@ FEATURED.forEach(([name,line,still,clip,link])=>{
     c.dataset.title=name+' × Fraction';c.setAttribute('aria-label','Watch '+name+' with Fraction')}
   fwRow.appendChild(c);
 });
-/* phones have no hover: clips play while their card is mostly on screen */
-if(matchMedia('(hover:none)').matches){const fio=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target.querySelector('video');if(!v)return;
-  e.target.classList.toggle('playing',e.isIntersecting);e.isIntersecting?v.play().catch(()=>{}):v.pause()}),{threshold:.7});fwRow.querySelectorAll('.fw-card').forEach(c=>fio.observe(c))}
 const cwGrid=document.getElementById('cwGrid');
 CW.forEach(([name,role,link,loop,shape,wide])=>{
   const b=document.createElement('button');b.type='button';b.className='cw-tile pv '+shape+(wide?' wide':'');
