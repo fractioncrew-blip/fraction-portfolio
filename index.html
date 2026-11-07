@@ -1278,8 +1278,10 @@ const TICKER=[  // [name, line, category, where it goes: "@Name" is that tile in
   function norm(){if(at>=N)still(()=>{at-=N;paint()})}   // land on the copy, then swap to the original unseen
   function go(){clearTimeout(swapT);norm();at++;paint();if(at===N)swapT=setTimeout(norm,950)}
   function run(){clearInterval(timer);if(!held&&seen&&!spin)timer=setInterval(go,1500)}
-  box.addEventListener('mouseenter',()=>{held=true;run()});box.addEventListener('mouseleave',()=>{held=false;run()});
-  box.addEventListener('focusin',e=>{held=true;run();const r=e.target.closest('li'),k=rows.indexOf(r);if(k>=0&&k<N&&k!==at){at=k;paint()}});
+  /* only a real mouse or keyboard pauses it: a tap on a phone reads as the mouse arriving and never leaving, which froze the ticker */
+  box.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse'){held=true;run()}});
+  box.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse'){held=false;run()}});
+  box.addEventListener('focusin',e=>{if(!e.target.matches(':focus-visible'))return;held=true;run();const r=e.target.closest('li'),k=rows.indexOf(r);if(k>=0&&k<N&&k!==at){at=k;paint()}});
   box.addEventListener('focusout',()=>{held=false;run()});
   new IntersectionObserver(es=>{seen=es[0].isIntersecting;run()}).observe(cover);
   /* long names shrink to fit the width they have */
@@ -1295,7 +1297,7 @@ const TICKER=[  // [name, line, category, where it goes: "@Name" is that tile in
     rows.forEach((r,k)=>{let d=k-m;if(d<-N/2)d+=N;r.style.opacity=Math.max(0,d<0?1+d*1.6:1-d*.7).toFixed(3)});
     if(u<1){spin=requestAnimationFrame(spinFrame(t0));return}
     still(()=>{list.style.filter='';rows.forEach(r=>r.style.opacity='');at=0;paint()});spin=0;run()}}
-  function startSpin(){cancelAnimationFrame(spin);clearTimeout(swapT);clearInterval(timer);
+  function startSpin(){held=false;cancelAnimationFrame(spin);clearTimeout(swapT);clearInterval(timer);  // each time it appears it starts fresh
     if(matchMedia('(prefers-reduced-motion: reduce)').matches){at=0;paint();return}
     list.style.transition='none';rows.forEach(r=>r.style.transition='none');  // frames drive the motion; still() hands it back
     rows.forEach(r=>r.className='');  // every name spins past in white; pink returns on the one it lands on
