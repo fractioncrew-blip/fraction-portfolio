@@ -1182,24 +1182,6 @@ addEventListener('keydown',e=>{if(e.target.closest?.('a,button,input,textarea'))
   if(['ArrowDown','PageDown',' ','End'].includes(e.key))holdFirst(e);else if(['ArrowUp','PageUp','Home'].includes(e.key))backUp(e)});
 addEventListener('scroll',()=>{if(scrollY>innerHeight*.3)away=true;else if(scrollY<=5&&away){away=false;unask()}},{passive:true});
 
-/* ---- ticker sound: browsers only allow audio after a tap, click or key press, so it wakes on the first one ---- */
-let tkAudio=null;
-function wakeAudio(){try{tkAudio=tkAudio||new (window.AudioContext||window.webkitAudioContext)();if(tkAudio.state==='suspended')tkAudio.resume()}catch(e){}}
-['pointerdown','touchend','keydown'].forEach(t=>addEventListener(t,wakeAudio,{passive:true}));
-function tick(){
-  if(!tkAudio||tkAudio.state!=='running'||document.hidden||!cover.classList.contains('asked')||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  /* a scroll-wheel detent: a short filtered noise snap over a soft low knock */
-  const t=tkAudio.currentTime,len=Math.round(tkAudio.sampleRate*.03),buf=tkAudio.createBuffer(1,len,tkAudio.sampleRate),d=buf.getChannelData(0);
-  for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/(len*.12));
-  const n=tkAudio.createBufferSource(),bp=tkAudio.createBiquadFilter(),ng=tkAudio.createGain();
-  n.buffer=buf;bp.type='bandpass';bp.frequency.value=3200;bp.Q.value=1.4;ng.gain.value=.22;
-  n.connect(bp).connect(ng).connect(tkAudio.destination);n.start(t);
-  const o=tkAudio.createOscillator(),g=tkAudio.createGain();
-  o.type='sine';o.frequency.setValueAtTime(320,t);o.frequency.exponentialRampToValueAtTime(140,t+.02);
-  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.05,t+.002);g.gain.exponentialRampToValueAtTime(.0001,t+.03);
-  o.connect(g).connect(tkAudio.destination);o.start(t);o.stop(t+.04);
-}
-
 /* ---- cover ticker: one project at a time rises into place every 1.5 s; hover or focus pauses, linked names jump to their section ---- */
 const TICKER=[  // [name, line, category, where it goes: "@Name" is that tile in Featured or Commercial work, "#id" a section]
   ["Vicky Kaushal","Featured in Ad Film","Celebrity Campaign","@Vicky Kaushal"],
@@ -1237,7 +1219,7 @@ const TICKER=[  // [name, line, category, where it goes: "@Name" is that tile in
     list.style.transform='translateY(calc(var(--row) * '+(-at)+'))'}
   function still(fn){list.style.transition='none';rows.forEach(r=>r.style.transition='none');fn();list.offsetHeight;list.style.transition='';rows.forEach(r=>r.style.transition='')}
   function norm(){if(at>=N)still(()=>{at-=N;paint()})}   // land on the copy, then swap to the original unseen
-  function go(){clearTimeout(swapT);norm();at++;paint();if(at===N)swapT=setTimeout(norm,950);tick()}
+  function go(){clearTimeout(swapT);norm();at++;paint();if(at===N)swapT=setTimeout(norm,950)}
   function run(){clearInterval(timer);if(!held&&seen)timer=setInterval(go,1500)}
   box.addEventListener('mouseenter',()=>{held=true;run()});box.addEventListener('mouseleave',()=>{held=false;run()});
   box.addEventListener('focusin',e=>{held=true;run();const r=e.target.closest('li'),k=rows.indexOf(r);if(k>=0&&k<N&&k!==at){at=k;paint()}});
