@@ -1209,23 +1209,26 @@ function holdFirst(e){
   if(asked){if(Date.now()-askAt<700&&e.cancelable)e.preventDefault();return}  // swallow trackpad momentum from the same gesture
   if(scrollY>5)return;
   if(e.cancelable)e.preventDefault();
-  asked=true;askAt=Date.now();ask.classList.add('on');ask.inert=false;cover.classList.add('asked');placeTicker();
+  asked=true;askAt=Date.now();ask.classList.add('on');ask.inert=false;cover.classList.add('asked');placeTicker(true);
 }
 function unask(){if(!asked)return;asked=false;ask.classList.remove('on');ask.inert=true;cover.classList.remove('asked');cover.querySelector('.mark').style.transform=''}
 /* while the prompt is up: the logo shrinks to the top centre, level with the YouTube and Instagram icons, and the
    ticker takes the logo's place in the middle of the screen (never lower than 18px above the prompt) */
-function placeTicker(){
+function placeTicker(glide){
   if(!asked)return;const tk=document.getElementById('ticker'),mk=cover.querySelector('.mark'),soc=cover.querySelector('.social'),H=cover.clientHeight;
   const cTop=cover.getBoundingClientRect().top;
-  mk.style.transition='none';mk.style.transform='';const r=mk.getBoundingClientRect();mk.offsetHeight;mk.style.transition='';
+  /* measure the logo in its home spot without it moving; only the first rise animates. A resize (on phones, the address bar
+     sliding in and out as you tap) just re-places it, otherwise the logo would drop back and fly up again on every tap */
+  mk.style.transition='none';mk.style.transform='';const r=mk.getBoundingClientRect();mk.offsetHeight;if(glide)mk.style.transition='';
   const logoMid=r.top-cTop+r.height/2,sr=soc.getBoundingClientRect(),iconMid=sr.top-cTop+sr.height/2;
   const sc=sr.height*1.1/r.height;   // logo about as tall as the icon buttons
   mk.style.transform='translateY('+(iconMid-logoMid)+'px) scale('+sc+')';
+  if(!glide){mk.offsetHeight;mk.style.transition=''}
   const askTop=H-parseFloat(getComputedStyle(ask).bottom)-ask.offsetHeight,th=tk.offsetHeight;
   const bottom=Math.max(H-askTop+18,H-(logoMid+th/2));   // centred where the logo was, unless that would crowd the prompt
   tk.style.bottom=bottom+'px';
 }
-addEventListener('resize',placeTicker);
+addEventListener('resize',()=>placeTicker(false));
 function backUp(e){if(asked&&scrollY<=5&&Date.now()-askAt>400){if(e.cancelable)e.preventDefault();unask()}}
 let ty=0,away=false;
 addEventListener('wheel',e=>{if(e.deltaY>0)holdFirst(e);else if(e.deltaY<0)backUp(e)},{passive:false});
