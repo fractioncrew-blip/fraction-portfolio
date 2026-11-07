@@ -1015,7 +1015,8 @@ CW.forEach(([name,role,link,loop,shape,wide],i)=>{
     +'<span class="cw-cap"><span class="cw-txt"><span class="eyebrow"></span><span class="h3"></span></span></span><span class="cw-play" aria-hidden="true"></span>';
   if(loop){const v=b.querySelector('video');v.poster=loop.replace('-loop.mp4','-poster.jpg');v.src=loop}
   else{b.querySelector('.cw-still').src='https://i.ytimg.com/vi/'+yt[1]+'/hqdefault.jpg';  // YouTube's own still, under the player
-    const f=b.querySelector('iframe');if(!isLite())f.src='https://www.youtube-nocookie.com/embed/'+yt[1]+'?autoplay=1&mute=1&loop=1&playlist='+yt[1]+'&controls=0&modestbranding=1&playsinline=1&rel=0&disablekb=1';
+    /* phones block muted YouTube autoplay and paint YouTube's play icon instead, so touch screens keep the still */
+    const f=b.querySelector('iframe');if(isLite()||matchMedia('(hover:none)').matches)f.remove();else f.src='https://www.youtube-nocookie.com/embed/'+yt[1]+'?autoplay=1&mute=1&loop=1&playlist='+yt[1]+'&controls=0&modestbranding=1&playsinline=1&rel=0&disablekb=1';
     f.onload=()=>setTimeout(()=>f.classList.add('on'),4500)}  // YouTube shows its title and play state for the first seconds; fade in once they have gone
   b.querySelector('.h3').textContent=name;b.querySelector('.eyebrow').textContent=role;b.dataset.work=name;
   if(yt)b.dataset.embed='https://www.youtube-nocookie.com/embed/'+yt[1]+'?autoplay=1&rel=0';else b.dataset.src=link;
