@@ -191,9 +191,11 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;co
 .cw-tile video{transition:filter .6s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
 .cw-tile video{transform:scale(1.02)}
 .cw-tile::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(8,3,13,.92),rgba(8,3,13,.1) 55%,transparent);pointer-events:none}
-.cw-cap{position:absolute;left:1.1cqw;right:1.1cqw;bottom:1.1cqw;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:1cqw}
+.cw-cap{position:absolute;left:1.1cqw;right:4.6cqw;bottom:1.1cqw;z-index:1;display:flex;align-items:flex-end}
 .cw-cap .h3{font-size:1.45cqw;line-height:1.05}
-.cw-play{flex:none;width:2.6cqw;height:2.6cqw;border-radius:50%;background:var(--pink);display:grid;place-items:center;box-shadow:0 0 1.6cqw rgba(255,79,166,.5);transform:scale(.85);opacity:.85;transition:transform .35s,opacity .35s}
+.cw-txt{display:flex;flex-direction:column;gap:.5cqw;min-width:0}
+.cw-txt .eyebrow{font-size:.78cqw;color:rgba(255,255,255,.72)}  /* the credit line, set like the Brand Films captions */
+.cw-play{position:absolute;right:1.1cqw;bottom:1.1cqw;z-index:1;width:2.6cqw;height:2.6cqw;border-radius:50%;background:var(--pink);display:grid;place-items:center;box-shadow:0 0 1.6cqw rgba(255,79,166,.5);transform:scale(.85);opacity:.85;transition:transform .35s,opacity .35s}
 .cw-play::before{content:"";margin-left:.2cqw;border-left:.75cqw solid #fff;border-top:.45cqw solid transparent;border-bottom:.45cqw solid transparent}
 .cw-tile:hover,.cw-tile:focus-visible{border-color:rgba(255,79,166,.7);box-shadow:0 0 2.4cqw rgba(255,79,166,.28);transform:translateY(-.2cqw)}
 .cw-tile:hover video,.cw-tile:focus-visible video{filter:none;transform:scale(1.07)}
@@ -486,7 +488,7 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
   .cw-tile.l:not(.wide){aspect-ratio:1/1}
   .cw-tile.v.wide{aspect-ratio:16/10}
   .cw-cap{left:12px;right:12px;bottom:12px;gap:8px}.cw-cap .h3{font-size:16px}
-  .cw-play{width:32px;height:32px}.cw-play::before{margin-left:3px;border-left-width:10px;border-top-width:6px;border-bottom-width:6px}
+  .cw-txt{gap:5px}.cw-txt .eyebrow{font-size:9px;line-height:1.35;letter-spacing:.08em}.cw-play{width:28px;height:28px;top:10px;right:10px;bottom:auto}.cw-play::before{margin-left:3px;border-left-width:10px;border-top-width:6px;border-bottom-width:6px}
   /* dance films playlist */
   .films .pad{flex-direction:column;align-items:stretch;gap:18px}
   .films .h2{font-size:clamp(30px,9vw,44px)}
@@ -853,15 +855,16 @@ const CREATORS=[
   ["Ruhee Dosani","media/creators/ruhee-dosani.webp","media/creators/ruhee-dosani-group.webp","https://www.instagram.com/reel/CrkXioyNFtJ/"],
   ["Noel Alexander","media/creators/noel-alexander.jpg","media/creators/noel-alexander-group.jpg","https://www.instagram.com/reel/Cpm845-DHFQ/"]
 ];
-// Commercial work: [name, full video file or YouTube link, 8 s silent loop for the tile ("" = loop the YouTube video), "l"andscape or "v"ertical, wide on phones]
+// Commercial work: [name, what Fraction did (small line above the name), full video file or YouTube link,
+//   8 s silent loop for the tile ("" = loop the YouTube video), "l"andscape or "v"ertical, wide on phones]
 const CW=[
-  ["Bewafa Music Video","media/bewafa-film.mp4","media/cw-bewafa-loop.mp4","l",1],
-  ["Nikhil & Rishabh","media/nikhil-rishabh-film.mp4","media/cw-nikhil-loop.mp4","l",0],
-  ["Anant Khamkar","https://youtu.be/PEKFrwLq2Bs","","l",0],
-  ["Riya Duggal","media/riya-film.mp4","media/cw-riya-loop.mp4","v",0],
-  ["RuhFikra","media/ruhfikra-film.mp4","media/cw-ruhfikra-loop.mp4","v",0],
-  ["Sharjah Warriors","media/sharjah-film.mp4","media/cw-sharjah-loop.mp4","v",0],
-  ["Fila","media/fila-film.mp4","media/cw-fila-loop.mp4","v",0]
+  ["Bewafa Music Video","Choreography","media/bewafa-film.mp4","media/cw-bewafa-loop.mp4","l",1],
+  ["Nikhil & Rishabh","Choreography & Featured · Music Video","media/nikhil-rishabh-film.mp4","media/cw-nikhil-loop.mp4","l",0],
+  ["Anant Khamkar","Direction & Production · Music Video","https://youtu.be/PEKFrwLq2Bs","","l",0],
+  ["Riya W.I.S.H","Song Promotion · Bollywood","media/riya-film.mp4","media/cw-riya-loop.mp4","v",0],
+  ["RuhFikra","Song Promotion","media/ruhfikra-film.mp4","media/cw-ruhfikra-loop.mp4","v",0],
+  ["Sharjah Warriors","Choreography & Featured · Music Video","media/sharjah-film.mp4","media/cw-sharjah-loop.mp4","v",0],
+  ["Fila","Choreography · Ad Film","media/fila-film.mp4","media/cw-fila-loop.mp4","v",0]
 ];
 // Featured work: [name, credit line, still image, short silent clip, full video (file, YouTube or Instagram link)]
 // leave still/clip/video as "" until the media arrives; the card then shows as "coming soon"
@@ -926,19 +929,19 @@ FEATURED.forEach(([name,line,still,clip,link])=>{
 if(matchMedia('(hover:none)').matches){const fio=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target.querySelector('video');if(!v)return;
   e.target.classList.toggle('playing',e.isIntersecting);e.isIntersecting?v.play().catch(()=>{}):v.pause()}),{threshold:.7});fwRow.querySelectorAll('.fw-card').forEach(c=>fio.observe(c))}
 const cwGrid=document.getElementById('cwGrid');
-CW.forEach(([name,link,loop,shape,wide])=>{
+CW.forEach(([name,role,link,loop,shape,wide])=>{
   const b=document.createElement('button');b.type='button';b.className='cw-tile pv '+shape+(wide?' wide':'');
   const yt=link.match(/youtu\.be\/([\w-]+)/);
   /* the tile is always moving: a silent loop of the film, or the YouTube video itself muted and looping */
   b.innerHTML=(loop?'<video muted loop playsinline autoplay preload="metadata"></video>'
     :'<iframe class="cw-yt" tabindex="-1" aria-hidden="true" allow="autoplay; encrypted-media" loading="lazy"></iframe>')
-    +'<span class="cw-cap"><span class="h3"></span><span class="cw-play" aria-hidden="true"></span></span>';
+    +'<span class="cw-cap"><span class="cw-txt"><span class="eyebrow"></span><span class="h3"></span></span></span><span class="cw-play" aria-hidden="true"></span>';
   if(loop)b.querySelector('video').src=loop;
   else{const f=b.querySelector('iframe');f.src='https://www.youtube-nocookie.com/embed/'+yt[1]+'?autoplay=1&mute=1&loop=1&playlist='+yt[1]+'&controls=0&modestbranding=1&playsinline=1&rel=0&disablekb=1';
     f.onload=()=>setTimeout(()=>f.classList.add('on'),4500)}  // YouTube shows its title and play state for the first seconds; fade in once they have gone
-  b.querySelector('.h3').textContent=name;
+  b.querySelector('.h3').textContent=name;b.querySelector('.eyebrow').textContent=role;
   if(yt)b.dataset.embed='https://www.youtube-nocookie.com/embed/'+yt[1]+'?autoplay=1&rel=0';else b.dataset.src=link;
-  b.dataset.title=name+' × Fraction';b.setAttribute('aria-label','Watch '+name+' with Fraction');
+  b.dataset.title=name+' · '+role;b.setAttribute('aria-label','Watch '+name+', '+role);
   cwGrid.appendChild(b);
 });
 /* the row is drawn twice so the -50% loop is seamless; the copy is hidden from screen readers */
