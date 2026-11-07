@@ -379,7 +379,8 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
 .contact .foot{display:flex;justify-content:space-between;align-items:flex-end;gap:4cqw}
 .sg-lines span{display:block}.sg-lines span+span{margin-top:.5em}
 .sg-lines i{font-style:normal;color:var(--pink);margin:0 .45em}
-.credit{margin:0;padding-top:1.4cqw;border-top:1px solid rgba(255,255,255,.12);font:400 max(.95cqw,12px)/1.3 var(--body);letter-spacing:.02em;color:rgba(255,255,255,.55)}
+.credit{display:flex;justify-content:space-between;align-items:baseline;gap:.6cqw 3cqw;flex-wrap:wrap;padding-top:1.4cqw;border-top:1px solid rgba(255,255,255,.12);font:400 max(.95cqw,12px)/1.4 var(--body);letter-spacing:.02em;color:rgba(255,255,255,.55)}
+.credit p{margin:0}.credit .own{color:rgba(255,255,255,.4)}
 .credit a{color:var(--pink-2);text-decoration:none}.credit a:hover{color:#fff}
 .lines{display:grid;grid-template-columns:auto auto;gap:1.2cqw 3cqw}
 .lines div{display:flex;flex-direction:column;gap:.4cqw;border-top:1px solid rgba(255,255,255,.2);padding-top:.9cqw}
@@ -560,6 +561,7 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
   .contact .foot{flex-direction:column;align-items:flex-start;gap:22px}
   .lines{grid-template-columns:1fr;gap:14px}.lines div:nth-child(2){grid-column:auto;grid-row:auto}
   .lines b{font-size:15px}
+  .credit{flex-direction:column;gap:8px}
 }
 @media (prefers-reduced-motion:reduce){.tk-list,.tk-list li{transition:none}}
 @media (prefers-reduced-motion:reduce){.hint::after{animation:none}.flip-in{transition:transform .01s}.creators .flip .flip-in{animation:none!important}.track{animation:none;flex-wrap:wrap;justify-content:center;width:auto;row-gap:4cqw}.track [aria-hidden="true"]{display:none}.cue::before{animation:none}.ask,.ask.on{transition:none}.orb{animation:none}.mono{transition:none}}
@@ -847,7 +849,10 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
           <div><span class="eyebrow">Instagram</span><b><a href="https://instagram.com/team.fraction" target="_blank" rel="noopener">@team.fraction</a></b></div>
         </div>
       </div>
-      <p class="credit">Curated by Prashant Nair · <a href="https://instagram.com/pra.shant.hai" target="_blank" rel="noopener">@pra.shant.hai</a></p>
+      <div class="credit">
+        <p>© <span id="cyear">2026</span> Team Fraction. All rights reserved. <span class="own">All brand names, logos and footage belong to their respective owners.</span></p>
+        <p>Curated by Prashant Nair · <a href="https://instagram.com/pra.shant.hai" target="_blank" rel="noopener">@pra.shant.hai</a></p>
+      </div>
     </div>
   </section>
 </main>
@@ -1145,6 +1150,7 @@ addEventListener('scroll',barFade,{passive:true});addEventListener('resize',barF
 function goTo(t){const y=scrollY;
   t.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
   setTimeout(()=>{if(scrollY===y)t.scrollIntoView()},600)}  // fallback where smooth scrolling is paused
+document.getElementById('cyear').textContent=new Date().getFullYear();  // the copyright year keeps itself current
 /* bring one tile to the middle of the screen (and into view inside a sideways row), then light it up for a moment */
 function goToTile(t){const y=scrollY,o={behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center',inline:'center'};
   t.scrollIntoView(o);setTimeout(()=>{if(scrollY===y)t.scrollIntoView({block:'center',inline:'center'})},600);
