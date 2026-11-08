@@ -217,6 +217,9 @@ a.tk-item:hover .tk-name,a.tk-item:focus-visible .tk-name{color:#fff}
 .watch.off{opacity:.45;cursor:default}
 
 /* commercial work: bento grid, tall tiles for the vertical films, a wide one for the landscape music video */
+#who-we-are,#who-we-are .pad{aspect-ratio:auto}
+#who-we-are .pad{position:relative;inset:auto;gap:1.2cqw;padding-block:3.2cqw}
+#who-we-are .lede{max-width:52cqw}
 #commercial-work,#commercial-work .pad{aspect-ratio:auto}
 #commercial-work .pad{position:relative;inset:auto;gap:2.2cqw}
 .cw .head{display:flex;justify-content:space-between;align-items:flex-end;gap:3cqw}
@@ -540,6 +543,7 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
   .fw-card{border-radius:10px}.fw-cap{left:14px;right:14px;bottom:14px;gap:6px}.fw-cap .h3{font-size:19px}.fw-cap small{font-size:12.5px}.fw-tag{top:12px;left:14px;font-size:10px}
   /* commercial work: two columns, wide tiles span both */
   #commercial-work .pad{gap:16px}
+  #who-we-are .pad{gap:10px}#who-we-are .lede{max-width:none}
   .cw .head{flex-direction:column;align-items:flex-start;gap:10px}
   .cw-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .cw-tile{margin-bottom:0}.cw-br{display:none}
@@ -634,6 +638,14 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
         <p class="eyebrow">Artists · Film · Fashion</p>
       </div>
       <div class="fw-row" id="fwRow"></div>
+    </div>
+  </section>
+
+  <!-- WHO WE ARE: a one-line band between Featured and Commercial work, set like the About us opener -->
+  <section class="slide tagline" id="who-we-are" aria-label="Who we are">
+    <div class="pad">
+      <p class="eyebrow">Dancers who make the film too</p>
+      <p class="lede">A Mumbai-based creative collective bringing together movement, storytelling and visual production.</p>
     </div>
   </section>
 
@@ -841,10 +853,8 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
   <!-- 2 INTRO -->
   <section class="slide intro" id="collective" aria-label="About us">
     <div class="pad">
-      <p class="eyebrow">Dancers who make the film too</p>
       <h2 class="h2">About <span class="pink">us</span></h2>
       <div class="about">
-        <p class="lede">A Mumbai-based creative collective bringing together movement, storytelling and visual production.</p>
         <p>From choreography and dance-led content to creative direction, brand campaigns, live performances and video production, we turn ideas into engaging visual experiences.</p>
         <p>We collaborate with brands, artists and creators to create work that moves people, both on and beyond the screen.</p>
       </div>
