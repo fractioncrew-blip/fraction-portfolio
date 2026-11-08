@@ -28,6 +28,9 @@
 (function(){var c=navigator.connection;
   if(c&&/(^|-)2g$/.test(c.effectiveType||''))document.documentElement.classList.add('lite')})();
 </script>
+<!-- Google Analytics 4 (Team Fraction account): visits plus the events sent below via logEvent() -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BK7BPWD3KT"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-BK7BPWD3KT');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Unbounded:wght@300;500;700;800&display=swap">
@@ -881,7 +884,7 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
         </div>
       </div>
       <div class="credit">
-        <p>© <span id="cyear">2026</span> Team Fraction. All rights reserved. <span class="own">All brand names, logos and footage belong to their respective owners.</span></p>
+        <p>© <span id="cyear">2026</span> Team Fraction. All rights reserved. <span class="own">All brand names, logos and footage belong to their respective owners. This site uses Google Analytics cookies to understand visits; no personal details are collected.</span></p>
         <p>Curated by Prashant Nair · <a href="https://www.naironcall.com" target="_blank" rel="noopener">www.naironcall.com</a></p>
       </div>
     </div>
@@ -913,11 +916,20 @@ button.watch{background:none;border:0;border-bottom:.12cqw solid currentColor;pa
 <script>
 /* ---- Lite mode: stills stand in for every silent loop, and nothing moving downloads until someone taps play ---- */
 const isLite=()=>document.documentElement.classList.contains('lite');
+/* ---- analytics: named events for what matters to Fraction (enquiries, which work gets watched, how far people get) ---- */
+function logEvent(name,params){try{gtag('event',name,params||{})}catch(e){}}
+if(isLite())logEvent('lite_mode',{trigger:'network'});
+document.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(!a)return;const h=a.href;
+  if(/wa\.me\//.test(h))logEvent('whatsapp_click',{person:/919664276169/.test(h)?'Pratik':'Mitesh'});
+  else if(h.startsWith('mailto:'))logEvent('email_click');
+  else if(/instagram\.com/.test(h))logEvent('instagram_click');
+  else if(/youtube\.com\/(@|playlist)/.test(h))logEvent('youtube_click',{link:a.getAttribute('aria-label')||a.textContent.trim()});
+  else if(/naironcall\.com/.test(h))logEvent('credit_click')},{capture:true});
 function stripVideos(){
   document.querySelectorAll('video').forEach(v=>{if(!v.muted||v.id==='pv')return;v.pause();if(v.getAttribute('src')){v.removeAttribute('src');v.load()}});
   document.querySelectorAll('iframe.cw-yt').forEach(f=>f.remove());
 }
-function goLite(){if(isLite())return;document.documentElement.classList.add('lite');stripVideos()}
+function goLite(){if(isLite())return;document.documentElement.classList.add('lite');stripVideos();logEvent('lite_mode',{trigger:'slow_load'})}
 function playLoop(v){if(!isLite()&&v.muted)v.play().catch(()=>{})}
 
 /* ---- phone-only cuts: elements with data-msrc swap to the vertical version under 760px ---- */
@@ -1071,6 +1083,7 @@ slides.forEach((s,idx)=>{
 const io=new IntersectionObserver(es=>es.forEach(e=>{
   const s=e.target,on=e.isIntersecting;
   s.classList.toggle('live',on);
+  if(on&&!s.dataset.seen){s.dataset.seen=1;logEvent('section_view',{section:s.getAttribute('aria-label')})}
   s.querySelectorAll('video').forEach(v=>on?playLoop(v):v.pause());
 }),{threshold:0,rootMargin:'-35% 0px -35% 0px'});
 if(isLite())stripVideos();
@@ -1181,6 +1194,7 @@ const pfw=document.getElementById('pfw');
 function embed(src){const f=document.createElement('iframe');f.title='Video';f.allow='autoplay; encrypted-media; fullscreen; picture-in-picture';
   f.allowFullscreen=true;f.scrolling='no';f.onload=()=>setTimeout(()=>f.classList.add('ready'),600);f.src=src;pfw.replaceChildren(f)}
 document.querySelectorAll('.play,.pv').forEach(b=>b.addEventListener('click',()=>{
+  logEvent('video_play',{video_title:b.dataset.title||b.dataset.work||b.textContent.trim()});
   const em=b.dataset.embed,ig=/instagram\.com/.test(b.dataset.link||'');
   document.getElementById('pt').textContent=b.dataset.title;const pl=document.getElementById('pl');pl.hidden=!b.dataset.link;if(b.dataset.link)pl.href=b.dataset.link;
   pl.textContent=ig?'Open on Instagram ↗':'Full film on YouTube ↗';document.getElementById('pn').hidden=true;
@@ -1207,7 +1221,8 @@ document.getElementById('cyear').textContent=new Date().getFullYear();  // the c
 function goToTile(t){const y=scrollY,o={behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center',inline:'center'};
   t.scrollIntoView(o);setTimeout(()=>{if(scrollY===y)t.scrollIntoView({block:'center',inline:'center'})},600);
   t.classList.remove('flash');clearTimeout(t._flash);setTimeout(()=>t.classList.add('flash'),400);t._flash=setTimeout(()=>t.classList.remove('flash'),2800)}
-document.querySelectorAll('.cue,.ask a,.hire,.home').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();goTo(document.querySelector(a.getAttribute('href')))}));
+document.querySelectorAll('.cue,.ask a,.hire,.home').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();
+  if(a.closest('.ask'))logEvent('looking_for',{choice:a.textContent.trim()});else if(a.classList.contains('hire'))logEvent('hire_us_click');goTo(document.querySelector(a.getAttribute('href')))}));
 
 /* ---- "Hire us" pops up while one of the four main segments is on screen ---- */
 const hire=document.getElementById('hire'),inSeg=new Set();
@@ -1275,7 +1290,7 @@ const TICKER=[  // [name, line, category, where it goes: "@Name" is that tile in
     const li=document.createElement('li'),el=document.createElement(href?'a':'div');el.className='tk-item';
     if(href){const tile=href[0]==='@'?[...document.querySelectorAll('[data-work]')].find(t=>t.dataset.work===href.slice(1)):null;
       el.href=tile?'#'+tile.closest('section').id:href;
-      el.addEventListener('click',e=>{e.preventDefault();if(tile)goToTile(tile);else goTo(document.querySelector(href))})}
+      el.addEventListener('click',e=>{e.preventDefault();logEvent('ticker_click',{item:name});if(tile)goToTile(tile);else goTo(document.querySelector(href))})}
     const n=document.createElement('span');n.className='tk-name';n.textContent=name;
     const sub=document.createElement('span');sub.className='tk-sub';sub.textContent=line;
     if(cat){const c=document.createElement('i');c.textContent=' · '+cat;sub.appendChild(c)}
